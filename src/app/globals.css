@@ -1,0 +1,140 @@
+@import url('https://rsms.me/inter/inter.css');
+@import "tailwindcss";
+
+/* ─── Design tokens ─────────────────────────────────────────────────── */
+@theme {
+  /* Surfaces */
+  --color-background:        hsl(0 0% 100%);
+  --color-foreground:        hsl(222 35% 5%);
+  --color-surface:           hsl(222 60% 97%);
+  --color-surface-tint:      hsl(222 55% 93%);
+  --color-card:              hsl(0 0% 100%);
+  --color-card-foreground:   hsl(222 35% 5%);
+  --color-popover:           hsl(0 0% 100%);
+  --color-popover-foreground: hsl(222 35% 5%);
+
+  /* Brand: Cobalt */
+  --color-primary:           hsl(219 76% 44%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-primary-hover:     hsl(219 76% 38%);
+  --color-primary-light:     hsl(213 66% 54%);
+  --color-primary-soft:      hsl(222 60% 97%);
+
+  /* Signal: Cyan */
+  --color-signal:            hsl(192 92% 39%);
+  --color-signal-foreground: hsl(0 0% 100%);
+  --color-signal-soft:       hsl(192 80% 94%);
+
+  /* Legacy aliases */
+  --color-live:              hsl(192 92% 39%);
+  --color-live-foreground:   hsl(0 0% 100%);
+  --color-live-soft:         hsl(192 80% 94%);
+
+  /* New badge: Ember */
+  --color-new-badge:         hsl(24 80% 52%);
+  --color-new-badge-foreground: hsl(0 0% 100%);
+
+  /* Neutrals */
+  --color-secondary:         hsl(222 55% 93%);
+  --color-secondary-foreground: hsl(222 35% 15%);
+  --color-muted:             hsl(222 60% 97%);
+  --color-muted-foreground:  hsl(222 30% 29%);
+  --color-accent:            hsl(222 60% 97%);
+  --color-accent-foreground: hsl(219 76% 30%);
+  --color-destructive:       hsl(0 72% 51%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border:            hsl(222 50% 90%);
+  --color-input:             hsl(222 50% 90%);
+  --color-ring:              hsl(219 76% 44%);
+  --color-tertiary:          hsl(222 26% 40%);
+
+  /* Radius */
+  --radius-sm:   0.5rem;
+  --radius-md:   0.75rem;
+  --radius-lg:   1rem;
+  --radius-xl:   1.25rem;
+  --radius-2xl:  1rem;
+  --radius-3xl:  1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-card:        0 1px 2px 0 hsl(222 35% 5% / 0.04);
+  --shadow-card-hover:  0 4px 12px -2px hsl(222 35% 5% / 0.06), 0 2px 4px -2px hsl(222 35% 5% / 0.04);
+  --shadow-elevated:    0 12px 32px -8px hsl(222 35% 5% / 0.10), 0 4px 12px -4px hsl(222 35% 5% / 0.06);
+  --shadow-glow:        0 0 0 4px hsl(219 76% 44% / 0.10);
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Animations */
+  --animate-fade-up: fadeUp 0.5s ease-out both;
+  --animate-ping-slow: ping 1.5s cubic-bezier(0,0,0.2,1) infinite;
+  --animate-ticker: ticker 45s linear infinite;
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+}
+
+/* Dark mode intentionally disabled — site is light-only */
+
+/* ─── Base styles ───────────────────────────────────────────────────── */
+html {
+  font-family: var(--font-sans);
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  background-image: radial-gradient(80% 60% at 50% 0%, var(--color-surface) 0%, var(--color-background) 60%);
+  background-repeat: no-repeat;
+  background-size: 100% 720px;
+}
+
+/* ─── Custom utilities ──────────────────────────────────────────────── */
+@utility text-gradient {
+  background: linear-gradient(135deg, hsl(219 76% 30%) 0%, hsl(219 76% 44%) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility text-tertiary {
+  color: var(--color-tertiary);
+}
+
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+@utility shadow-card-hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+@utility shadow-elevated {
+  box-shadow: var(--shadow-elevated);
+}
+
+@utility fade-up {
+  animation: var(--animate-fade-up);
+}
+
+@utility font-display {
+  font-family: var(--font-sans);
+  letter-spacing: -0.02em;
+}
+
+@utility container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 2rem;
+  max-width: 1400px;
+}
