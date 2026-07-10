@@ -9,7 +9,9 @@ Brand name: **"Product Management, Re-Architected"**
 Substack: https://fromoutofthenoise.substack.com/  
 Raindrop collection: 70283481
 
-**GitHub repo:** `git@github.com:rallen7425/pm-rearchitected.git` (fixed 2026-07-10 — the repo used to be rooted one level up at `PMRearchitected/`, predating a file reorg into this folder, so it never reflected the real app; reinitialized here matching every other app's convention of repo root = app root). No Vercel deployment yet.
+**GitHub repo:** `git@github.com:rallen7425/pm-rearchitected.git` (fixed 2026-07-10 — the repo used to be rooted one level up at `PMRearchitected/`, predating a file reorg into this folder, so it never reflected the real app; reinitialized here matching every other app's convention of repo root = app root).
+
+**Live URL:** https://pm-rearchitected.vercel.app (first deployed 2026-07-10, `rick-allen-s-projects/pm-rearchitected`). `RAINDROP_TOKEN` is set as a production env var. Verified working: Home (live Substack RSS feed), About, and Resources pages all render correctly with real content, zero errors.
 
 ---
 
@@ -66,7 +68,7 @@ Row 2: UX Design · Roadmapping & Prioritization · Execution · Technology
 1. **Add real URLs** to the "Read More" links in `/resources/page.tsx` — 8 modules × 10 sources = 80 links
 2. **Update resource card counts** in `src/components/site/Resources.tsx` to match actual ref counts
 3. **Fix LinkedIn URL** in `src/app/about/page.tsx` (line ~144)
-4. **Deploy** — site has never been deployed to Vercel. GitHub is now sorted (see below), so this is unblocked whenever it's picked up.
+4. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
 5. **Mobile nav** — the header nav is `hidden md:flex`, so mobile users see no navigation. A hamburger menu or mobile drawer needs to be added
 
 ---
