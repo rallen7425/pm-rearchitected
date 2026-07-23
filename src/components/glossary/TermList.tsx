@@ -11,7 +11,7 @@ export function TermList({ terms }: { terms: TermSummary[] }) {
       {terms.map((term) => (
         <li key={term.id_slug} className="break-inside-avoid mb-4 text-sm text-muted-foreground leading-relaxed">
           <Link
-            href={`/glossary/${term.id_slug}`}
+            href={`/terms/${term.id_slug}`}
             className="font-semibold text-foreground hover:text-primary transition-colors"
           >
             {term.canonical_term}

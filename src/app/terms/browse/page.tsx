@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Header from "@/components/site/Header";
 import Hero from "@/components/site/Hero";
 import Footer from "@/components/site/Footer";
 import { TermList } from "@/components/glossary/TermList";
+import { GlossaryHeader } from "@/components/glossary/GlossaryHeader";
 import { listCategories, listTermsByCategory } from "@/lib/glossary";
 
 export const revalidate = 3600;
@@ -24,25 +24,24 @@ export default async function GlossaryBrowsePage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <Hero />
+        <Hero showDescription={false} />
         <div className="container pb-20">
-          <div className="flex items-baseline justify-between gap-4 mb-5 flex-wrap">
-            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Browse by Category</h2>
-            <Link href="/glossary" className="text-sm text-primary hover:underline">
-              ← Top Terms
-            </Link>
-          </div>
-          <p className="text-base text-muted-foreground leading-relaxed mb-8 max-w-3xl">
-            The complete glossary — all {termsByCategory.reduce((sum, t) => sum + t.length, 0)}{" "}
-            terms, organized by theme.
-          </p>
+          <GlossaryHeader
+            links={[
+              { href: "/terms", label: "Top Terms" },
+              { href: "/terms/flashcards", label: "Test Yourself" },
+            ]}
+          />
+          <h3 id="category-list" className="text-xl md:text-2xl font-semibold tracking-tight mb-4 scroll-mt-24">
+            Browse by Category
+          </h3>
 
-          <nav className="flex flex-wrap gap-2 mb-12">
+          <nav className="flex flex-wrap gap-x-4 gap-y-2 mb-12">
             {categories.map((category) => (
               <a
                 key={category.id_slug}
                 href={`#${category.id_slug}`}
-                className="text-sm px-3 py-1.5 rounded-full border border-border hover:bg-secondary transition-colors"
+                className="text-sm text-primary hover:underline"
               >
                 {category.name}
               </a>
@@ -63,6 +62,12 @@ export default async function GlossaryBrowsePage() {
                     </p>
                   )}
                   <TermList terms={termsByCategory[i]} />
+                  <a
+                    href="#category-list"
+                    className="mt-6 inline-block text-sm text-primary hover:underline"
+                  >
+                    ↑ Return to top
+                  </a>
                 </section>
               </div>
             ))}

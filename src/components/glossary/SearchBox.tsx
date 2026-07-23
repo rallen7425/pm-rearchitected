@@ -22,7 +22,7 @@ export function SearchBox() {
 
       setStatus("loading");
       try {
-        const res = await fetch(`/api/glossary/search?q=${encodeURIComponent(trimmed)}`, {
+        const res = await fetch(`/api/terms/search?q=${encodeURIComponent(trimmed)}`, {
           signal: controller.signal,
         });
         if (!res.ok) throw new Error("Search request failed");
@@ -46,17 +46,12 @@ export function SearchBox() {
         type="search"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search terms, e.g. &ldquo;LLM&rdquo;, &ldquo;RAG&rdquo;, &ldquo;roadmap&rdquo;..."
+        placeholder="Search terms, e.g. &ldquo;LLM&rdquo;, &ldquo;RAG&rdquo;..."
         autoFocus
         className="w-full max-w-xl rounded-lg border border-border bg-card px-4 py-3 text-base placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
       />
 
       <div className="mt-8">
-        {status === "idle" && (
-          <p className="text-sm text-muted-foreground">
-            Start typing to search the full glossary — including aliases and abbreviations.
-          </p>
-        )}
         {status === "loading" && <p className="text-sm text-muted-foreground">Searching…</p>}
         {status === "error" && (
           <p className="text-sm text-destructive">Something went wrong. Try again.</p>
@@ -69,7 +64,7 @@ export function SearchBox() {
             {results.map((result) => (
               <li key={result.id_slug} className="text-sm text-muted-foreground leading-relaxed">
                 <Link
-                  href={`/glossary/${result.id_slug}`}
+                  href={`/terms/${result.id_slug}`}
                   className="font-semibold text-foreground hover:text-primary transition-colors"
                 >
                   {result.canonical_term}

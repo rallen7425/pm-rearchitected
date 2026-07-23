@@ -38,14 +38,14 @@ export default async function TermPage({ params }: { params: Promise<{ slug: str
       <Header />
       <main className="flex-1">
         <div className="container pt-8 pb-20 max-w-3xl">
-          <Link href="/glossary" className="text-sm text-primary hover:underline">
-            ← AI Glossary
+          <Link href="/terms" className="text-sm text-primary hover:underline">
+            ← AI Terms
           </Link>
 
           <div className="mt-4 flex items-center gap-2 flex-wrap">
             {category && (
               <Link
-                href={`/glossary/browse#${category.id_slug}`}
+                href={`/terms/browse#${category.id_slug}`}
                 className="text-xs font-medium px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground hover:bg-accent transition-colors"
               >
                 {category.name}
@@ -79,7 +79,7 @@ export default async function TermPage({ params }: { params: Promise<{ slug: str
                 {term.related_terms.map((related) => (
                   <Link
                     key={related.id_slug}
-                    href={`/glossary/${related.id_slug}`}
+                    href={`/terms/${related.id_slug}`}
                     className="text-sm px-3 py-1.5 rounded-full border border-border hover:bg-secondary transition-colors"
                   >
                     {related.canonical_term}
