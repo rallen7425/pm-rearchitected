@@ -1,0 +1,86 @@
+term_slug,alias_text,alias_type
+artificial-intelligence,AI,synonym
+artificial-intelligence,Cognitive Computing (dated synonym),deprecated_or_variant
+machine-learning,ML,synonym
+deep-learning,DL,synonym
+natural-language-processing,NLP,synonym
+generative-ai,GenAI,synonym
+large-language-model,LLM,synonym
+large-language-model,Large Language Models (LLMs),synonym
+artificial-general-intelligence,AGI,synonym
+artificial-general-intelligence,General AI,synonym
+model,AI Model,synonym
+ai-agent-agentic-ai,AI Agent,synonym
+ai-agent-agentic-ai,Agentic AI,synonym
+ai-agent-agentic-ai,Agent,synonym
+ai-agent-agentic-ai,Agentic,synonym
+hallucination,Hallucinate,synonym
+training-data,Training Set,synonym
+dataset,Data Set,synonym
+token-tokenization,Token,synonym
+token-tokenization,Tokens,synonym
+token-tokenization,Tokenization,synonym
+retrieval-augmented-generation,RAG,synonym
+artificial-narrow-intelligence,ANI,synonym
+artificial-narrow-intelligence,Narrow AI,synonym
+artificial-narrow-intelligence,Weak AI,synonym
+multimodal-ai,Multimodal,synonym
+multimodal-ai,Multimodal Model,synonym
+chain-of-thought,Chain-of-Thought Prompting,synonym
+chain-of-thought,CoT,synonym
+meta-prompt-system-prompt,System Prompt,synonym
+meta-prompt-system-prompt,Meta Prompt,synonym
+embeddings,Embedding,synonym
+model-context-protocol,MCP,synonym
+model-context-protocol,MCP connector,synonym
+transformer,Transformer Model,synonym
+gpt,GPT,synonym
+gpt,"GPT-4, GPT-4o, GPT-4.1, GPT-5, GPT-5.4, GPT-5.5, GPT-5.6, o1, o3, o4-mini",deprecated_or_variant
+reinforcement-learning-from-human-feedback,RLHF,synonym
+pretraining,Pre-trained Model,synonym
+pretraining,Pre-Trained Models,synonym
+reasoning-model,Reasoning Models,synonym
+generative-adversarial-network,GAN,synonym
+generative-adversarial-network,GANs,synonym
+diffusion-model,Diffusion,synonym
+diffusion-model,Diffusion Models,synonym
+gpu,GPU,synonym
+model-drift,Concept Drift,synonym
+explainable-ai,XAI,synonym
+ai-alignment,Alignment,synonym
+ai-ethics,Ethical AI,synonym
+microsoft-copilot,Microsoft Copilot Search (excluded feature-level variant),deprecated_or_variant
+neural-network,Artificial Neural Network (ANN),synonym
+artificial-superintelligence,ASI,synonym
+artificial-superintelligence,Superintelligence,synonym
+weights,Open Weights (product/licensing context),deprecated_or_variant
+closed-source,Proprietary Software,synonym
+open-weight-model,Open Weights,synonym
+knowledge-graph,Knowledge Graphs and Ontologies,synonym
+attention-mechanism,Attention,synonym
+hyperparameter,Hyperparameter Tuning,synonym
+loss-function,Cost Function,synonym
+backpropagation,Back Propagation,synonym
+convolutional-neural-network,CNN,synonym
+recurrent-neural-network,RNN,synonym
+emergent-behavior,Emergence,synonym
+symbolic-ai,Knowledge-Driven AI,synonym
+hybrid-ai,Neuro-Symbolic AI,synonym
+vision-transformer,ViT,synonym
+clip,CLIP,synonym
+continual-learning,Lifelong Learning,synonym
+autoencoder,Autoencoders,synonym
+tpu,TPU,synonym
+k-nn,k-NN,synonym
+optimization,Optimization Algorithm,synonym
+mlops,Machine Learning Operations,synonym
+llmops,Large Language Model Operations,synonym
+time-to-first-token,TTFT,synonym
+validation-data,Validation,synonym
+nerf,NeRF,synonym
+lstm,LSTM,synonym
+human-computer-interaction,HCI,synonym
+foom,Fast Takeoff,synonym
+foom,Hard Takeoff,synonym
+paperclip-maximizer,Paperclips,synonym
+memory-cache,KV Caching,synonym

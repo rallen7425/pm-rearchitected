@@ -6,6 +6,7 @@ const NAV = [
   { href: "/", label: "Home", external: false },
   { href: "https://fromoutofthenoise.substack.com/", label: "Blog", external: true },
   { href: "/resources", label: "Resources", external: false },
+  { href: "/glossary", label: "Glossary", external: false },
   { href: "/about", label: "About", external: false },
 ];
 

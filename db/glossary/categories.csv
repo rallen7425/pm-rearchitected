@@ -1,0 +1,6 @@
+id_slug,name,description,sort_order
+ai-101,AI 101,Foundational terms any AI-literate person should know,1
+pm-basics,PM Basics,Non-technical terms important for PMs and designers,2
+technical-for-pms,Technical-for-PMs,Terms PMs need to speak credibly with engineers/data scientists,3
+advanced,Advanced,Advanced/niche concepts for AI-focused PMs,4
+notable-ai-products,Notable AI Products,Major named AI products/models worth recognizing by name,5
