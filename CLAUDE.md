@@ -46,7 +46,8 @@ Raindrop collection: 70283481
 - **AI Terms** → `/terms` (nav label changed from "Glossary" to "AI Terms" 2026-07-23; route changed from `/glossary` to `/terms` same day)
 - **About** → `/about`
 - Logo + "Rick Allen" name → `/about`
-- Subscribe button → Substack subscribe page
+- Mobile (`<md`): hamburger icon (☰/✕) toggles a dropdown with the same 5 links below the header, added 2026-07-24 — desktop nav is `hidden md:flex` with no prior mobile fallback, so mobile users previously had zero navigation
+- Subscribe button removed from the header 2026-07-24 (per Rick's request, "for now") — still present on the About page and Footer, just not in the top nav
 
 ---
 
@@ -136,12 +137,15 @@ three share one visual: a two-panel `TwoSidedCard` (term on the left, answer on 
 
 ### Verification note
 
-Today's `/terms` work (route rename, header/search redesign, study-page rebuild, Level filter) was
-verified via type-check, lint, and curl-based smoke tests across every route — no browser-automation
-tool is available in this environment. Rick exercised the actual interactive behavior himself
-throughout the session via iterative feedback (that's how the Start-gate, card layout, verdict
-colors, and Level filter design were arrived at) — but a final end-to-end click-through on a real
-device, especially after the 2026-07-23 production push, is still worth doing.
+The 2026-07-23 `/terms` work (route rename, header/search redesign, study-page rebuild, Level filter)
+was verified via type-check, lint, and curl-based smoke tests across every route — no
+browser-automation tool is available in this environment. Rick exercised the actual interactive
+behavior himself throughout the session via iterative feedback (that's how the Start-gate, card
+layout, verdict colors, and Level filter design were arrived at). His follow-up real-phone
+click-through on 2026-07-24 is exactly why this kind of check matters even after curl/lint pass
+clean: it caught the header nav being completely invisible on mobile (`hidden md:flex` with no
+fallback — see "Next Session Should Pick Up," now fixed). Keep pushing for a real-device pass after
+any header/nav/layout change; curl and automated checks won't catch responsive-only bugs.
 
 ---
 
@@ -156,14 +160,16 @@ device, especially after the 2026-07-23 production push, is still worth doing.
 
 ## Next Session Should Pick Up
 
-1. **Final device click-through on AI Terms** — production push (route rename, study-page rebuild,
-   AI grading) happened 2026-07-23; do one real-device pass on the live site, particularly Open-Ended
-   grading (needs a live Anthropic call) and the mobile layout of the two-panel study cards.
+1. **Continue the device click-through on AI Terms** — Rick's real-phone pass on 2026-07-24 caught
+   the mobile nav gap (item 6, now fixed); keep going, particularly Open-Ended grading (needs a live
+   Anthropic call) and the mobile layout of the two-panel study cards.
 2. **Add real URLs** to the "Read More" links in `/resources/page.tsx` — 8 modules × 10 sources = 80 links
 3. **Update resource card counts** in `src/components/site/Resources.tsx` to match actual ref counts
 4. **Fix LinkedIn URL** in `src/app/about/page.tsx` (line ~144)
 5. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
-6. **Mobile nav** — the header nav is `hidden md:flex`, so mobile users see no navigation. A hamburger menu or mobile drawer needs to be added
+6. ~~Mobile nav~~ — **DONE 2026-07-24**, hamburger menu added to `Header.tsx`.
+7. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
+   it comes back (and where) or stays gone.
 
 ---
 
@@ -174,7 +180,7 @@ device, especially after the 2026-07-23 production push, is still worth doing.
 | `src/app/page.tsx` | Home page |
 | `src/app/about/page.tsx` | Standalone About page |
 | `src/app/resources/page.tsx` | Resources page with all 8 modules |
-| `src/components/site/Header.tsx` | Nav — client component, uses `usePathname` |
+| `src/components/site/Header.tsx` | Nav — client component, uses `usePathname`; mobile hamburger dropdown added 2026-07-24, no Subscribe button in header as of same date |
 | `src/components/site/Hero.tsx` | Hero section (shared across pages) |
 | `src/components/site/SubstackLatest.tsx` | Recent posts, fetches 5 from RSS |
 | `src/components/site/Newsfeed.tsx` | Reading This Week, Raindrop.io API |
