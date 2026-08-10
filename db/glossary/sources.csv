@@ -71,3 +71,120 @@ perplexity-ai,inboundblogging.com,https://inboundblogging.com/ai-seo-glossary/,f
 sora,techcrunch.com,https://techcrunch.com/2026/07/03/artificial-intelligence-definition-glossary-hallucinations-guide-to-common-ai-terms/,further_reading
 neural-network,hai.stanford.edu,https://hai.stanford.edu/ai-definitions,further_reading
 hhh,platform.claude.com,https://platform.claude.com/docs/en/about-claude/glossary,further_reading
+ai-agent-agentic-ai,Pragmatic Institute,https://www.pragmaticinstitute.com/resources/articles/product/ai-agents-for-product-managers/,further_reading
+ai-agent-agentic-ai,IBM Technology (YouTube),https://www.youtube.com/watch?v=2j26a5dmCnI,video
+ai-agent-agentic-ai,Mind the Product,https://www.mindtheproduct.com/product-management-for-agentic-ai-when-to-build-agents-and-wow-to-do-it-well/,further_reading
+ai-agent-agentic-ai,freeCodeCamp,https://www.freecodecamp.org/news/the-agentic-ai-handbook/,further_reading
+algorithm,Medium (Design Bootcamp),https://medium.com/design-bootcamp/algorithms-a-product-managers-guide-to-the-unsung-heroes-of-technology-ee04b98a1639,further_reading
+algorithm,Stanford GSB,https://www.gsb.stanford.edu/insights/explainer-what-algorithm,further_reading
+artificial-general-intelligence,AWS,https://aws.amazon.com/what-is/artificial-general-intelligence/,further_reading
+artificial-general-intelligence,IBM Technology (YouTube),https://www.youtube.com/watch?v=rBlCOLfMYfw,video
+artificial-general-intelligence,Medium (David Haberlah),https://medium.com/@haberlah/the-future-of-product-management-in-an-age-of-artificial-general-intelligence-agi-4a19ceb54451,further_reading
+artificial-intelligence,Pragmatic Institute,https://www.pragmaticinstitute.com/resources/articles/product/how-to-learn-ai-as-a-product-manager-start-here/,further_reading
+artificial-intelligence,Crash Course AI (PBS Digital Studios YouTube),https://www.youtube.com/watch?v=a0_lo_GDcFw,video
+artificial-intelligence,Aakash Gupta,https://www.aakashg.com/ai-product-management/,further_reading
+bias,ITRex,https://itrexgroup.com/blog/ai-bias-definition-types-examples-debiasing-strategies/,further_reading
+bias,IBM Technology - Martin Keen (YouTube),https://www.youtube.com/watch?v=og67qeTZPYs,video
+bias,Product School,https://productschool.com/blog/artificial-intelligence/ai-ethics-product-management,further_reading
+bias,Kevin Armstrong,https://kevinarmstrong.io/blog/responsible-ai-for-product-managers-a-practical-playbook/,further_reading
+chatbot,boost.ai,https://boost.ai/learn/chatbot/how-do-chatbots-work/,further_reading
+chatbot,Mind the Product,https://www.mindtheproduct.com/deep-dive-ux-best-practices-for-ai-chatbots/,further_reading
+context-window,Redis,https://redis.io/blog/llm-context-windows/,further_reading
+context-window,Neo4j,https://neo4j.com/blog/agentic-ai/context-engineering-vs-prompt-engineering/,further_reading
+deep-learning,Medium (Rohit Verma),https://rohitverma141.medium.com/understanding-ai-ml-deep-learning-and-transformers-with-the-lens-of-a-product-manager-bf48b1df6911,further_reading
+deep-learning,Product Compass (Pawel Huryn),https://www.productcompass.pm/p/introduction-to-ai-product-management,further_reading
+deep-learning,3Blue1Brown (YouTube),https://www.youtube.com/watch?v=aircAruvnKk,video
+evaluations,Hamel Husain,https://hamel.dev/blog/posts/evals/,further_reading
+evaluations,Productboard,https://www.productboard.com/blog/ai-evals-for-product-managers/,further_reading
+evaluations,Amplitude,https://amplitude.com/blog/ai-evals-for-product-managers,further_reading
+evaluations,Mind the Product,https://www.mindtheproduct.com/how-to-implement-effective-ai-evaluations/,further_reading
+fine-tuning,Aakash Gupta,https://www.news.aakashg.com/p/rag-vs-fine-tuning-vs-prompt-engineering,further_reading
+fine-tuning,KDnuggets,https://www.kdnuggets.com/fine-tuning-explained-for-noobs-how-pretrained-models-learn-new-skills,further_reading
+fine-tuning,Google for Developers,https://developers.google.com/machine-learning/crash-course/llm/tuning,further_reading
+fine-tuning,IBM Technology (YouTube),https://www.youtube.com/watch?v=00Q0G84kq3M,video
+generative-ai,IBM Technology,https://www.ibm.com/think/videos/generative-ai-models,video
+hallucination,IBM,https://www.ibm.com/think/topics/ai-hallucinations,further_reading
+large-language-model,IBM Technology,https://www.youtube.com/watch?v=5sLYAQS9sWQ,video
+machine-learning,IBM,https://www.ibm.com/cloud/learn/machine-learning,further_reading
+model,Medium (Chetan Channa),https://chetanchanna.medium.com/becoming-an-ai-ready-product-manager-understanding-ai-models-algorithms-for-product-managers-8ddea33668c3,further_reading
+natural-language-processing,IBM,https://www.ibm.com/think/topics/natural-language-processing,further_reading
+natural-language-processing,Simplilearn,https://www.youtube.com/watch?v=CMrHM8a3hqw,video
+neural-network,IBM Technology,https://www.youtube.com/watch?v=NMZ0Tgc2jFQ,video
+prompt,Productboard,https://www.productboard.com/blog/how-product-managers-can-unlock-ais-potential/,further_reading
+prompt-engineering,ProdPad,https://www.prodpad.com/blog/prompt-engineering-for-product-managers/,further_reading
+prompt-engineering,Medium (Nishant Rawat),https://medium.com/journey-into-product-management/genai-prompt-engineering-a-product-managers-guide-707659899e81,further_reading
+reinforcement-learning,IBM,https://www.ibm.com/think/topics/reinforcement-learning,further_reading
+retrieval-augmented-generation,Medium (Somnath Biswas),https://somnath-biswas.medium.com/rag-in-practice-a-product-managers-guide-b9a432927dbd,further_reading
+retrieval-augmented-generation,AWS,https://aws.amazon.com/what-is/retrieval-augmented-generation/,further_reading
+supervised-learning,IBM,https://www.ibm.com/think/topics/supervised-vs-unsupervised-learning,further_reading
+supervised-learning,Google Cloud,https://cloud.google.com/discover/supervised-vs-unsupervised-learning,further_reading
+unsupervised-learning,IBM,https://www.ibm.com/think/topics/supervised-vs-unsupervised-learning,further_reading
+token-tokenization,Medium (Vignesh Ramakrishnan),https://medium.com/@vigram23/why-understanding-tokenization-matters-for-product-managers-2b961f585d52,further_reading
+token-tokenization,Airbyte,https://airbyte.com/data-engineering-resources/llm-tokenization,further_reading
+training-data,IBM,https://www.ibm.com/think/topics/training-data,further_reading
+training-data,AI PM Guru (Substack),https://aipmguru.substack.com/p/data-fundamentals-for-ai-product,further_reading
+ai-alignment,Medium (Sahin Ahmed),https://medium.com/@sahin.samia/what-is-the-ai-alignment-problem-and-why-is-it-important-15167701da6f,further_reading
+ai-ethics,Mind the Product,https://www.mindtheproduct.com/ethical-ai-in-saas-a-product-managers-guide-to-responsible-innovation/,further_reading
+ai-ethics,Scrum.org,https://www.scrum.org/resources/blog/ethical-ai-product-owners-product-managers,further_reading
+ai-safety,"AI Safety, Ethics, and Society (Center for AI Safety)",https://www.aisafetyedu.org/learn/intro-to-ai-safety,further_reading
+anthropomorphism,Nielsen Norman Group,https://www.nngroup.com/articles/anthropomorphism/,further_reading
+artificial-narrow-intelligence,GeeksforGeeks,https://www.geeksforgeeks.org/artificial-intelligence/narrow-ai-vs-general-ai/,further_reading
+automation,Retool,https://retool.com/blog/artificial-intelligence-automation,further_reading
+chain-of-thought,Learn Prompting,https://learnprompting.org/docs/intermediate/chain_of_thought,further_reading
+chain-of-thought,PromptHub,https://www.prompthub.us/blog/chain-of-thought-prompting-guide,further_reading
+compute,Micron21,https://www.micron21.com/blog/what-is-gpu-compute-the-compute-that-s-empowing-ai-workloads-around-the-world,further_reading
+computer-vision,AWS,https://aws.amazon.com/what-is/computer-vision/,further_reading
+computer-vision,DataCamp,https://www.datacamp.com/blog/what-is-computer-vision,further_reading
+conversational-ai,Tidio,https://www.tidio.com/blog/chatbots-vs-conversational-ai/,further_reading
+conversational-ai,Intercom,https://www.intercom.com/learning-center/chatbot-vs-conversational-ai,further_reading
+dataset,Sama,https://www.sama.com/blog/what-is-training-data,further_reading
+diffusion-model,Towards Data Science,https://towardsdatascience.com/diffusion-models-explained-simply/,further_reading
+embeddings,Elastic,https://www.elastic.co/what-is/vector-embedding,further_reading
+embeddings,DZone,https://dzone.com/articles/a-guide-to-vector-embeddings-for-product-and-softw,further_reading
+explainable-ai,ITRex,https://itrexgroup.com/blog/explainable-ai-principles-classification-examples/,further_reading
+explainable-ai,Communications of the ACM,https://cacm.acm.org/blogcacm/why-explainable-ai-is-a-product-imperative/,further_reading
+foundation-model,AWS,https://aws.amazon.com/what-is/foundation-models/,further_reading
+gpt,GeeksforGeeks,https://www.geeksforgeeks.org/artificial-intelligence/introduction-to-generative-pre-trained-transformer-gpt/,further_reading
+gpu,IBM,https://www.ibm.com/think/topics/gpu,further_reading
+gpu,AWS,https://aws.amazon.com/what-is/gpu/,further_reading
+generative-adversarial-network,AWS,https://aws.amazon.com/what-is/gan/,further_reading
+generative-adversarial-network,IBM Developer,https://developer.ibm.com/articles/generative-adversarial-networks-explained/,further_reading
+grounding,Medium,https://medium.com/@2019be04004/grounding-in-llms-what-it-is-and-why-it-matters-db4d9ff29d27,further_reading
+grounding,Moveworks,https://www.moveworks.com/us/en/resources/ai-terms-glossary/grounding,further_reading
+guardrails,IBM,https://www.ibm.com/think/topics/ai-guardrails,further_reading
+guardrails,Marc Abraham,https://marcabraham.com/2026/04/28/my-product-management-toolkit-69-ai-guardrails/,further_reading
+human-in-the-loop,Product Talk (Teresa Torres's site),https://www.producttalk.org/glossary-ai-human-in-the-loop/,further_reading
+human-in-the-loop,LogRocket,https://blog.logrocket.com/product-management/human-in-the-loop-ai-decision-making,further_reading
+inference,Backblaze,https://www.backblaze.com/blog/ai-101-training-vs-inference/,further_reading
+latency,MixRoute,https://mixroute.ai/blog/llm-api-latency-guide/,further_reading
+meta-prompt-system-prompt,PromptLayer,https://blog.promptlayer.com/system-prompt-vs-user-prompt-a-comprehensive-guide-for-ai-prompts/,further_reading
+model-context-protocol,IBM,https://www.ibm.com/think/topics/model-context-protocol,further_reading
+model-context-protocol,Databricks,https://www.databricks.com/blog/what-is-model-context-protocol,further_reading
+model-drift,Aerospike,https://aerospike.com/blog/model-drift-machine-learning/,further_reading
+model-drift,Monte Carlo Data,https://www.montecarlodata.com/blog-ai-data-drift/,further_reading
+multimodal-ai,Salesforce,https://www.salesforce.com/artificial-intelligence/multimodal-ai/,further_reading
+multimodal-ai,Splunk,https://www.splunk.com/en_us/blog/learn/multimodal-ai.html,further_reading
+open-source,MindStudio,https://www.mindstudio.ai/blog/open-source-ai-vs-closed-source-business-model,further_reading
+overfitting,AWS,https://aws.amazon.com/what-is/overfitting/,further_reading
+overfitting,freeCodeCamp,https://www.freecodecamp.org/news/what-is-overfitting-machine-learning/,further_reading
+parameters,TechTarget,https://www.techtarget.com/searchenterpriseai/tip/The-role-of-AI-parameters-in-the-enterprise,further_reading
+pretraining,Lightly.ai,https://www.lightly.ai/blog/pretraining-vs-finetuning,further_reading
+prompt-injection,Proofpoint,https://www.proofpoint.com/us/threat-reference/prompt-injection,further_reading
+prompt-injection,Palo Alto Networks,https://www.paloaltonetworks.com/cyberpedia/what-is-a-prompt-injection-attack,further_reading
+reasoning-model,IBM,https://www.ibm.com/think/topics/reasoning-model,further_reading
+reasoning-model,Le Wagon,https://blog.lewagon.com/skills/openai-o1-and-o3-explained-how-thinking-models-work/,further_reading
+reinforcement-learning-from-human-feedback,IBM Technology (Martin Keen),https://mediacenter.ibm.com/media/Reinforcement+Learning+from+Human+Feedback+(RLHF)+Explained/1_uv1w3sj3,video
+responsible-ai,LaunchNotes,https://www.launchnotes.com/glossary/responsible-ai-framework-in-product-management-and-operations,further_reading
+responsible-ai,World Economic Forum,https://www.weforum.org/stories/2025/06/responsible-generative-ai-product-development-use/,further_reading
+synthetic-data,SAS,https://www.sas.com/en_us/insights/articles/analytics/harnessing-synthetic-data-to-fuel-ai-breakthroughs.html,further_reading
+synthetic-data,Development Corporate,https://developmentcorporate.com/product-management/how-synthetic-data-is-revolutionizing-product-management-for-saas-companies-in-2025/,further_reading
+temperature,PromptLayer,https://blog.promptlayer.com/temperature-setting-in-llms/,further_reading
+training,Appian,https://appian.com/blog/acp/ai/how-does-ai-model-training-work,further_reading
+training,Mercor,https://www.mercor.com/resources/experts/how-to-train-an-ai-model/,further_reading
+transfer-learning,IBM,https://www.ibm.com/think/topics/transfer-learning,further_reading
+transfer-learning,DataCamp,https://www.datacamp.com/blog/what-is-transfer-learning-in-ai-an-introductory-guide,further_reading
+transformer,Georgia Tech Poloclub,https://poloclub.github.io/transformer-explainer/,further_reading
+vector-database,IBM,https://www.ibm.com/think/topics/rag-vector-database,further_reading
+vector-database,Product School,https://productschool.com/blog/artificial-intelligence/rag-product-managers,further_reading
+zero-shot-learning,Microsoft Learn,https://learn.microsoft.com/en-us/dotnet/ai/conceptual/zero-shot-learning,further_reading
+zero-shot-learning,GeeksforGeeks,https://www.geeksforgeeks.org/machine-learning/zero-shot-vs-one-shot-vs-few-shot-learning/,further_reading
