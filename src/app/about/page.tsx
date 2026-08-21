@@ -60,6 +60,27 @@ export default function AboutPage() {
 
             <div className="border-t border-border" />
 
+            {/* Digital Twin callout */}
+            <div className="rounded-lg border border-border bg-card shadow-card px-6 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h3 className="text-lg font-semibold tracking-tight mb-1">
+                  Have a question for me directly?
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Try my Digital Twin, an AI built from my own writing and career history that
+                  answers questions in my voice.
+                </p>
+              </div>
+              <a
+                href="/digital-twin"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium hover:bg-primary-hover transition-colors"
+              >
+                Chat with the Digital Twin
+              </a>
+            </div>
+
+            <div className="border-t border-border" />
+
             {/* Perspective */}
             <div>
               <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-5">
