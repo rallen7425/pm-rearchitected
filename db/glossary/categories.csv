@@ -1,6 +1,17 @@
-id_slug,name,description,sort_order
-ai-101,AI 101,Foundational terms any AI-literate person should know,1
-pm-basics,PM Basics,Non-technical terms important for PMs and designers,2
-technical-for-pms,Technical-for-PMs,Terms PMs need to speak credibly with engineers/data scientists,3
-advanced,Advanced,Advanced/niche concepts for AI-focused PMs,4
-notable-ai-products,Notable AI Products,Major named AI products/models worth recognizing by name,5
+id_slug,name,description,sort_order,domain
+ai-101,AI 101,Foundational terms any AI-literate person should know,1,ai
+pm-basics,PM Basics,Non-technical terms important for PMs and designers,2,ai
+technical-for-pms,Technical-for-PMs,Terms PMs need to speak credibly with engineers/data scientists,3,ai
+advanced,Advanced,Advanced/niche concepts for AI-focused PMs,4,ai
+notable-ai-products,Notable AI Products,Major named AI products/models worth recognizing by name,5,ai
+pm-strategy-vision,Product Strategy & Vision,"Product strategy, vision, and positioning terms",1,pm
+pm-discovery-research,Discovery & Research,User research and product discovery terms,2,pm
+pm-design-ux,Design & UX,Design and UX terms,3,pm
+pm-agile-delivery,Agile & Delivery,"Agile, Scrum, and delivery process terms",4,pm
+pm-metrics-growth,Metrics & Growth,Product metrics and growth terms,5,pm
+pm-frameworks-prioritization,Frameworks & Prioritization,Prioritization and decision-making frameworks,6,pm
+pm-roles-org,Roles & Org,Product management roles and org structure terms,7,pm
+pm-technical-for-pms,Technical for PMs,Developer/technical vocabulary explained for non-technical PMs,8,pm
+pm-product-operations,Product Operations,Product operations and process terms,9,pm
+pm-deployment,Deployment,Release and deployment terms,10,pm
+pm-go-to-market,Go-To-Market,"Go-to-market, pricing, and launch terms",11,pm

@@ -1,10 +1,13 @@
 import { getSupabaseClient } from "./supabase";
 
+export type GlossaryDomain = "ai" | "pm";
+
 export interface Category {
   id_slug: string;
   name: string;
   description: string | null;
   sort_order: number;
+  domain: GlossaryDomain;
 }
 
 export interface TermSummary {
@@ -44,39 +47,53 @@ export interface TermSearchResult {
 export interface SearchGlossaryOptions {
   category?: string;
   maxPriority?: number;
+  domain?: GlossaryDomain;
 }
 
 export async function searchGlossary(
   query: string,
-  { category, maxPriority }: SearchGlossaryOptions = {}
+  { category, maxPriority, domain = "ai" }: SearchGlossaryOptions = {}
 ): Promise<TermSearchResult[]> {
   const supabase = getSupabaseClient();
   const { data, error } = await supabase.rpc("search_terms", {
     search_query: query,
     filter_category: category ?? null,
     filter_max_priority: maxPriority ?? null,
+    filter_domain: domain,
   });
   if (error) throw error;
   return (data ?? []) as TermSearchResult[];
 }
 
-export async function listCategories(): Promise<Category[]> {
+export async function listCategories(domain: GlossaryDomain = "ai"): Promise<Category[]> {
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("categories")
-    .select("id_slug, name, description, sort_order")
+    .select("id_slug, name, description, sort_order, domain")
+    .eq("domain", domain)
     .order("sort_order");
   if (error) throw error;
   return data ?? [];
 }
 
-export async function listTopTerms(maxPriority = 2): Promise<TermSummary[]> {
+// `terms` has no domain column of its own — domain lives on the category it
+// belongs to — so any query scoping terms by domain goes through this first.
+async function categoryIdsForDomain(domain: GlossaryDomain): Promise<string[]> {
   const supabase = getSupabaseClient();
+  const { data, error } = await supabase.from("categories").select("id_slug").eq("domain", domain);
+  if (error) throw error;
+  return (data ?? []).map((c) => c.id_slug);
+}
+
+export async function listTopTerms(maxPriority = 2, domain: GlossaryDomain = "ai"): Promise<TermSummary[]> {
+  const supabase = getSupabaseClient();
+  const categoryIds = await categoryIdsForDomain(domain);
   const { data, error } = await supabase
     .from("terms")
     .select("id_slug, canonical_term, short_definition, category_id, priority")
     .eq("status", "active")
     .lte("priority", maxPriority)
+    .in("category_id", categoryIds)
     .order("priority")
     .order("canonical_term");
   if (error) throw error;
@@ -96,12 +113,14 @@ export async function listTermsByCategory(categorySlug: string): Promise<TermSum
   return data ?? [];
 }
 
-export async function listStudyTerms(): Promise<StudyTerm[]> {
+export async function listStudyTerms(domain: GlossaryDomain = "ai"): Promise<StudyTerm[]> {
   const supabase = getSupabaseClient();
+  const categoryIds = await categoryIdsForDomain(domain);
   const { data, error } = await supabase
     .from("terms")
     .select("id_slug, canonical_term, short_definition, long_definition, category_id, priority")
     .eq("status", "active")
+    .in("category_id", categoryIds)
     .order("category_id")
     .order("priority")
     .order("canonical_term");
@@ -109,14 +128,18 @@ export async function listStudyTerms(): Promise<StudyTerm[]> {
   return data ?? [];
 }
 
-export async function listAllTermSlugs(): Promise<string[]> {
+export async function listAllTermSlugs(domain: GlossaryDomain = "ai"): Promise<string[]> {
   const supabase = getSupabaseClient();
-  const { data, error } = await supabase.from("terms").select("id_slug");
+  const categoryIds = await categoryIdsForDomain(domain);
+  const { data, error } = await supabase.from("terms").select("id_slug").in("category_id", categoryIds);
   if (error) throw error;
   return (data ?? []).map((t) => t.id_slug);
 }
 
-export async function getTermBySlug(slug: string): Promise<TermDetail | null> {
+export async function getTermBySlug(
+  slug: string,
+  domain: GlossaryDomain = "ai"
+): Promise<TermDetail | null> {
   const supabase = getSupabaseClient();
 
   const { data: term, error: termError } = await supabase
@@ -129,6 +152,17 @@ export async function getTermBySlug(slug: string): Promise<TermDetail | null> {
     .maybeSingle();
   if (termError) throw termError;
   if (!term) return null;
+
+  // terms carries no domain of its own — confirm the term's category actually
+  // belongs to the requested domain, so e.g. /terms/<a-pm-slug> 404s instead
+  // of rendering PM content under the AI Terms URL prefix.
+  const { data: termCategory, error: categoryError } = await supabase
+    .from("categories")
+    .select("domain")
+    .eq("id_slug", term.category_id)
+    .maybeSingle();
+  if (categoryError) throw categoryError;
+  if (termCategory?.domain !== domain) return null;
 
   const [{ data: aliases, error: aliasError }, { data: relations, error: relationError }, { data: sources, error: sourceError }] =
     await Promise.all([

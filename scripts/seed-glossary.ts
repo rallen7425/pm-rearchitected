@@ -10,7 +10,13 @@ function readCsv<T>(filename: string): T[] {
   return parse(raw, { columns: true, skip_empty_lines: true }) as T[];
 }
 
-type CategoryRow = { id_slug: string; name: string; description: string; sort_order: string };
+type CategoryRow = {
+  id_slug: string;
+  name: string;
+  description: string;
+  sort_order: string;
+  domain: string;
+};
 type TermRow = {
   id_slug: string;
   canonical_term: string;
@@ -55,6 +61,7 @@ async function main() {
       name: c.name,
       description: c.description || null,
       sort_order: Number(c.sort_order),
+      domain: c.domain,
     }));
     const { error } = await supabase.from("categories").insert(rows);
     if (error) throw new Error(`categories: ${error.message}`);

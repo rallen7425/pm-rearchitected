@@ -2,12 +2,18 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import type { TermSearchResult } from "@/lib/glossary";
+import type { GlossaryDomain, TermSearchResult } from "@/lib/glossary";
 
-export function SearchBox() {
+const BASE_PATH_BY_DOMAIN: Record<GlossaryDomain, string> = {
+  ai: "/terms",
+  pm: "/pm-terms",
+};
+
+export function SearchBox({ domain = "ai" }: { domain?: GlossaryDomain }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<TermSearchResult[]>([]);
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+  const basePath = BASE_PATH_BY_DOMAIN[domain];
 
   useEffect(() => {
     const trimmed = query.trim();
@@ -22,9 +28,10 @@ export function SearchBox() {
 
       setStatus("loading");
       try {
-        const res = await fetch(`/api/terms/search?q=${encodeURIComponent(trimmed)}`, {
-          signal: controller.signal,
-        });
+        const res = await fetch(
+          `/api/terms/search?q=${encodeURIComponent(trimmed)}&domain=${domain}`,
+          { signal: controller.signal }
+        );
         if (!res.ok) throw new Error("Search request failed");
         const data = await res.json();
         setResults(data.results ?? []);
@@ -38,7 +45,7 @@ export function SearchBox() {
       clearTimeout(timeout);
       controller.abort();
     };
-  }, [query]);
+  }, [query, domain]);
 
   return (
     <div>
@@ -64,7 +71,7 @@ export function SearchBox() {
             {results.map((result) => (
               <li key={result.id_slug} className="text-sm text-muted-foreground leading-relaxed">
                 <Link
-                  href={`/terms/${result.id_slug}`}
+                  href={`${basePath}/${result.id_slug}`}
                   className="font-semibold text-foreground hover:text-primary transition-colors"
                 >
                   {result.canonical_term}

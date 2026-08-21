@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { searchGlossary } from "@/lib/glossary";
+import { searchGlossary, type GlossaryDomain } from "@/lib/glossary";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -11,9 +11,10 @@ export async function GET(request: NextRequest) {
   const category = searchParams.get("category") ?? undefined;
   const maxPriorityParam = searchParams.get("maxPriority");
   const maxPriority = maxPriorityParam ? Number(maxPriorityParam) : undefined;
+  const domain = (searchParams.get("domain") as GlossaryDomain | null) ?? "ai";
 
   try {
-    const results = await searchGlossary(q, { category, maxPriority });
+    const results = await searchGlossary(q, { category, maxPriority, domain });
     return NextResponse.json({ results });
   } catch (error) {
     console.error("Glossary search failed:", error);

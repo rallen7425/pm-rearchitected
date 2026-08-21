@@ -85,3 +85,130 @@ foom,Hard Takeoff,synonym
 paperclip-maximizer,Paperclips,synonym
 memory-cache,KV Caching,synonym
 evaluations,Evals,synonym
+backlog,Backlog,synonym
+backlog,Product Backlog,synonym
+backlog,What is a Backlog,synonym
+backlog,backlog (sprint),synonym
+mvp,MVP (Minimal Viable Product),synonym
+mvp,MVP: Minimum Viable Product,synonym
+mvp,Minimum Viable Product (MVP),synonym
+product-requirements-document,PRD: Product Requirements Document,synonym
+product-requirements-document,Product Requirement Document,synonym
+product-requirements-document,Product Requirements Doc (PRD),synonym
+product-requirements-document,Product Requirements Document,synonym
+product-roadmap,Feature-Less Roadmap,synonym
+product-roadmap,Kanban Roadmap,synonym
+product-roadmap,Roadmap,synonym
+product-roadmap,Roadmap Milestones,synonym
+product-roadmap,Stakeholder Roadmaps,synonym
+product-roadmap,Timeline Roadmap,synonym
+agile,Agile Framework,synonym
+agile,Agile Methodology,synonym
+agile,Agile Product Development,synonym
+agile,agile development,synonym
+agile,agile product management,synonym
+epic,Epics,synonym
+gtm,GTM: Go-To-Market Strategy,synonym
+gtm,Go-To-Market (GTM),synonym
+gtm,Go-to-Market (GTM) Strategy,synonym
+gtm,Go-to-Market Strategy,synonym
+product-led-growth,Product Led Growth,synonym
+product-led-growth,Product-Led Growth,synonym
+sprint,Sprints,synonym
+technical-debt,Technical debt,synonym
+wireframe,Wireframes,synonym
+acceptance-criteria,acceptance criteria,synonym
+beta-testing,Beta Testing,synonym
+beta-testing,Beta testing,synonym
+lifetime-value,LTV (Lifetime Value),synonym
+lifetime-value,Lifetime Value,synonym
+objectives-and-key-results,OKR (Objectives and Key Results),synonym
+objectives-and-key-results,OKRs (Objectives and Key Results),synonym
+objectives-and-key-results,OKRs: Objectives and Key Results,synonym
+objectives-and-key-results,Objectives and Key Results,synonym
+product-lifecycle,Product Life Cycle,synonym
+scrum,Scrum Agile Framework,synonym
+user-experience,UX: User Experience,synonym
+user-experience,User Experience,synonym
+user-experience,User experience (UX) design,synonym
+user-flow,User flow,synonym
+user-persona,Persona,synonym
+user-persona,User persona,synonym
+api-1,application programming interface,synonym
+business-intelligence,BI Business Intelligence,synonym
+business-intelligence,BI: Business Intelligence,synonym
+business-intelligence,Business Intelligence,synonym
+jobs-to-be-done,JTBD: Jobs-To-Be-Done,synonym
+jobs-to-be-done,Jobs to be done,synonym
+jobs-to-be-done,Jobs-To-Be-Done Framework,synonym
+jobs-to-be-done,Jobs-to-Be-Done,synonym
+jobs-to-be-done,Jobs-to-be-Done Framework,synonym
+key-performance-indicator,KPI (Key Performance Indicator),synonym
+moscow-method,MOSCOW Framework,synonym
+moscow-method,MoSCoW,synonym
+moscow-method,MoSCoW Prioritization,synonym
+net-promoter-score,NPS (Net Promoter Score),synonym
+net-promoter-score,NPS: Net Promoter Score,synonym
+product-operations,Product Operation,synonym
+product-operations,Product Ops,synonym
+product-operations,ProductOps,synonym
+product-owner,Agile Product Owner,synonym
+product-portfolio,Product Portfolio,synonym
+product-market-fit,Product Market Fit,synonym
+product-market-fit,Product/Market Fit,synonym
+scope-creep,Scope Creep,synonym
+arr,Annual Recurring Revenue,synonym
+arr,annual recurring revenue,synonym
+art-agile-release-train,Agile Release Train,synonym
+art-agile-release-train,agile release train,synonym
+backlog-grooming,Backlog Grooming,synonym
+bug,Bugs,synonym
+burndown-chart,burndown chart,synonym
+churn-rate,Churn Rates,synonym
+customer-acquisition-cost,CAC (Customer Acquisition Cost),synonym
+customer-experience,Customer Experience,synonym
+definition-of-done,Agile Definition of Done,synonym
+definition-of-done,Definition of Done,synonym
+front-end,Front-end development,synonym
+front-end,Frontend,synonym
+kano-model,KANO Framework,synonym
+mockup,Mockups,synonym
+monthly-recurring-revenue,MRR (Monthly Recurring Revenue),synonym
+monthly-recurring-revenue,MRR: Monthly Recurring Revenue,synonym
+product-discovery,Product-Discovery,synonym
+product-spec,Product Specs,synonym
+qa,Quality Assurance,synonym
+rice-scoring-model,RICE Framework,synonym
+rice-scoring-model,RICE Scoring,synonym
+smart-goals,SMART Goal Setting,synonym
+smart-goals,SMART Objectives,synonym
+use-case,Use case,synonym
+user-interface,User Interface,synonym
+user-interface,User interface (UI) design,synonym
+5w1h,5 Ws and H,synonym
+aarrr-pirate-metrics-framework,AARRR Framework,synonym
+backend,Back-end development,synonym
+business-model-canvas,business model canvas,synonym
+ci-cd,CI/CD (Continuous Integration/Continuous Deployment),synonym
+circles-method,CIRCLE Framework,synonym
+continuous-improvement,Continuous Improvement,synonym
+customer-empathy,User Empathy,synonym
+customer-journey,User journey,synonym
+customer-journey-map,User Journey Mapping,synonym
+database,Database,synonym
+design-ops,DesignOps,synonym
+empathy-map,Empathy map,synonym
+feature-driven-development,FDD: Feature-Driven Development,synonym
+five-whys,5 Why Framework,synonym
+goob-get-out-of-the-building,Get Out Of The Building,synonym
+information-architecture,Information Architecture,synonym
+kpis,KPIs: Key Performance Indicators,synonym
+market-requirements-document,MRD: Market Requirements Document,synonym
+pdca-cycle,Plan Do Check Act (PDCA),synonym
+retrospective,Retrospective,synonym
+sdk,SDK,synonym
+shape-up-method,Shapeup,synonym
+tam,Total Addressable Market (TAM),synonym
+voice-of-customer,Voice of Customer (VOC),synonym
+what-is-a-product-operating-model,Product Operating Model,synonym
+working-backwards,Working Backwords,synonym
