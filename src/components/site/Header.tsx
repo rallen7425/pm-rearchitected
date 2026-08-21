@@ -8,7 +8,8 @@ const NAV = [
   { href: "/", label: "Home", external: false },
   { href: "https://fromoutofthenoise.substack.com/", label: "Blog", external: true },
   { href: "/resources", label: "Resources", external: false },
-  { href: "/terms", label: "AI Terms", external: false },
+  { href: "/terminology", label: "Terminology", external: false },
+  { href: "/digital-twin", label: "Digital Twin", external: false },
   { href: "/about", label: "About", external: false },
 ];
 
