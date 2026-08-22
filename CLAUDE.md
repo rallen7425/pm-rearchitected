@@ -17,36 +17,44 @@ Raindrop collection: 70283481
 
 **AI grading:** Anthropic API (`claude-haiku-4-5-20251001`), used only to grade Open-Ended quiz answers as Correct/Partial/Incorrect (`POST /api/terms/grade`). Key is `ANTHROPIC_API_KEY`, reused from the same personal key already used by sibling apps (`distilled`, `sonic-radius`) rather than a fresh one.
 
-**Production env vars** (Vercel, `rick-allen-s-projects/pm-rearchitected`, Production environment): `RAINDROP_TOKEN`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY` — all four confirmed present as of 2026-07-23 (the Supabase and Anthropic keys were only ever in `.env.local` until today's production push; the app would have 500'd on every `/terms` route without them).
+**Digital Twin chat:** Anthropic API (`claude-sonnet-5`), a system-prompt-stuffed chat (no RAG/vector store) answering visitor questions about Rick in his own voice, streamed through `POST /api/digital-twin/chat`. Same `ANTHROPIC_API_KEY` as above. See "Digital Twin" section below.
+
+**Production env vars** (Vercel, `rick-allen-s-projects/pm-rearchitected`, Production environment): `RAINDROP_TOKEN`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY` — all four confirmed present as of 2026-07-23 (the Supabase and Anthropic keys were only ever in `.env.local` until today's production push; the app would have 500'd on every `/terms` route without them). No new env vars were needed for PM Terms or Digital Twin (2026-08-21) — both reuse existing keys.
 
 ---
 
-## Current State (as of 2026-07-23)
+## Current State (as of 2026-08-21)
 
 ### Pages built
 - `/` — Home page (Hero, Recent Posts, Reading This Week, Resource Library, About section)
-- `/about` — Full standalone About page with bio content
+- `/about` — Full standalone About page with bio content, plus a Digital Twin callout card (added 2026-08-21)
 - `/resources` — Full Resources page with 8 modules, two-column bullet format
+- `/terminology` — Combined hub showing top PM terms and top AI terms side by side (added 2026-08-21)
 - `/terms` — AI Terms top terms (priority 1–2, static) — renamed from `/glossary` 2026-07-23
 - `/terms/browse` — AI Terms browsed by category (all 177 terms)
 - `/terms/search` — AI Terms live full-text search (incl. aliases/abbreviations)
 - `/terms/flashcards` — AI Terms study page: Flash Card / Multiple Choice / Open-Ended
 - `/terms/[slug]` — AI Terms detail page (177 statically generated)
+- `/pm-terms`, `/pm-terms/browse`, `/pm-terms/search`, `/pm-terms/flashcards`, `/pm-terms/[slug]` — PM Terms domain, mirrors the `/terms` route tree exactly (added 2026-08-21, see "PM Terms" section below)
+- `/digital-twin` — AI chat answering visitor questions about Rick in his own voice (added 2026-08-21, see "Digital Twin" section below)
 
 ### Data sources
 - **Recent Posts**: Substack RSS (`fromoutofthenoise.substack.com/feed`), shows 5 posts with thumbnails
 - **Reading This Week**: Raindrop.io API, collection 70283481, last 7 days. Token in `.env.local` (`RAINDROP_TOKEN`)
 - **AI Terms**: Supabase (`pm_rearchitected` schema), 177 terms / 5 categories / 86 aliases / 318 related-term pairs / 72 sources, seeded from `db/glossary/*.csv` via `npm run seed:glossary`. Full-text search via a ranked Postgres function (`search_terms`), exposed at `GET /api/terms/search?q=...&category=...&maxPriority=...`. Open-Ended quiz grading via `POST /api/terms/grade` (Anthropic).
+- **PM Terms**: same Supabase tables as AI Terms, distinguished by a `categories.domain` column (`ai` | `pm`) added 2026-08-21 — 11 PM categories, 516 PM terms. See "PM Terms" section below.
+- **Digital Twin**: 5 markdown files at `content/digital-twin/*.md`, read server-side at request time and stuffed into the system prompt — no database, no RAG. See "Digital Twin" section below.
 - ISR revalidation every 3600s (`export const revalidate = 3600` in `page.tsx`)
 
 ### Navigation
 - **Home** → `/`
 - **Blog** → `https://fromoutofthenoise.substack.com/` (external, new tab)
 - **Resources** → `/resources`
-- **AI Terms** → `/terms` (nav label changed from "Glossary" to "AI Terms" 2026-07-23; route changed from `/glossary` to `/terms` same day)
+- **Terminology** → `/terminology` (renamed from "AI Terms" → `/terms`, 2026-08-21 — now points to the combined PM+AI hub instead of the AI-only page)
+- **Digital Twin** → `/digital-twin` (added 2026-08-21)
 - **About** → `/about`
 - Logo + "Rick Allen" name → `/about`
-- Mobile (`<md`): hamburger icon (☰/✕) toggles a dropdown with the same 5 links below the header, added 2026-07-24 — desktop nav is `hidden md:flex` with no prior mobile fallback, so mobile users previously had zero navigation
+- Mobile (`<md`): hamburger icon (☰/✕) toggles a dropdown with the same links below the header, added 2026-07-24 — desktop nav is `hidden md:flex` with no prior mobile fallback, so mobile users previously had zero navigation
 - Subscribe button removed from the header 2026-07-24 (per Rick's request, "for now") — still present on the About page and Footer, just not in the top nav
 
 ---
@@ -65,6 +73,24 @@ Raindrop collection: 70283481
 ### Resource Library module order (home page cards + resources page sections)
 Row 1: PM 101 · Product Strategy · Discovery & Research · AI for Product Managers  
 Row 2: UX Design · Roadmapping & Prioritization · Execution · Technology
+
+---
+
+## Completed 2026-08-21
+
+- Shipped the **PM Terms glossary domain** — work that had actually been built and DB-seeded on
+  2026-08-09 but sat uncommitted in the working tree for ~3 weeks (never documented here, since this
+  file wasn't updated that session). Verified live before pushing: the Supabase `domain` migration
+  was already applied and 516 PM terms / 11 categories were already seeded, and `npm run build`
+  compiled every new route clean. See "PM Terms" section below.
+- Built and shipped the **Digital Twin AI chat feature** end to end — corpus, system prompt
+  assembly, streaming API route, rate limiting, chat UI, dedicated page, nav + About page entry
+  points. See "Digital Twin" section below.
+- Renamed the "AI Terms" nav link to "Terminology," pointing at the new combined hub instead of the
+  AI-only `/terms` page.
+- All three landed as three separate commits in one push, deployed clean to production, and
+  spot-checked live (200s on `/digital-twin`, `/terminology`, `/pm-terms`, `/terms`; a live streaming
+  call to the Digital Twin endpoint confirmed the comp-deflection and employment-status rules held).
 
 ---
 
@@ -149,27 +175,109 @@ any header/nav/layout change; curl and automated checks won't catch responsive-o
 
 ---
 
+## PM Terms (built 2026-08-09, committed & shipped 2026-08-21)
+
+A second glossary "domain" alongside AI Terms, covering core product management terminology
+(strategy, discovery, UX, agile/delivery, metrics, frameworks, roles, technical-for-PMs, product
+ops, deployment, go-to-market). Shares the same Supabase tables as AI Terms rather than a separate
+schema.
+
+- **Schema**: `categories` gained a `domain` column (`ai` | `pm`) — the discriminator for
+  everything. `terms` has no domain column of its own; domain is derived by joining through
+  `category_id`, so any domain-scoped terms query goes through `categoryIdsForDomain()` in
+  `src/lib/glossary.ts` first. 11 PM categories, 516 PM terms.
+- **Routes**: `/pm-terms`, `/pm-terms/browse`, `/pm-terms/search`, `/pm-terms/flashcards`,
+  `/pm-terms/[slug]` mirror the `/terms` tree exactly, sharing the same components
+  (`GlossaryHeader`, `SearchBox`, `TermList`, `FlashcardStudio`) via a `domain` prop rather than
+  forking them.
+- **Search**: `search_terms` Postgres function gained a `filter_domain` parameter; `GET
+  /api/terms/search` accepts `?domain=ai|pm` (defaults to `ai` for backward compatibility with
+  existing callers).
+- **`/terminology`**: new hub page showing the top 10 PM terms and top 10 AI terms side by side,
+  each linking through to its own domain's routes.
+- **Verification note**: this feature's DB migration and seed data were confirmed live via a
+  throwaway script (`createClient` + the same `ws`-transport Node-20 workaround as
+  `seed-glossary.ts`) before pushing on 2026-08-21, and `npm run build` compiled all new routes —
+  but nobody has clicked through the actual `/pm-terms` or `/terminology` pages in a browser yet.
+  Treat as build-verified, not UX-verified.
+
+---
+
+## Digital Twin (added 2026-08-21)
+
+A system-prompt-stuffed chat (explicitly **not** RAG — no vector store, no embeddings) that answers
+visitor questions about Rick's background, career, and product philosophy in his own voice. First of
+two planned AI features; a second, broader "Product Coach" tool is a separate future project, not
+started.
+
+- **Corpus**: 5 markdown files (`bio.md`, `career-timeline.md`, `achievements.md`, `philosophy.md`,
+  `faq.md`) at `content/digital-twin/*.md`, copied from `PMRearchitected/Rick's Digital
+  Twin/Corpus-Ready/` (the outer scratch folder, not tracked by this repo — Rick can edit the `.md`
+  files directly to update the twin's knowledge, no code changes needed).
+- **System prompt assembly**: `src/lib/digital-twin.ts` reads all 5 files at request time via `fs`,
+  concatenates them under `## HEADING` delimiters, and wraps them with identity framing, hard
+  behavioral rules pulled near-verbatim from `faq.md`'s "Controlled framing" section (never disclose
+  compensation figures, never surface recruiter/contact names, settled brief framing for "why did
+  you leave UKG" — large-scale layoff, May 2026, no elaboration — acknowledge the active job search
+  without naming companies in conversation, never fabricate facts outside the corpus, no em dashes
+  ever), and a closing voice instruction from `bio.md`'s "Personality / voice notes" section.
+- **API**: `POST /api/digital-twin/chat`, streaming Route Handler, `claude-sonnet-5` (not Haiku —
+  voice quality matters more here than for the cheap Haiku-based AI Terms quiz grading). `max_tokens:
+  600`. Rejects message arrays over 20 turns or 2000 chars/message. No conversation history persisted
+  server-side — the client holds the running array and resends it each request. No logging of
+  message content, only error objects on failure.
+- **Rate limiting**: `src/lib/rate-limit.ts`, in-memory sliding window per IP (`x-forwarded-for`),
+  15 requests/10min. Known v1 tradeoff: resets on Vercel cold start since it's not a shared store.
+  If abuse shows up, upgrade path is a Supabase-backed counter table (project already has a Supabase
+  connection).
+- **UI**: `src/components/digital-twin/ChatPanel.tsx`, dedicated page at `/digital-twin` (not a
+  floating widget, matching the site's existing pattern of dedicated feature pages). Streams
+  token-by-token via `ReadableStream` + `getReader()` on the client. Visible disclaimer pinned above
+  the chat ("This is an AI representation of Rick... not Rick himself").
+- **React Compiler gotcha**: accumulating streamed text into a `let` variable mutated across a
+  `while` loop, then read inside a `setMessages` closure, trips `eslint-plugin-react-hooks`'s
+  `react-hooks/immutability` rule — Next 16 ships React Compiler-aware lint rules, one of the
+  "breaking changes vs. training data" `AGENTS.md` warns about. Fixed by deriving the new message
+  purely from `prev` inside the state updater (`prev[prev.length - 1].content + chunk`) instead of
+  mutating an external variable. Apply the same pattern to any future streaming UI here.
+- **Verification note**: all 5 required behavioral probes (salary/comp deflection, UKG-departure
+  framing, recruiter-name redirect, honest "I don't know" on an uncovered fact, general POV question
+  for voice quality) were tested via live streaming curl calls against both local and production —
+  all passed, including zero em dashes across every response despite the source corpus itself being
+  full of them. Browser streaming and desktop layout were visually confirmed. **Mobile viewport was
+  not verified** — the browser tool's `resize_window` reported success but `window.innerWidth`
+  stayed at desktop width regardless (tried twice, including a fresh tab). Needs a real-phone check,
+  same class of gap that caught the 2026-07-24 header-nav mobile bug.
+
+---
+
 ## What's Broken / Known Issues
 
 - **Preview tool** (`mcp__Claude_Preview__preview_*`) cannot start the server — port 3000 is occupied by an unrelated `node` process (PID 4913) that the tool checks first. Workaround: run the dev server manually (`npm run dev -- --port 3001`) and verify via curl or browser. The `.claude/launch.json` is configured for port 3001 but the tool keeps tripping on port 3000.
 - **LinkedIn URL** on the About page (`/about`) uses a placeholder: `https://linkedin.com/in/rickallen`. Needs Rick's actual LinkedIn URL.
 - **"Read More" links** in all Resources page bullets point to `href="#"`. Real URLs need to be added for each source.
 - **Resource card ref counts** (e.g. "12 refs", "9 refs") are hardcoded placeholders. Update when real content is finalized.
+- **Digital Twin mobile layout unverified** — see "Digital Twin" section above. `resize_window` in the browser automation tool didn't actually change the rendered viewport this session (confirmed via `window.innerWidth`); needs a real-phone check.
+- **`/pm-terms` and `/terminology` are build-verified only, not UX-verified** — nobody has clicked through the actual pages in a browser since they were built on 2026-08-09. Data and routes are confirmed working (build + direct DB query + a 200 smoke test in production), but the interactive experience (browse, search, flashcards for the PM domain) hasn't been exercised.
+- **Digital Twin rate limiting is in-memory** — resets on every Vercel cold start, so it's not a durable defense against sustained abuse. Fine for current traffic; revisit with a Supabase-backed counter if abuse shows up.
 
 ---
 
 ## Next Session Should Pick Up
 
-1. **Continue the device click-through on AI Terms** — Rick's real-phone pass on 2026-07-24 caught
-   the mobile nav gap (item 6, now fixed); keep going, particularly Open-Ended grading (needs a live
-   Anthropic call) and the mobile layout of the two-panel study cards.
-2. **Add real URLs** to the "Read More" links in `/resources/page.tsx` — 8 modules × 10 sources = 80 links
-3. **Update resource card counts** in `src/components/site/Resources.tsx` to match actual ref counts
-4. **Fix LinkedIn URL** in `src/app/about/page.tsx` (line ~144)
-5. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
-6. ~~Mobile nav~~ — **DONE 2026-07-24**, hamburger menu added to `Header.tsx`.
-7. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
+1. **Real-phone check of `/digital-twin`** — same gap that caught the 2026-07-24 header-nav bug;
+   automated tools couldn't verify the mobile layout this session.
+2. **Click through `/pm-terms` and `/terminology` interactively** — browse, search, and flashcards
+   for the PM domain have never been exercised in a browser, only build-verified.
+3. **Add real URLs** to the "Read More" links in `/resources/page.tsx` — 8 modules × 10 sources = 80 links
+4. **Update resource card counts** in `src/components/site/Resources.tsx` to match actual ref counts
+5. **Fix LinkedIn URL** in `src/app/about/page.tsx`
+6. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
    it comes back (and where) or stays gone.
+7. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
+8. ~~Mobile nav~~ — **DONE 2026-07-24**, hamburger menu added to `Header.tsx`.
+9. ~~PM Terms domain~~ — **DONE 2026-08-21** (built 2026-08-09, committed/shipped 2026-08-21).
+10. ~~Digital Twin chat~~ — **DONE 2026-08-21**, live at `/digital-twin`.
 
 ---
 
@@ -202,6 +310,18 @@ any header/nav/layout change; curl and automated checks won't catch responsive-o
 | `src/lib/grading.ts` | Open-Ended answer grading prompt + call (server-only) |
 | `src/components/glossary/GlossaryHeader.tsx` | Shared "AI Terms" heading + search toggle + per-page nav links, used on all 4 hub pages |
 | `src/components/glossary/` | `TermList`, `SearchBox`, `GlossaryHeader`, `FlashcardStudio` — folder kept its original name |
-| `scripts/seed-glossary.ts` | AI Terms seed script (`npm run seed:glossary`) — kept its original name |
-| `db/glossary/*.csv` | AI Terms source content (categories/terms/aliases/related_terms/sources) — folder kept its original name |
+| `scripts/seed-glossary.ts` | AI Terms + PM Terms seed script (`npm run seed:glossary`) — kept its original name, now domain-aware |
+| `db/glossary/*.csv` | AI Terms + PM Terms source content (categories/terms/aliases/related_terms/sources) — folder kept its original name |
+| `src/app/terminology/page.tsx` | Combined PM+AI terms hub page |
+| `src/app/pm-terms/page.tsx` | PM Terms top-terms page |
+| `src/app/pm-terms/browse/page.tsx` | PM Terms browse-by-category page |
+| `src/app/pm-terms/search/page.tsx` | PM Terms search page |
+| `src/app/pm-terms/flashcards/page.tsx` | PM Terms study page |
+| `src/app/pm-terms/[slug]/page.tsx` | PM Terms detail page |
+| `content/digital-twin/*.md` | Digital Twin corpus (bio, career-timeline, achievements, philosophy, faq) — edit directly to update the chat's knowledge, no code changes needed |
+| `src/lib/digital-twin.ts` | Digital Twin system prompt assembly (reads corpus, applies hard behavioral rules) |
+| `src/lib/rate-limit.ts` | In-memory per-IP sliding-window rate limiter used by the Digital Twin chat endpoint |
+| `src/app/api/digital-twin/chat/route.ts` | Digital Twin streaming chat API route |
+| `src/app/digital-twin/page.tsx` | Digital Twin chat page |
+| `src/components/digital-twin/ChatPanel.tsx` | Digital Twin chat UI (streaming, disclaimer, suggested prompts) |
 | `.env.local` | `RAINDROP_TOKEN`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY` |
