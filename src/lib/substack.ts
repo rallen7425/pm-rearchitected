@@ -47,12 +47,34 @@ export async function fetchSubstackPosts(limit = 10): Promise<SubstackPost[]> {
   return (await fetchSubstackFeed()).slice(0, limit);
 }
 
-// The Substack RSS feed carries no tag/category data, so the "Reframed" blog
-// series is identified by its title convention: every entry is "Reframed: <topic>".
+// ---- "Reframed" blog series ----
+// The RSS feed only carries the ~20 most recent posts and exposes no tags, so the
+// series is read from the Substack archive API instead, which returns the full
+// history with each post's real tags. A post counts as part of the series if it
+// carries the "Reframed" tag OR its title starts with "Reframed:" (a couple of
+// series entries are missing the tag).
+
+const ARCHIVE_API = "https://fromoutofthenoise.substack.com/api/v1/archive";
+const REFRAMED_TAG = "reframed";
 const REFRAMED_PREFIX = /^\s*reframed\s*:\s*/i;
 
-export function isReframedPost(post: SubstackPost): boolean {
-  return REFRAMED_PREFIX.test(post.title);
+interface ArchivePost {
+  title?: string;
+  slug?: string;
+  canonical_url?: string;
+  post_date?: string;
+  subtitle?: string;
+  description?: string;
+  wordcount?: number;
+  postTags?: { name?: string; slug?: string }[];
+}
+
+export interface ReframedPost {
+  title: string;
+  link: string;
+  pubDate: string;
+  description: string;
+  wordcount: number;
 }
 
 /** Strips the "Reframed:" series prefix for display (the tile already shows a Reframed pill). */
@@ -60,12 +82,43 @@ export function reframedSeriesTitle(title: string): string {
   return title.replace(REFRAMED_PREFIX, "").trim();
 }
 
-/** Reframed series posts, most recent first. */
-export async function fetchReframedPosts(limit = 30): Promise<SubstackPost[]> {
-  return (await fetchSubstackFeed())
-    .filter(isReframedPost)
-    .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
-    .slice(0, limit);
+function isReframedArchivePost(p: ArchivePost): boolean {
+  const tagged = (p.postTags ?? []).some((t) => t.slug?.toLowerCase() === REFRAMED_TAG);
+  return tagged || REFRAMED_PREFIX.test(p.title ?? "");
+}
+
+/** Reframed series posts, most recent first, across the publication's full history. */
+export async function fetchReframedPosts(maxPages = 8): Promise<ReframedPost[]> {
+  const collected: ArchivePost[] = [];
+
+  for (let page = 0; page < maxPages; page++) {
+    const res = await fetch(`${ARCHIVE_API}?sort=new&limit=12&offset=${page * 12}`, {
+      next: { revalidate: 3600 },
+      headers: { "User-Agent": "PMReArchitected/1.0" },
+    });
+    if (!res.ok) break;
+
+    const batch = (await res.json()) as ArchivePost[];
+    if (!Array.isArray(batch) || batch.length === 0) break;
+    collected.push(...batch);
+    if (batch.length < 12) break;
+  }
+
+  return collected
+    .filter(isReframedArchivePost)
+    .map((p) => ({
+      title: p.title ?? "",
+      link: p.canonical_url ?? `https://fromoutofthenoise.substack.com/p/${p.slug ?? ""}`,
+      pubDate: p.post_date ?? "",
+      description: p.subtitle?.trim() || p.description?.trim() || "",
+      wordcount: typeof p.wordcount === "number" ? p.wordcount : 0,
+    }))
+    .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+}
+
+/** Read-time estimate from a real word count (Substack archive exposes this). */
+export function readTimeFromWords(wordcount: number): string {
+  return `${Math.max(3, Math.round(wordcount / 200))} min`;
 }
 
 function inferTag(title: string): string {

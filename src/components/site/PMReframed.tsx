@@ -1,4 +1,4 @@
-import { fetchReframedPosts, formatDate, readTime, reframedSeriesTitle } from "@/lib/substack";
+import { fetchReframedPosts, formatDate, readTimeFromWords, reframedSeriesTitle } from "@/lib/substack";
 import ReframedRail, { type ReframedTile } from "./ReframedRail";
 
 const SERIES_URL = "https://fromoutofthenoise.substack.com/p/pm-reframed";
@@ -12,7 +12,7 @@ export default async function PMReframed() {
     link: p.link,
     description: p.description,
     dateLabel: formatDate(p.pubDate),
-    readLabel: readTime(p.description),
+    readLabel: readTimeFromWords(p.wordcount),
   }));
 
   return (
