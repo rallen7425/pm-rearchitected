@@ -3,6 +3,7 @@ import Header from "@/components/site/Header";
 import Hero from "@/components/site/Hero";
 import SubstackLatest from "@/components/site/SubstackLatest";
 import Newsfeed from "@/components/site/Newsfeed";
+import PMReframed from "@/components/site/PMReframed";
 import Resources from "@/components/site/Resources";
 import About from "@/components/site/About";
 import Footer from "@/components/site/Footer";
@@ -55,6 +56,9 @@ export default function Home() {
               </Suspense>
             </aside>
           </div>
+          <Suspense fallback={<div className="h-72 bg-muted/30 rounded-2xl animate-pulse" />}>
+            <PMReframed />
+          </Suspense>
           <Suspense fallback={<div className="h-64 bg-muted/30 rounded-2xl animate-pulse" />}>
             <Resources />
           </Suspense>
