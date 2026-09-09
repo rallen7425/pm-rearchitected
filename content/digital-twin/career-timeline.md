@@ -11,21 +11,22 @@ Led a team of product managers building next-generation pay and financial wellne
 - Spearheaded replatforming and modernization of the employee pay experience: redesigned web and mobile journeys on a new design system, launched a text-and-voice AI Pay Assistant, and unified the pay distribution platform across all user touchpoints with instant bank account verification (via an open-banking integration) to reduce payment errors and unlock fintech distribution partnerships.
 - Drove adoption of an agentic AI-powered product discovery workflow across product and design (Claude Code, Replit), compressing research/prototyping/user-testing cycles from months to days — a process change he led for PMs and designers specifically (not the parallel, separately-driven engineering adoption of AI coding tools).
 - Built and scaled the product organization from the ground up — recruiting and developing PMs, designers, and engineers into a team recognized for delivering outsized impact relative to its size. Operated as a hands-on player-coach: driving the most complex platform/partnership work directly while mentoring PMs across the broader org.
+- Served as the lead product stakeholder for UKG Labs, partnering with more than a dozen early-stage financial-wellness companies to evaluate partnerships and inform the portfolio strategy.
 - Departed UKG in May 2026 (large-scale reduction/layoff).
 
 ## accesso — Director of Product Management, Mobile Experience
 **Mar 2023 – Nov 2023 · Orlando, FL (Remote)**
 
-Led the Guest Experience mobile app and platform product team; defined accesso's mobile-first guest experience strategy for theme park, ski resort, and attraction customers.
+Led a four-person Guest Experience mobile app and platform product team; defined accesso's mobile-first guest experience strategy for theme park, ski resort, and attraction customers.
 
-- Delivered mobile apps for major theme parks and ski resorts incorporating ticketing, queuing, food & beverage, and guest experience functionality, growing revenue and transaction fees.
+- Delivered mobile apps for major theme parks and ski resorts (including brands such as Cedar Fair and Alterra Mountain Company) incorporating ticketing, queuing, food & beverage, and guest experience functionality, growing revenue and transaction fees.
 - Introduced a SaaS mobile developer platform (SDK and APIs) letting tier-1 customers and partners integrate accesso features within their own apps, expanding accesso's sales footprint.
 - Managed the design system and its rollout across accesso's customers.
 
 ## P97 Networks — Head of Mobile Product Management & Design
 **Oct 2021 – Mar 2023 · Houston, TX (Remote)**
 
-Owned product strategy, roadmap, and implementation for P97's Mobility and Connected Commerce platform (in-person payments, loyalty, digital offers).
+Owned product strategy, roadmap, and implementation for P97's Mobility and Connected Commerce platform (in-person payments, loyalty, digital offers), managing a team of eight product managers and designers. The 25+ fuel and convenience brands on the platform largely operate through franchised or independently owned locations.
 
 - Implemented 25+ apps on the P97 platform for major fuel and convenience retail brands, including ExxonMobil, Shell, Phillips 66, and Citgo, growing transaction revenue and recurring service fees.
 - Led design and development of the ExxonMobil app (US and Canada) — 4.8-star rating, most-downloaded app in its category.

@@ -51,6 +51,12 @@ Reframes the question from "how do you survive disruption" to "how do you archit
 **On the PayPal role specifically**
 Precise distinction worth maintaining: his PayPal work was on the White Label Wallet platform (enabling merchants to embed payments/loyalty via SDK/API), not core consumer PayPal. Worth being exact about this given how many PayPal alumni are in fintech hiring pools.
 
+**"What are you working on now?" / "Are you building your own product?"**
+Alongside the job search, Rick is actively building mobile app products from a long-standing personal backlog as a solo entrepreneur under Rocky Coast Labs, and developing "Product Management, Re-Architected" (including this Digital Twin). Frame this as deliberate, hands-on practice with agentic AI product development. It is how he keeps building while looking for the next leadership role, not idle time between jobs.
+
+**On franchise and multi-location business models**
+Has repeatedly built for franchised or independently owned operator models: P97's 25+ fuel and convenience brands (ExxonMobil, Phillips 66, Citgo, Shell) largely run through franchised or independently owned locations, and PayPal White Label Wallet's largest customer, Subway, operates on a franchise model.
+
 **On giving and receiving feedback**
 Wants feedback direct and early rather than softened: "I'd rather hear a hard truth early than have someone dance around a problem." Tries to build enough psychological safety on his team that people will tell him when something isn't working — including when he's the one who isn't working — and describes himself as someone who'd rather incorporate feedback and improve than defend a position to be right. When giving feedback, stays direct but frames it around impact and forward motion rather than dwelling on what went wrong, and prefers quick, private conversations over letting issues fester.
 
@@ -76,4 +82,4 @@ Uses the UKG pay-distribution replatforming as the model: several teams each own
 A concrete, small-scale example of process change: using AI/"vibe coding" tools to turn around a mobile UI change and user testing overnight — handing off working code directly rather than manually building Figma files first — as one illustration of collapsing a research/prototyping/testing cycle that used to take much longer.
 
 ## Known open items (things not yet finalized in source material)
-- The full punched-up LinkedIn "About" hook has three candidate openers drafted but no final selection yet — if asked to produce LinkedIn-voice content, don't treat any one version as settled.
+- (Resolved Sept 2026) The LinkedIn "About" section is now finalized. The settled version lives in `_sources/linkedin-about-2026-09.md`, and its substance is reflected in bio.md ("Areas of expertise" and "Current status"). The earlier note about three unselected candidate openers no longer applies.

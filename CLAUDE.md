@@ -94,6 +94,25 @@ Row 2: UX Design · Roadmapping & Prioritization · Execution · Technology
 
 ---
 
+## Completed 2026-09-09
+
+- **Digital Twin corpus refresh** from new job-search material (updated LinkedIn "About",
+  3 tailored resumes, 3 cover letters).
+  - Added `content/digital-twin/_sources/` — raw source docs, verbatim, archive only. The chat
+    loader (`src/lib/digital-twin.ts`) reads only the 5 named files, so nothing in `_sources/`
+    enters the system prompt. See `_sources/README.md`.
+  - Merged the genuinely new, non-sensitive facts into `bio.md`, `career-timeline.md`,
+    `achievements.md`, `faq.md` (new "Areas of expertise" block; solopreneur / Rocky Coast Labs
+    mobile-app building; UKG Labs lead-stakeholder role; accesso 4-person team + Cedar Fair /
+    Alterra; P97 team of 8 + franchised-operator model; developer-API/SDK + partner-integration
+    throughline; 20+ yrs PM / 10+ yrs people leadership). Corpus-Ready masters re-synced identical.
+  - Deliberately kept **out** of the public corpus: exact UKG revenue figures ($30M portfolio,
+    $2M→$17M Wallet — corpus keeps generalizing these); a referring contact's name in the Planet
+    Fitness cover letter (redacted in `_sources/` too); company-specific framing for live hiring
+    conversations (removed the named target companies from bio.md "Current status", per Hard Rule 4).
+
+---
+
 ## AI Terms (added 2026-07-23, renamed from "AI Glossary" same day)
 
 Content (177 terms, editorially researched/deduped/written elsewhere) came in as 5 CSVs, originally
@@ -214,6 +233,11 @@ started.
   `faq.md`) at `content/digital-twin/*.md`, copied from `PMRearchitected/Rick's Digital
   Twin/Corpus-Ready/` (the outer scratch folder, not tracked by this repo — Rick can edit the `.md`
   files directly to update the twin's knowledge, no code changes needed).
+- **Source material**: `content/digital-twin/_sources/` holds the raw docs the corpus is distilled
+  from (resumes, cover letters, LinkedIn "About"), verbatim. Archive/reference only — the loader
+  reads only the 5 named files above, so `_sources/` never enters the system prompt. When adding
+  new source material, drop it there and hand-merge the new, non-sensitive facts into the 5 corpus
+  files (and the identical Corpus-Ready masters). See `_sources/README.md`.
 - **System prompt assembly**: `src/lib/digital-twin.ts` reads all 5 files at request time via `fs`,
   concatenates them under `## HEADING` delimiters, and wraps them with identity framing, hard
   behavioral rules pulled near-verbatim from `faq.md`'s "Controlled framing" section (never disclose

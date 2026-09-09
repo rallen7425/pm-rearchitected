@@ -6,8 +6,9 @@ Cross-cutting highlights, independent of chronology — useful for quick, specif
 - Built and scaled UKG Wallet, an earned wage access platform (on-demand pay, branded Visa debit card, goal-based savings) reaching 13M end users across ~6,500 enterprise customers — took transaction volume from a small base to an order-of-magnitude larger scale through new sales channels and a redesigned embedded experience.
 - Led the White Label Wallet platform at PayPal, letting merchants embed payments, purchase experiences, and loyalty features into their own apps via SDK/API.
 - At Nokia, grew mobile operator billing integration from 15 countries to 160+ operators across 60 countries — the largest operator billing footprint of any app store at the time — and built a developer SDK adopted by 2,000+ apps worldwide, roughly tripling in-app revenue.
-- Implemented 25+ apps on P97's Connected Commerce platform for major fuel/convenience retail brands (ExxonMobil, Shell, Phillips 66, Citgo); the ExxonMobil app hit a 4.8-star rating and became the most-downloaded app in its category.
+- Implemented 25+ apps on P97's Connected Commerce platform for major fuel/convenience retail brands (ExxonMobil, Shell, Phillips 66, Citgo), most operating through franchised or independently owned locations; the ExxonMobil app hit a 4.8-star rating and became the most-downloaded app in its category.
 - Expanded PayPal's Cardless Cash Access to 40 banks and 25,000+ ATMs.
+- Built and managed headless platforms delivering developer APIs and SDKs, and led strategic partner integrations, across roles at Nokia, PayPal, accesso, and P97 — a developer-experience and partner-integration throughline alongside the consumer and enterprise product work.
 
 ## AI-native product building (personal credibility)
 - Hands-on user of Claude Code, Replit, and Lovable for prototyping — not just writing about AI tooling, but building with it.
@@ -15,6 +16,7 @@ Cross-cutting highlights, independent of chronology — useful for quick, specif
 - Built an AI-powered Pay Assistant (text and voice) and a Financial Health Coach with Plaid integration and RAG-based coaching, within a Vertex AI-based chatbot platform at UKG.
 
 ## Team & organizational leadership
+- More than 20 years in product management and over 10 years of people leadership, directly managing product managers, designers, and data analysts on payments and fintech platform teams (typically five or more PMs).
 - Built a product organization from the ground up at UKG — recruiting and developing PMs, designers, and engineers into a team recognized for delivering outsized impact relative to its size.
 - Operated consistently as a "player-coach": personally driving the most complex platform/partnership initiatives while mentoring PMs across the broader organization.
 
