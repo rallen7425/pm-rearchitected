@@ -60,20 +60,16 @@ Raindrop collection: 70283481
 
 ---
 
-## Completed This Session
+## Completed earlier (July 2026 — initial site build)
 
 - Rebuilt nav from scroll-based section links to proper page navigation
 - Created standalone `/about` page with full bio, mission, perspective sections
-- Created full `/resources` page with 8 modules, intro paragraphs, and two-column bullet lists (5 bullets per column, bold source name + description + Read More link)
-- Resource Library on home page: 8 cards in 2 rows (4 per row), "Browse topic" links go to `/resources#module-id`
+- Built the first `/resources` page (8 topic modules, two-column bullet lists) — **superseded by the
+  2026-09-09 Resources redesign; see that section below**
 - Home page About section: full container width, updated link text to "Read More About Product Management, Re-Architected"
 - About page body text: full container width (no max-w-3xl constraint)
 - "From Out of the Noise" on About page is a clickable link to Substack
 - Recent Posts increased from 3 to 5
-
-### Resource Library module order (home page cards + resources page sections)
-Row 1: PM 101 · Product Strategy · Discovery & Research · AI for Product Managers  
-Row 2: UX Design · Roadmapping & Prioritization · Execution · Technology
 
 ---
 
@@ -114,7 +110,7 @@ Row 2: UX Design · Roadmapping & Prioritization · Execution · Technology
 
 ---
 
-## Completed 2026-09-10
+## Completed 2026-09-09 / 09-10 (one working session, continued)
 
 - **Resources redesign** shipped (`2f985c1`) — work that had sat uncommitted in the tree since
   2026-09-02/03, transcribed from `handoff-for-claude-code/*.json`. Replaced the old 8-module
@@ -128,6 +124,10 @@ Row 2: UX Design · Roadmapping & Prioritization · Execution · Technology
 - **Stale outer git repo disabled** — `PMRearchitected/.git` (one boilerplate "Create Next App"
   commit, no remote, phantom tracked scaffold) renamed to `.git.disabled`. The real repo is this
   one (`pm-rearchitected/`), unaffected. Delete `.git.disabled` or rename it back if ever needed.
+- **`CLAUDE.md` brought current** (`528057a` + follow-up) — Current State, this section, Known
+  Issues, Next Session, and Key Files all refreshed for the above.
+- All work committed and pushed to `main`; each change auto-deployed to production and was
+  smoke-checked live. Working tree clean at session end.
 
 ---
 
@@ -335,7 +335,7 @@ started.
 
 ## What's Broken / Known Issues
 
-- **Preview tool** (`mcp__Claude_Preview__preview_*`) cannot start the server — port 3000 is occupied by an unrelated `node` process (PID 4913) that the tool checks first. Workaround: run the dev server manually (`npm run dev -- --port 3001`) and verify via curl or browser. The `.claude/launch.json` is configured for port 3001 but the tool keeps tripping on port 3000.
+- **Preview MCP tool** (`mcp__Claude_Preview__preview_*`) has been unreliable at starting the dev server (historically tripped on port 3000 being occupied). Workaround that works: run it manually, `npm run dev -- --port 3001`, and verify via curl or the browser tool. `.claude/launch.json` is set for port 3001.
 - **LinkedIn URL** on the About page (`/about`) uses a placeholder: `https://linkedin.com/in/rickallen`. Real URL is `https://www.linkedin.com/in/ricklallen` (per the `_sources/` resumes/covers) — not yet applied.
 - **Resources content is mostly placeholder** (2026-09-09 redesign, by design): Top Voices have no `url`s (non-clickable), Templates all say "coming soon", 5 of 6 `/resources/[topic]` pages have no written sub-topic bodies, every per-topic "From the Blog" is an empty state. All filled in by editing `src/lib/resources.ts`.
 - **Digital Twin Case Studies sidebar is placeholder** — `CaseStudiesAside.tsx` has 3 example cards, awaiting Rick's real case studies.
