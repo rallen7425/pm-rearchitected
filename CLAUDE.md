@@ -23,12 +23,13 @@ Raindrop collection: 70283481
 
 ---
 
-## Current State (as of 2026-08-21)
+## Current State (as of 2026-09-10)
 
 ### Pages built
 - `/` — Home page (Hero, Recent Posts, Reading This Week, Resource Library, About section)
 - `/about` — Full standalone About page with bio content, plus a Digital Twin callout card (added 2026-08-21)
-- `/resources` — Full Resources page with 8 modules, two-column bullet format
+- `/resources` — Resource Library page: 6-topic tile grid + Terminology teaser + Top Voices + Templates + Books (redesigned 2026-09-09, see "Resources" section below)
+- `/resources/[topic]` — Per-topic pages, 6 statically generated (`strategy-discovery`, `ai-agentic-practice`, `pm-foundations`, `roadmapping-execution`, `ux-design`, `technology`); only Strategy & Discovery has written content so far (added 2026-09-09)
 - `/terminology` — Combined hub showing top PM terms and top AI terms side by side (added 2026-08-21)
 - `/terms` — AI Terms top terms (priority 1–2, static) — renamed from `/glossary` 2026-07-23
 - `/terms/browse` — AI Terms browsed by category (all 177 terms)
@@ -40,7 +41,7 @@ Raindrop collection: 70283481
 
 ### Data sources
 - **Recent Posts**: Substack RSS (`fromoutofthenoise.substack.com/feed`), shows 5 posts with thumbnails
-- **Reading This Week**: Raindrop.io API, collection 70283481, last 7 days. Token in `.env.local` (`RAINDROP_TOKEN`)
+- **Reading This Week**: Raindrop.io API, collection 70283481, last 7 days, capped at 10 items (`fetchReadingList(days, limit)` in `src/lib/raindrop-feed.ts`, 2026-09-10). Token in `.env.local` (`RAINDROP_TOKEN`)
 - **AI Terms**: Supabase (`pm_rearchitected` schema), 177 terms / 5 categories / 86 aliases / 318 related-term pairs / 72 sources, seeded from `db/glossary/*.csv` via `npm run seed:glossary`. Full-text search via a ranked Postgres function (`search_terms`), exposed at `GET /api/terms/search?q=...&category=...&maxPriority=...`. Open-Ended quiz grading via `POST /api/terms/grade` (Anthropic).
 - **PM Terms**: same Supabase tables as AI Terms, distinguished by a `categories.domain` column (`ai` | `pm`) added 2026-08-21 — 11 PM categories, 516 PM terms. See "PM Terms" section below.
 - **Digital Twin**: 5 markdown files at `content/digital-twin/*.md`, read server-side at request time and stuffed into the system prompt — no database, no RAG. See "Digital Twin" section below.
@@ -110,6 +111,23 @@ Row 2: UX Design · Roadmapping & Prioritization · Execution · Technology
     $2M→$17M Wallet — corpus keeps generalizing these); a referring contact's name in the Planet
     Fitness cover letter (redacted in `_sources/` too); company-specific framing for live hiring
     conversations (removed the named target companies from bio.md "Current status", per Hard Rule 4).
+
+---
+
+## Completed 2026-09-10
+
+- **Resources redesign** shipped (`2f985c1`) — work that had sat uncommitted in the tree since
+  2026-09-02/03, transcribed from `handoff-for-claude-code/*.json`. Replaced the old 8-module
+  bullet lists (placeholder "Item 1/2/3", `href="#"`) with: a 6-topic tile grid, statically
+  generated `/resources/[topic]` pages, a live Terminology teaser (pulls AI+PM terms from Supabase
+  at ISR time), Top Voices, Templates, and Books. See "Resources" section below.
+- **"Reading this week" newsfeed capped at 10** (`50d5c16`) — `fetchReadingList` gained a `limit`
+  param (default 10), sliced after the 7-day filter; `Newsfeed.tsx` passes `(7, 10)`.
+- **Digital Twin page reformatted** around a centered interaction box (`2498ecd`) — followed
+  Rick's `stitch_webpage_template_clone`. Header/nav/footer unchanged. See "Digital Twin" section.
+- **Stale outer git repo disabled** — `PMRearchitected/.git` (one boilerplate "Create Next App"
+  commit, no remote, phantom tracked scaffold) renamed to `.git.disabled`. The real repo is this
+  one (`pm-rearchitected/`), unaffected. Delete `.git.disabled` or rename it back if ever needed.
 
 ---
 
@@ -222,7 +240,34 @@ schema.
 
 ---
 
-## Digital Twin (added 2026-08-21)
+## Resources (redesigned 2026-09-09)
+
+Replaced the original `/resources` (8 topic modules, two-column bullet lists with `href="#"` and
+literal "Item 1/2/3" placeholders) with a structured Resource Library.
+
+- **Content + types**: `src/lib/resources.ts` — `RESOURCE_TOPICS` (6 topics: Strategy & Discovery,
+  AI & Agentic Practice, PM Foundations, Roadmapping & Execution, UX Design, Technology; the first
+  two are `width: "wide"`), each with sub-topics; `RESOURCES_BLOG_MAP` (hand-maintained per-topic
+  Substack post list, ships empty); `RESOURCE_SECTIONS` (Terminology link cards, Top Voices,
+  Templates, Books). `url: null` renders as non-clickable, never a fabricated link. `body: null`
+  renders "Write-up coming soon." Only `strategy-discovery` is fully written.
+- **Routes**: `/resources/[topic]/page.tsx` — `generateStaticParams` over `TOPIC_IDS`,
+  `dynamicParams = false` (unknown slug → 404). Breadcrumb, "From the Blog" (empty state until
+  `RESOURCES_BLOG_MAP` gets entries), sub-topic write-ups + link pills.
+- **Components**: `src/components/site/ResourceTiles.tsx` — the 6-tile grid, shared by the home
+  page (`Resources.tsx`, which is now a thin wrapper) and `/resources`. `TerminologyTeaser.tsx` —
+  `"use client"` single-card glossary preview; the server builds a 40-term pool from
+  `listStudyTerms`/`listCategories` (both domains) at ISR time and passes it down; shuffle re-picks
+  in the click handler only, never during render.
+- **Known placeholder surface on production (by design)**: Top Voices have no `url`s yet, Templates
+  all say "coming soon", 5 of 6 topic pages have no written sub-topic bodies, every "From the Blog"
+  is an empty state. Fill in by editing `src/lib/resources.ts` (no code changes needed).
+- **Verified**: `npm run build` (all 6 topic pages prerender) + `eslint` clean; live smoke-checked
+  after deploy (`/resources` + all 6 topic routes 200, bad slug 404, teaser populated from Supabase).
+
+---
+
+## Digital Twin (added 2026-08-21, page reformatted 2026-09-10)
 
 A system-prompt-stuffed chat (explicitly **not** RAG — no vector store, no embeddings) that answers
 visitor questions about Rick's background, career, and product philosophy in his own voice. First of
@@ -256,8 +301,21 @@ started.
   connection).
 - **UI**: `src/components/digital-twin/ChatPanel.tsx`, dedicated page at `/digital-twin` (not a
   floating widget, matching the site's existing pattern of dedicated feature pages). Streams
-  token-by-token via `ReadableStream` + `getReader()` on the client. Visible disclaimer pinned above
-  the chat ("This is an AI representation of Rick... not Rick himself").
+  token-by-token via `ReadableStream` + `getReader()` on the client. Visible disclaimer always
+  shown.
+- **Page layout (reformatted 2026-09-10)**: `page.tsx` keeps the hero unchanged, then a `border-t`
+  and a `lg:grid-cols-3` grid — interaction area 2/3 (right divider), `CaseStudiesAside` 1/3;
+  single column below `lg`. Header/nav/footer were explicitly out of scope. `ChatPanel` has two
+  states in the same spot: an **entry state** (centered "What would you like to know?" + a large
+  rounded `textarea` card with a send-arrow button + suggested-prompt pills + disclaimer;
+  Enter submits, Shift+Enter newline) and, once `messages.length > 0`, the **conversation state**
+  (bordered card: disclaimer bar, bubbles, typing indicator, follow-up input) — it transitions in
+  place, streaming logic untouched. Followed Rick's `PMRearchitected/Rick's Digital
+  Twin/stitch_webpage_template_clone/`.
+- **`CaseStudiesAside.tsx`**: right-sidebar, **placeholder content only** — an "Examples" badge,
+  "full case studies coming soon", and 3 cards describing real work areas (Embedded Wallet/EWA,
+  Agentic Discovery, White Label Wallet) with no fabricated figures and no links. Rick supplies
+  real case studies later. The template's mic/voice button was dropped (no voice input to wire).
 - **React Compiler gotcha**: accumulating streamed text into a `let` variable mutated across a
   `while` loop, then read inside a `setMessages` closure, trips `eslint-plugin-react-hooks`'s
   `react-hooks/immutability` rule — Next 16 ships React Compiler-aware lint rules, one of the
@@ -278,10 +336,10 @@ started.
 ## What's Broken / Known Issues
 
 - **Preview tool** (`mcp__Claude_Preview__preview_*`) cannot start the server — port 3000 is occupied by an unrelated `node` process (PID 4913) that the tool checks first. Workaround: run the dev server manually (`npm run dev -- --port 3001`) and verify via curl or browser. The `.claude/launch.json` is configured for port 3001 but the tool keeps tripping on port 3000.
-- **LinkedIn URL** on the About page (`/about`) uses a placeholder: `https://linkedin.com/in/rickallen`. Needs Rick's actual LinkedIn URL.
-- **"Read More" links** in all Resources page bullets point to `href="#"`. Real URLs need to be added for each source.
-- **Resource card ref counts** (e.g. "12 refs", "9 refs") are hardcoded placeholders. Update when real content is finalized.
-- **Digital Twin mobile layout unverified** — see "Digital Twin" section above. `resize_window` in the browser automation tool didn't actually change the rendered viewport this session (confirmed via `window.innerWidth`); needs a real-phone check.
+- **LinkedIn URL** on the About page (`/about`) uses a placeholder: `https://linkedin.com/in/rickallen`. Real URL is `https://www.linkedin.com/in/ricklallen` (per the `_sources/` resumes/covers) — not yet applied.
+- **Resources content is mostly placeholder** (2026-09-09 redesign, by design): Top Voices have no `url`s (non-clickable), Templates all say "coming soon", 5 of 6 `/resources/[topic]` pages have no written sub-topic bodies, every per-topic "From the Blog" is an empty state. All filled in by editing `src/lib/resources.ts`.
+- **Digital Twin Case Studies sidebar is placeholder** — `CaseStudiesAside.tsx` has 3 example cards, awaiting Rick's real case studies.
+- **Digital Twin mobile layout unverified** — applies to both the original build and the 2026-09-10 reformat. Responsive via Tailwind `lg:` breakpoints but only desktop was visually checked; needs a real-phone pass.
 - **`/pm-terms` and `/terminology` are build-verified only, not UX-verified** — nobody has clicked through the actual pages in a browser since they were built on 2026-08-09. Data and routes are confirmed working (build + direct DB query + a 200 smoke test in production), but the interactive experience (browse, search, flashcards for the PM domain) hasn't been exercised.
 - **Digital Twin rate limiting is in-memory** — resets on every Vercel cold start, so it's not a durable defense against sustained abuse. Fine for current traffic; revisit with a Supabase-backed counter if abuse shows up.
 
@@ -293,15 +351,19 @@ started.
    automated tools couldn't verify the mobile layout this session.
 2. **Click through `/pm-terms` and `/terminology` interactively** — browse, search, and flashcards
    for the PM domain have never been exercised in a browser, only build-verified.
-3. **Add real URLs** to the "Read More" links in `/resources/page.tsx` — 8 modules × 10 sources = 80 links
-4. **Update resource card counts** in `src/components/site/Resources.tsx` to match actual ref counts
-5. **Fix LinkedIn URL** in `src/app/about/page.tsx`
+3. **Fill in Resources content** in `src/lib/resources.ts` — sub-topic write-ups for the 5
+   unwritten topic pages, real `url`s for Top Voices and Templates, per-topic Substack posts in
+   `RESOURCES_BLOG_MAP`.
+4. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
+   placeholder cards).
+5. **Fix LinkedIn URL** in `src/app/about/page.tsx` → `https://www.linkedin.com/in/ricklallen`.
 6. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
    it comes back (and where) or stays gone.
 7. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
 8. ~~Mobile nav~~ — **DONE 2026-07-24**, hamburger menu added to `Header.tsx`.
 9. ~~PM Terms domain~~ — **DONE 2026-08-21** (built 2026-08-09, committed/shipped 2026-08-21).
 10. ~~Digital Twin chat~~ — **DONE 2026-08-21**, live at `/digital-twin`.
+11. ~~Resources redesign~~ — **DONE 2026-09-09**, shipped and live (content still being filled in).
 
 ---
 
@@ -311,15 +373,19 @@ started.
 |------|---------|
 | `src/app/page.tsx` | Home page |
 | `src/app/about/page.tsx` | Standalone About page |
-| `src/app/resources/page.tsx` | Resources page with all 8 modules |
+| `src/app/resources/page.tsx` | Resource Library page (tile grid + Terminology teaser + Top Voices + Templates + Books), redesigned 2026-09-09 |
+| `src/app/resources/[topic]/page.tsx` | Per-topic Resources pages, 6 statically generated (`dynamicParams = false`) |
+| `src/lib/resources.ts` | Resources content + types (`RESOURCE_TOPICS`, `RESOURCES_BLOG_MAP`, `RESOURCE_SECTIONS`) — edit to fill in content, no code changes needed |
+| `src/components/site/ResourceTiles.tsx` | Shared 6-topic tile grid (home page + `/resources`) |
+| `src/components/site/TerminologyTeaser.tsx` | Client single-card glossary preview on `/resources`; server passes a term pool from Supabase |
 | `src/components/site/Header.tsx` | Nav — client component, uses `usePathname`; mobile hamburger dropdown added 2026-07-24, no Subscribe button in header as of same date |
 | `src/components/site/Hero.tsx` | Hero section (shared across pages) |
 | `src/components/site/SubstackLatest.tsx` | Recent posts, fetches 5 from RSS |
-| `src/components/site/Newsfeed.tsx` | Reading This Week, Raindrop.io API |
-| `src/components/site/Resources.tsx` | Home page resource cards (2 rows × 4) |
+| `src/components/site/Newsfeed.tsx` | Reading This Week, Raindrop.io API — calls `fetchReadingList(7, 10)` |
+| `src/components/site/Resources.tsx` | Home page Resource Library section — thin wrapper around `ResourceTiles` |
 | `src/components/site/About.tsx` | Home page About section (short version) |
 | `src/lib/substack.ts` | RSS fetch + parse |
-| `src/lib/raindrop-feed.ts` | Raindrop.io API fetch |
+| `src/lib/raindrop-feed.ts` | Raindrop.io API fetch — `fetchReadingList(days = 7, limit = 10)`, slices after the day filter |
 | `src/app/globals.css` | Tailwind v4 design tokens (`@theme`), incl. `--color-success` (green, added 2026-07-23) |
 | `src/app/terms/page.tsx` | AI Terms top-terms page |
 | `src/app/terms/browse/page.tsx` | AI Terms browse-by-category page |
@@ -346,6 +412,7 @@ started.
 | `src/lib/digital-twin.ts` | Digital Twin system prompt assembly (reads corpus, applies hard behavioral rules) |
 | `src/lib/rate-limit.ts` | In-memory per-IP sliding-window rate limiter used by the Digital Twin chat endpoint |
 | `src/app/api/digital-twin/chat/route.ts` | Digital Twin streaming chat API route |
-| `src/app/digital-twin/page.tsx` | Digital Twin chat page |
-| `src/components/digital-twin/ChatPanel.tsx` | Digital Twin chat UI (streaming, disclaimer, suggested prompts) |
+| `src/app/digital-twin/page.tsx` | Digital Twin page — hero + `lg:grid-cols-3` (ChatPanel 2/3, CaseStudiesAside 1/3); reformatted 2026-09-10 |
+| `src/components/digital-twin/ChatPanel.tsx` | Digital Twin chat UI — entry state (big ask box + prompt pills) transitions in place to the streaming conversation |
+| `src/components/digital-twin/CaseStudiesAside.tsx` | Right sidebar on `/digital-twin` — placeholder case-study cards, awaiting real content |
 | `.env.local` | `RAINDROP_TOKEN`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY` |
