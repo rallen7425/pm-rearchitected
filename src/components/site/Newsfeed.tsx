@@ -2,7 +2,7 @@ import { ArrowUpRight, Radio } from "lucide-react";
 import { fetchReadingList, raindropTimeAgo, raindropIsNew } from "@/lib/raindrop-feed";
 
 export default async function Newsfeed() {
-  const items = await fetchReadingList(7);
+  const items = await fetchReadingList(7, 10);
 
   return (
     <section id="newsfeed" className="scroll-mt-24">

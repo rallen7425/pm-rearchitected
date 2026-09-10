@@ -8,7 +8,7 @@ export interface RaindropFeedItem {
   created: string;
 }
 
-export async function fetchReadingList(days = 7): Promise<RaindropFeedItem[]> {
+export async function fetchReadingList(days = 7, limit = 10): Promise<RaindropFeedItem[]> {
   if (!TOKEN) return [];
 
   const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
@@ -29,7 +29,8 @@ export async function fetchReadingList(days = 7): Promise<RaindropFeedItem[]> {
       link: item.link,
       domain: item.domain,
       created: item.created,
-    }));
+    }))
+    .slice(0, limit);
 }
 
 export function raindropTimeAgo(created: string): string {
