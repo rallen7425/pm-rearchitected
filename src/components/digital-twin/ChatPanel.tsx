@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Send } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
@@ -11,6 +11,9 @@ const SUGGESTED_PROMPTS = [
   "Why did you leave UKG?",
   "What are you looking for next?",
 ];
+
+const DISCLAIMER =
+  "This is an AI representation of Rick, built from his own words, not Rick himself. For anything time-sensitive or personal, reach out to him directly.";
 
 export function ChatPanel() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -75,37 +78,75 @@ export function ChatPanel() {
     sendMessage(input);
   }
 
-  return (
-    <div className="rounded-lg border border-border bg-card shadow-card flex flex-col h-[70vh] max-h-[720px]">
-      <div className="border-b border-border px-4 py-3 sm:px-6">
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          This is an AI representation of Rick, built from his own words, not Rick himself. For
-          anything time-sensitive or personal, reach out to him directly.
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(input);
+    }
+  }
+
+  // ─── Entry state: the interaction box, centered ──────────────────────
+  if (messages.length === 0) {
+    return (
+      <div className="flex flex-col items-center text-center">
+        <h2 className="text-3xl font-bold tracking-tight sm:text-[32px]">
+          What would you like to know?
+        </h2>
+        <p className="mt-2 max-w-xl text-base text-muted-foreground">
+          Ask about Rick&apos;s career, his approach to product management, or what he&apos;s looking
+          for next.
         </p>
+
+        <form
+          onSubmit={handleSubmit}
+          className="mt-8 w-full max-w-2xl rounded-2xl border border-border bg-card p-4 shadow-card transition-all focus-within:border-primary/40 focus-within:shadow-card-hover sm:p-5"
+        >
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            rows={3}
+            placeholder="Ask something..."
+            className="w-full resize-none border-0 bg-transparent p-0 text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:text-base"
+          />
+          <div className="mt-3 flex justify-end">
+            <button
+              type="submit"
+              disabled={!input.trim()}
+              aria-label="Send"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-colors hover:bg-primary-hover disabled:pointer-events-none disabled:opacity-50"
+            >
+              <ArrowRight className="h-5 w-5" />
+            </button>
+          </div>
+        </form>
+
+        <div className="mt-5 flex max-w-2xl flex-wrap items-center justify-center gap-2.5">
+          {SUGGESTED_PROMPTS.map((prompt) => (
+            <button
+              key={prompt}
+              type="button"
+              onClick={() => sendMessage(prompt)}
+              className="inline-flex items-center rounded-xl border border-border bg-card px-3.5 py-2 text-xs font-medium text-foreground shadow-card transition-all hover:border-primary/30 hover:bg-secondary sm:text-[13px]"
+            >
+              {prompt}
+            </button>
+          ))}
+        </div>
+
+        <p className="mt-6 max-w-xl text-xs leading-relaxed text-muted-foreground">{DISCLAIMER}</p>
+      </div>
+    );
+  }
+
+  // ─── Conversation state: streaming chat ─────────────────────────────
+  return (
+    <div className="flex max-h-[70vh] min-h-[420px] flex-col rounded-2xl border border-border bg-card shadow-card">
+      <div className="border-b border-border px-4 py-3 sm:px-5">
+        <p className="text-xs leading-relaxed text-muted-foreground">{DISCLAIMER}</p>
       </div>
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 space-y-4">
-        {messages.length === 0 && (
-          <div className="h-full flex flex-col items-center justify-center text-center gap-6">
-            <p className="text-sm text-muted-foreground max-w-sm">
-              Ask about Rick&apos;s career, his approach to product management, or what he&apos;s
-              looking for next.
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 max-w-md">
-              {SUGGESTED_PROMPTS.map((prompt) => (
-                <button
-                  key={prompt}
-                  type="button"
-                  onClick={() => sendMessage(prompt)}
-                  className="text-xs px-3 py-1.5 rounded-full border border-border text-foreground hover:bg-secondary transition-colors"
-                >
-                  {prompt}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
+      <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto px-4 py-6 sm:px-5">
         {messages.map((message, i) => (
           <div
             key={i}
@@ -114,15 +155,15 @@ export function ChatPanel() {
             <div
               className={
                 message.role === "user"
-                  ? "max-w-[85%] rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm leading-relaxed"
-                  : "max-w-[85%] rounded-lg bg-secondary text-secondary-foreground px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap"
+                  ? "max-w-[85%] rounded-lg bg-primary px-4 py-2.5 text-sm leading-relaxed text-primary-foreground"
+                  : "max-w-[85%] whitespace-pre-wrap rounded-lg bg-secondary px-4 py-2.5 text-sm leading-relaxed text-secondary-foreground"
               }
             >
               {message.role === "assistant" && message.content === "" && status === "streaming" ? (
                 <span className="inline-flex gap-1">
-                  <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground animate-pulse" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground animate-pulse [animation-delay:0.15s]" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground animate-pulse [animation-delay:0.3s]" />
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-muted-foreground" />
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-muted-foreground [animation-delay:0.15s]" />
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-muted-foreground [animation-delay:0.3s]" />
                 </span>
               ) : (
                 message.content
@@ -132,22 +173,26 @@ export function ChatPanel() {
         ))}
       </div>
 
-      <form onSubmit={handleSubmit} className="border-t border-border p-3 sm:p-4 flex items-end gap-2">
-        <input
-          type="text"
+      <form
+        onSubmit={handleSubmit}
+        className="flex items-end gap-2 border-t border-border p-3 sm:p-4"
+      >
+        <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask Rick's Digital Twin a question..."
+          onKeyDown={handleKeyDown}
+          rows={1}
+          placeholder="Ask a follow-up..."
           disabled={status === "streaming"}
-          className="flex-1 rounded-lg border border-border bg-card px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-60"
+          className="max-h-32 flex-1 resize-none rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-60"
         />
         <button
           type="submit"
           disabled={status === "streaming" || !input.trim()}
           aria-label="Send"
-          className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-primary text-primary-foreground hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:pointer-events-none"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-colors hover:bg-primary-hover disabled:pointer-events-none disabled:opacity-50"
         >
-          <Send className="h-4 w-4" />
+          <ArrowRight className="h-4 w-4" />
         </button>
       </form>
     </div>
