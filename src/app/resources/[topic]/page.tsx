@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BookOpen, ChevronRight, Play } from "lucide-react";
+import { ArrowUpRight, BookOpen, ChevronRight, Play } from "lucide-react";
 import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
 import {
   getTopic,
   RESOURCES_BLOG_MAP,
   TOPIC_IDS,
+  type Resource,
   type ResourceLink,
 } from "@/lib/resources";
 
@@ -57,6 +58,100 @@ function LinkPill({ link }: { link: ResourceLink }) {
     >
       {inner}
     </a>
+  );
+}
+
+// New card-list sub-topic format (2026-09-19) — one card per resource, matching
+// SubstackLatest.tsx's "Recent posts" visual language. `type: "video"` resources are
+// partitioned out of the card list into a separate grid below it; `type: "tool"` gets a
+// small "Tool" tag instead of the video icon and "Visit site" instead of "Read the source."
+function ResourceCard({ r }: { r: Resource }) {
+  return (
+    <div className="px-5 py-4">
+      <div className="flex items-center gap-2">
+        {r.type === "tool" && (
+          <span className="inline-flex shrink-0 items-center rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
+            Tool
+          </span>
+        )}
+        <h4 className="text-sm font-semibold leading-snug">{r.title}</h4>
+      </div>
+      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{r.summary}</p>
+      {r.links ? (
+        <div className="mt-2 flex flex-wrap gap-4">
+          {r.links.map((l) => (
+            <a
+              key={l.url}
+              href={l.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+            >
+              {l.label} <ArrowUpRight className="h-3 w-3" />
+            </a>
+          ))}
+        </div>
+      ) : r.url ? (
+        <a
+          href={r.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+        >
+          {r.type === "tool" ? "Visit site" : "Read the source"} <ArrowUpRight className="h-3 w-3" />
+        </a>
+      ) : (
+        <span className="mt-2 inline-block text-xs text-tertiary">Source coming soon</span>
+      )}
+    </div>
+  );
+}
+
+function VideoGrid({ videos }: { videos: Resource[] }) {
+  if (videos.length === 0) return null;
+  return (
+    <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {videos.map((v) => (
+        <a
+          key={v.title}
+          href={v.url ?? undefined}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex aspect-square flex-col justify-between rounded-xl border border-border bg-card p-2.5 transition-colors hover:border-primary/50"
+        >
+          <div className="flex flex-1 items-center justify-center rounded-lg bg-new-badge/10">
+            <Play className="h-5 w-5 text-new-badge" />
+          </div>
+          <div className="mt-2">
+            <p className="line-clamp-2 text-[11px] font-semibold leading-snug">{v.title}</p>
+            <p className="mt-0.5 line-clamp-2 text-[10.5px] leading-snug text-muted-foreground">
+              {v.summary}
+            </p>
+            {v.runtime && <p className="mt-0.5 text-[10px] text-tertiary">{v.runtime}</p>}
+          </div>
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function ResourceSection({ resources }: { resources: Resource[] }) {
+  if (resources.length === 0) {
+    return <p className="text-sm italic text-tertiary">Write-up coming soon.</p>;
+  }
+  const cards = resources.filter((r) => r.type !== "video");
+  const videos = resources.filter((r) => r.type === "video");
+  return (
+    <>
+      {cards.length > 0 && (
+        <div className="mt-4 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
+          {cards.map((r) => (
+            <ResourceCard key={r.title} r={r} />
+          ))}
+        </div>
+      )}
+      <VideoGrid videos={videos} />
+    </>
   );
 }
 
@@ -136,28 +231,37 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
                     {String(i + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
                   </div>
                   <h3 className="mt-1.5 text-lg font-semibold tracking-tight">{st.name}</h3>
+                  {st.note && (
+                    <p className="mt-2 text-sm italic text-muted-foreground">{st.note}</p>
+                  )}
 
-                  <div className="mt-3 space-y-3">
-                    {st.body ? (
-                      st.body.map((para, p) => (
-                        <p
-                          key={p}
-                          className="max-w-3xl text-[15px] leading-relaxed text-muted-foreground"
-                        >
-                          {para}
-                        </p>
-                      ))
-                    ) : (
-                      <p className="text-sm italic text-tertiary">Write-up coming soon.</p>
-                    )}
-                  </div>
+                  {st.resources !== undefined ? (
+                    <ResourceSection resources={st.resources ?? []} />
+                  ) : (
+                    <>
+                      <div className="mt-3 space-y-3">
+                        {st.body ? (
+                          st.body.map((para, p) => (
+                            <p
+                              key={p}
+                              className="max-w-3xl text-[15px] leading-relaxed text-muted-foreground"
+                            >
+                              {para}
+                            </p>
+                          ))
+                        ) : (
+                          <p className="text-sm italic text-tertiary">Write-up coming soon.</p>
+                        )}
+                      </div>
 
-                  {st.links.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-2.5">
-                      {st.links.map((link) => (
-                        <LinkPill key={link.label} link={link} />
-                      ))}
-                    </div>
+                      {st.links && st.links.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-2.5">
+                          {st.links.map((link) => (
+                            <LinkPill key={link.label} link={link} />
+                          ))}
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               ))}
