@@ -291,7 +291,8 @@ export const RESOURCE_TOPICS: ResourceTopic[] = [
     width: "wide",
     tileDescription:
       "Foundations of product management — roles, frameworks, and core practices.",
-    pageIntro: null,
+    pageIntro:
+      "Foundations of product management — what the role actually is, the frameworks worth knowing once you've got the basics down, and a summary on how AI is reshaping the practice. The resources below provide a great starting point for someone new to product management or looking for a refresher.",
     subtopics: [
       {
         id: "what-is-product-management",
