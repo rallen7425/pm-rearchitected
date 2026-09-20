@@ -73,7 +73,8 @@ export const RESOURCE_TOPICS: ResourceTopic[] = [
     width: "wide",
     tileDescription:
       "How product teams actually build with AI — architecture, evaluation, and the operating-model shifts as teams move from writing specs to shipping working prototypes.",
-    pageIntro: null,
+    pageIntro:
+      "How product teams build with AI, including the vocabulary and basic concepts, the tools to go from idea to working prototype, and a deeper practitioner's view of how the PM discipline is changing.",
     subtopics: [
       {
         id: "ai-fundamentals",
