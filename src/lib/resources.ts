@@ -73,8 +73,7 @@ export const RESOURCE_TOPICS: ResourceTopic[] = [
     width: "wide",
     tileDescription:
       "Foundations of product management — roles, frameworks, and core practices.",
-    pageIntro:
-      "Foundations of product management — what the role actually is, the frameworks worth knowing once you've got the basics down, and a summary on how AI is reshaping the practice. The resources below provide a great starting point for someone new to product management or looking for a refresher.",
+    pageIntro: "Foundations of product management—what the role involves, how product teams work, the frameworks worth understanding, and how AI is reshaping the practice. These resources offer a starting point for someone new to product management or looking for a refresher.",
     subtopics: [
       {
         id: "what-is-product-management",
@@ -112,10 +111,28 @@ export const RESOURCE_TOPICS: ResourceTopic[] = [
             url: "https://www.atlassian.com/agile/product-management",
           },
           {
+            type: "article",
+            title: "Atlassian — Product Manager: Role & Best Practices",
+            summary: "A practical look at a PM’s everyday responsibilities: understanding customer needs, setting priorities, aligning stakeholders, and working with the team to make product decisions. Connects the definitions above to what the job involves in practice.",
+            url: "https://www.atlassian.com/agile/product-management/product-manager",
+          },
+          {
+            type: "article",
+            title: "Teresa Torres — Core Concept: The Product Trio",
+            summary: "A short introduction to how product managers, designers, and engineers work together to understand customers, explore solutions, and take responsibility for outcomes. Useful context for understanding the PM’s place on the team.",
+            url: "https://www.producttalk.org/product-trio/",
+          },
+          {
             type: "video",
             title: "Lenny's Podcast — Shreyas Doshi: The art of product management",
             summary: "Doshi expands on his memo in conversation. A good way to hear the thinking behind it rather than just read the summary.",
             url: "https://www.youtube.com/watch?v=YP_QghPLG-8",
+          },
+          {
+            type: "video",
+            title: "Christian Idiodi — How to Be a Great Product Manager",
+            summary: "A practitioner’s introduction to the responsibilities and mindset of a strong product manager. A video companion to the readings on what the role involves.",
+            url: "https://www.svpg.com/videos/how-to-be-a-great-product-manager/",
           },
           {
             type: "article",
@@ -157,11 +174,25 @@ export const RESOURCE_TOPICS: ResourceTopic[] = [
             summary: "Cagan's newer framing of what separates strong product companies from the rest, empowered teams solving real problems, not a roadmap of features handed down from above. The natural next step after the Four Big Risks.",
             url: "https://www.svpg.com/the-product-operating-model-an-introduction/",
           },
+        ],
+      },
+      {
+        id: "frameworks",
+        name: "Frameworks",
+        theme: "foundational approaches to learning, goals, and product choices",
+        note: "Foundational approaches for understanding customer needs, testing ideas, setting goals, and making product choices. Start with the purpose of each framework and use the original sources to explore how it works.",
+        resources: [
           {
             type: "article",
             title: "The Agile Manifesto",
             summary: "The four values and twelve principles, written in 2001, that most of modern product and engineering practice still traces back to. Worth reading in the original rather than a paraphrase of it.",
             url: "https://agilemanifesto.org/",
+          },
+          {
+            type: "article",
+            title: "Stanford d.school — Design Thinking Bootleg",
+            summary: "Practical methods for understanding people, defining problems, generating ideas, prototyping, and testing. A useful introduction to Design Thinking through activities you can try.",
+            url: "https://dschool.stanford.edu/tools/design-thinking-bootleg",
           },
           {
             type: "article",
@@ -171,9 +202,27 @@ export const RESOURCE_TOPICS: ResourceTopic[] = [
           },
           {
             type: "article",
+            title: "Eric Ries — The Lean Startup Methodology",
+            summary: "Introduces validated learning and the Build-Measure-Learn cycle: turn assumptions into experiments, learn from customers, and decide whether to continue or change direction.",
+            url: "https://theleanstartup.com/principles",
+          },
+          {
+            type: "article",
             title: "Eric Ries — What Is an MVP?",
             summary: "Ries explains the minimum viable product on his own terms, correcting the common misread that it means shipping something half-finished. It's the smallest thing that lets you test a real assumption.",
             url: "https://leanstartup.co/resources/articles/what-is-an-mvp/",
+          },
+          {
+            type: "article",
+            title: "What Matters — What Is an OKR?",
+            summary: "Explains how objectives describe what you want to accomplish and key results make progress measurable. A starting point for connecting product work to explicit goals.",
+            url: "https://www.whatmatters.com/faqs/okr-meaning-definition-example",
+          },
+          {
+            type: "article",
+            title: "Intercom — RICE: Simple Prioritization for Product Managers",
+            summary: "Introduces reach, impact, confidence, and effort as a structured way to compare opportunities. Useful for making the assumptions behind prioritization decisions visible.",
+            url: "https://www.intercom.com/blog/rice-simple-prioritization-for-product-managers/",
           },
         ],
       },
@@ -181,7 +230,7 @@ export const RESOURCE_TOPICS: ResourceTopic[] = [
         id: "pm-in-2026",
         name: "Product Management in 2026",
         theme: "how the practice is changing in the AI era, at a glance",
-        note: "Surface-level framing only, how the practice is changing, not technical AI deep dives. Reserve RAG/agents/eval/architecture content for a dedicated AI-for-PMs section elsewhere.",
+        note: "How AI is changing the PM’s work, the skills the role demands, and the products teams build. These readings introduce the shifts; the AI for PMs page explores the tools and technical concepts in greater depth.",
         resources: [
           {
             type: "article",
