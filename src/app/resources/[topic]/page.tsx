@@ -161,7 +161,6 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
   if (!t) notFound();
 
   const posts = RESOURCES_BLOG_MAP[topic] ?? [];
-  const total = t.subtopics.length;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -220,17 +219,13 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
 
           {/* Sub-topics */}
           <section className="mt-12">
-            <h2 className="mb-6 text-xl font-semibold tracking-tight">Sub-topics</h2>
             <div className="space-y-10">
-              {t.subtopics.map((st, i) => (
+              {t.subtopics.map((st) => (
                 <div
                   key={st.id}
                   className="border-t border-border pt-8 first:border-t-0 first:pt-0"
                 >
-                  <div className="font-mono text-xs text-tertiary">
-                    {String(i + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-                  </div>
-                  <h3 className="mt-1.5 text-lg font-semibold tracking-tight">{st.name}</h3>
+                  <h2 className="text-xl font-semibold tracking-tight">{st.name}</h2>
                   {st.note && (
                     <p className="mt-2 text-sm italic text-muted-foreground">{st.note}</p>
                   )}
