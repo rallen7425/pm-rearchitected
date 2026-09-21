@@ -17,6 +17,8 @@
 //     deferred" sections).
 // `src/app/resources/[topic]/page.tsx` renders whichever shape a given sub-topic sets.
 
+import { PRODUCT_VISION_STRATEGY } from "./product-vision-strategy";
+
 export type TopicWidth = "wide" | "standard";
 
 export interface ResourceLink {
@@ -27,6 +29,9 @@ export interface ResourceLink {
 
 /** One resource-card entry in the new card-list sub-topic format. */
 export interface Resource {
+  /** Optional primary call-to-action and supporting Markdown paragraphs/links. */
+  linkLabel?: string;
+  supportingContent?: string;
   type: "article" | "video" | "tool";
   /** Bold card heading, e.g. "Shreyas Doshi — What is product management? (a memo)". */
   title: string;
@@ -41,6 +46,8 @@ export interface Resource {
 }
 
 export interface SubTopic {
+  /** Keep video-led sources with their supporting readings in the main list. */
+  resourceLayout?: "list";
   id: string;
   name: string;
   /** One-line description shown in the tile's compact sub-topic list. */
@@ -67,6 +74,7 @@ export interface ResourceTopic {
 }
 
 export const RESOURCE_TOPICS: ResourceTopic[] = [
+  PRODUCT_VISION_STRATEGY,
   {
     id: "pm-foundations",
     label: "PM 101",

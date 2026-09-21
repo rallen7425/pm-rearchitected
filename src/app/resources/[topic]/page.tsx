@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowUpRight, BookOpen, ChevronRight, Play } from "lucide-react";
 import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
+import SupportingReadings from "@/components/site/SupportingReadings";
 import {
   getTopic,
   RESOURCES_BLOG_MAP,
@@ -98,11 +99,12 @@ function ResourceCard({ r }: { r: Resource }) {
           rel="noopener noreferrer"
           className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
         >
-          {r.type === "tool" ? "Visit site" : "Read the source"} <ArrowUpRight className="h-3 w-3" />
+          {r.linkLabel ?? (r.type === "tool" ? "Visit site" : "Read the source")} <ArrowUpRight className="h-3 w-3" />
         </a>
       ) : (
         <span className="mt-2 inline-block text-xs text-tertiary">Source coming soon</span>
       )}
+      {r.supportingContent && <SupportingReadings content={r.supportingContent} />}
     </div>
   );
 }
@@ -135,12 +137,12 @@ function VideoGrid({ videos }: { videos: Resource[] }) {
   );
 }
 
-function ResourceSection({ resources }: { resources: Resource[] }) {
+function ResourceSection({ resources, layout }: { resources: Resource[]; layout?: "list" }) {
   if (resources.length === 0) {
     return <p className="text-sm italic text-tertiary">Write-up coming soon.</p>;
   }
-  const cards = resources.filter((r) => r.type !== "video");
-  const videos = resources.filter((r) => r.type === "video");
+  const cards = layout === "list" ? resources : resources.filter((r) => r.type !== "video");
+  const videos = layout === "list" ? [] : resources.filter((r) => r.type === "video");
   return (
     <>
       {cards.length > 0 && (
@@ -223,6 +225,7 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
               {t.subtopics.map((st) => (
                 <div
                   key={st.id}
+                  id={st.id}
                   className="border-t border-border pt-8 first:border-t-0 first:pt-0"
                 >
                   <h2 className="text-xl font-semibold tracking-tight">{st.name}</h2>
@@ -231,7 +234,7 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
                   )}
 
                   {st.resources !== undefined ? (
-                    <ResourceSection resources={st.resources ?? []} />
+                    <ResourceSection resources={st.resources ?? []} layout={st.resourceLayout} />
                   ) : (
                     <>
                       <div className="mt-3 space-y-3">
