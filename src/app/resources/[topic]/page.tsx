@@ -186,9 +186,9 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
           </div>
 
           {/* From the Blog */}
-          {topic === "discovery-research" ? (
+          {(t.reframedPostUrls || topic === "discovery-research") ? (
             <div className="mt-10">
-              <PMReframed title="From the Blog" postUrls={posts.map((post) => post.url)} />
+              <PMReframed title="From the Blog" postUrls={t.reframedPostUrls ?? posts.map((post) => post.url)} />
             </div>
           ) : (
           <section className="mt-10">

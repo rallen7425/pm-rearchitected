@@ -1,3 +1,7 @@
+import { DESIGN_FOR_PMS } from "./design-for-pms";
+import { AGILE_DEVELOPMENT_DEPLOYMENT } from "./agile-development-deployment";
+import { GO_TO_MARKET_GROWTH } from "./go-to-market-growth";
+import { TECHNOLOGY_FOR_PMS } from "./technology-for-pms";
 // Content + types for the Resources section (home-page tile grid, the standalone
 // /resources page, and the per-topic /resources/[topic] pages).
 //
@@ -71,6 +75,8 @@ export interface ResourceTopic {
   tileDescription: string;
   /** Longer intro paragraph for the topic's own page, or null when not yet written. */
   pageIntro: string | null;
+  /** Relevant posts rendered with the home page Reframed rail. */
+  reframedPostUrls?: string[];
   subtopics: SubTopic[];
 }
 
@@ -495,119 +501,10 @@ export const RESOURCE_TOPICS: ResourceTopic[] = [
     ],
   },
   DISCOVERY_RESEARCH,
-  {
-    id: "roadmapping-execution",
-    label: "Roadmapping & Execution",
-    width: "standard",
-    tileDescription:
-      "Sequencing work, making tradeoffs under uncertainty, and shipping with speed and quality.",
-    pageIntro: null,
-    subtopics: [
-      {
-        id: "prioritization-frameworks",
-        name: "Prioritization Frameworks",
-        theme: "RICE, opportunity trees, and saying no well",
-        body: null,
-        links: [],
-      },
-      {
-        id: "roadmap-communication",
-        name: "Roadmap Communication",
-        theme: "outcome-based plans stakeholders actually trust",
-        body: null,
-        links: [],
-      },
-      {
-        id: "delivery-practices",
-        name: "Delivery Practices",
-        theme: "Shape Up, Scrum, and dual-track agile",
-        body: null,
-        links: [],
-      },
-      {
-        id: "flow-throughput",
-        name: "Flow & Throughput",
-        theme: "finding the bottleneck that's actually slowing you down",
-        body: null,
-        links: [],
-      },
-    ],
-  },
-  {
-    id: "ux-design",
-    label: "UX Design",
-    width: "standard",
-    tileDescription: "Taste-building references for PMs who care about the craft.",
-    pageIntro: null,
-    subtopics: [
-      {
-        id: "visual-interaction-craft",
-        name: "Visual & Interaction Craft",
-        theme: "the small decisions that make interfaces feel polished",
-        body: null,
-        links: [],
-      },
-      {
-        id: "design-systems",
-        name: "Design Systems",
-        theme: "consistency and flexibility at scale",
-        body: null,
-        links: [],
-      },
-      {
-        id: "ux-research-usability",
-        name: "UX Research & Usability",
-        theme: "evidence-based practice, not opinion",
-        body: null,
-        links: [],
-      },
-      {
-        id: "designing-for-ai",
-        name: "Designing for AI",
-        theme: "trust, uncertainty, and human oversight in AI interfaces",
-        body: null,
-        links: [],
-      },
-    ],
-  },
-  {
-    id: "technology",
-    label: "Technology",
-    width: "standard",
-    tileDescription:
-      "Technical literacy for PMs — architecture, APIs, data, and infrastructure.",
-    pageIntro: null,
-    subtopics: [
-      {
-        id: "architecture-fundamentals",
-        name: "Architecture Fundamentals",
-        theme: "how engineers think about tradeoffs and quality",
-        body: null,
-        links: [],
-      },
-      {
-        id: "apis-developer-experience",
-        name: "APIs & Developer Experience",
-        theme: "what makes a developer-facing product excellent",
-        body: null,
-        links: [],
-      },
-      {
-        id: "infrastructure-systems-design",
-        name: "Infrastructure & Systems Design",
-        theme: "the decisions that affect scale and reliability",
-        body: null,
-        links: [],
-      },
-      {
-        id: "partnering-with-engineering",
-        name: "Partnering with Engineering",
-        theme: "working well with staff and principal engineers",
-        body: null,
-        links: [],
-      },
-    ],
-  },
+  DESIGN_FOR_PMS,
+  AGILE_DEVELOPMENT_DEPLOYMENT,
+  GO_TO_MARKET_GROWTH,
+  TECHNOLOGY_FOR_PMS,
 ];
 
 export const TOPIC_IDS = RESOURCE_TOPICS.map((t) => t.id);

@@ -30,21 +30,22 @@ const PM_CARDS: ResourceTile[] = [
   {
     title: "Design for PMs",
     description: "Build your eye for great experiences — from usability and interaction to design systems.",
-    href: "/resources/ux-design",
+    href: "/resources/design-for-pms",
   },
   {
     title: "Agile, Development & Deployment",
     description: "Work with engineering to plan, build, and ship products with speed and quality.",
-    href: "/resources/roadmapping-execution",
+    href: "/resources/agile-development-deployment",
   },
   {
     title: "Go-to-Market & Growth",
     description: "Bring products to market, drive adoption, and build sustainable growth.",
+    href: "/resources/go-to-market-growth",
   },
   {
     title: "Technology for PMs",
     description: "Technical literacy for PMs — architecture, APIs, data, and infrastructure.",
-    href: "/resources/technology",
+    href: "/resources/technology-for-pms",
   },
 ];
 
