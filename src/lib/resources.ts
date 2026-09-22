@@ -17,6 +17,7 @@
 //     deferred" sections).
 // `src/app/resources/[topic]/page.tsx` renders whichever shape a given sub-topic sets.
 
+import { DISCOVERY_RESEARCH } from "./discovery-research";
 import { PRODUCT_VISION_STRATEGY } from "./product-vision-strategy";
 
 export type TopicWidth = "wide" | "standard";
@@ -493,118 +494,7 @@ export const RESOURCE_TOPICS: ResourceTopic[] = [
       },
     ],
   },
-  {
-    id: "strategy-discovery",
-    label: "Strategy & Discovery",
-    width: "standard",
-    tileDescription:
-      "Diagnosis-led frameworks for picking the right bets and validating them fast — from articulating a coherent strategy to getting close enough to customers to separate real problems from assumed ones.",
-    pageIntro:
-      "Strategy and discovery are the same motion wearing two names — one sets the direction, the other tells you whether you're right. This page collects the frameworks I return to for diagnosing the real problem before committing to a bet, and the research habits that keep that diagnosis honest once a team is already moving fast. It leans traditional on purpose: differentiation, competitive positioning, and customer truth don't expire just because the tooling underneath them changed. Where AI reshapes the practice — faster synthesis, cheaper validation, agentic research assistants — that's noted within the relevant sub-topic below rather than split into a separate page of its own.",
-    subtopics: [
-      {
-        id: "strategic-diagnosis",
-        name: "Strategic Diagnosis",
-        theme: 'what strategy actually is, and why most "strategies" are goals in disguise',
-        body: [
-          'Richard Rumelt\'s Good Strategy / Bad Strategy remains the clearest single explanation of what strategy actually is: a diagnosis of the real obstacle, a guiding policy for dealing with it, and a set of coherent actions that follow from both. Most documents that call themselves a "strategy" skip the diagnosis entirely and jump straight to goals dressed up in strategic language — growth targets, market share numbers, aspirations with no theory of how you get there.',
-          "The diagnosis is the part worth rereading at the start of every planning cycle. If a team can't state, in one sentence, what specifically is standing between them and the outcome they want, the roadmap that follows is a wish list, not a strategy.",
-        ],
-        links: [
-          { type: "article", label: "Good Strategy / Bad Strategy — Rumelt", url: null },
-          { type: "article", label: "Reforge — Product Strategy course", url: null },
-          { type: "video", label: "Rumelt on diagnosis (interview)", url: null },
-        ],
-      },
-      {
-        id: "competitive-moats",
-        name: "Competitive Moats",
-        theme: "durable advantage: 7 Powers, positioning, structural edges",
-        body: [
-          'Hamilton Helmer\'s 7 Powers gives a compact vocabulary for the actual sources of durable advantage — scale economies, network effects, switching costs, counter-positioning, and the rest — that holds up better in a positioning debate than "we\'ll out-execute them." Porter\'s original competitive-strategy work still underlies most of it; Helmer just made it usable in a single sitting.',
-        ],
-        links: [
-          { type: "article", label: "7 Powers — Helmer", url: null },
-          { type: "article", label: "Competitive Strategy — Porter", url: null },
-          { type: "article", label: "Stratechery archive", url: null },
-        ],
-      },
-      {
-        id: "pmf-positioning",
-        name: "PMF & Positioning",
-        theme: "crossing the chasm, act-two GTM, category strategy",
-        body: [
-          "Crossing the Chasm and The Innovator's Dilemma describe the same discontinuity from opposite sides — the first from a challenger trying to cross into the mainstream, the second from an incumbent about to be disrupted by one. Reading them together is more useful than reading either alone, especially when deciding how hard to defend an existing product line versus fund a new bet.",
-        ],
-        links: [
-          { type: "article", label: "Crossing the Chasm — Moore", url: null },
-          { type: "article", label: "The Innovator's Dilemma — Christensen", url: null },
-          { type: "article", label: "Sequoia Arc — positioning frameworks", url: null },
-        ],
-      },
-      {
-        id: "customer-interviewing",
-        name: "Customer Interviewing",
-        theme: "getting real signal instead of flattery",
-        body: [
-          "The Mom Test is short enough to reread in an hour and specific enough to change how the next ten interviews go. The core trick is asking about past behavior instead of future intentions — people are unreliable narrators of their own hypothetical choices, however sincere they are while answering.",
-        ],
-        links: [
-          { type: "article", label: "The Mom Test — Fitzpatrick", url: null },
-          { type: "article", label: "Intercom on Jobs to Be Done", url: null },
-        ],
-      },
-      {
-        id: "jobs-to-be-done",
-        name: "Jobs to Be Done",
-        theme: "what customers actually hire your product to do",
-        body: [
-          "JTBD reframes a product decision around what a customer is actually trying to accomplish rather than the feature they happened to ask for. It's easy to nod along to and harder to apply consistently — the useful version of this topic is less the theory and more the discipline of writing job stories specific enough to survive contact with a real roadmap debate.",
-        ],
-        links: [
-          { type: "article", label: "Jobs to Be Done — Ulwick & Christensen", url: null },
-          { type: "article", label: "Intercom's JTBD guide", url: null },
-        ],
-      },
-      {
-        id: "continuous-discovery",
-        name: "Continuous Discovery",
-        theme: "weekly habits that keep teams close to users",
-        body: [
-          'Teresa Torres\' weekly-touchpoint model is the most concrete answer I\'ve found to "how do you actually keep a team close to customers without discovery becoming a special project someone runs twice a year." Opportunity Solution Trees are the visual artifact that makes the habit stick — they force a team to trace every solution back to a specific opportunity, and every opportunity back to a stated outcome.',
-        ],
-        links: [
-          { type: "article", label: "Continuous Discovery Habits — Torres", url: null },
-          { type: "article", label: "Opportunity Solution Trees — guide", url: null },
-          { type: "video", label: "Torres on the weekly cadence (talk)", url: null },
-        ],
-      },
-      {
-        id: "research-synthesis",
-        name: "Research Synthesis",
-        theme: "turning qualitative noise into decisions",
-        body: [
-          "The bottleneck in most research practices isn't collecting interviews — it's turning them into something a team can act on before the finding goes stale. Tools like Dovetail matter less than the discipline behind them: tagging and synthesizing on a running cadence, not batching it all at the end of a quarter when half the context has already evaporated.",
-        ],
-        links: [
-          { type: "article", label: "Just Enough Research — Hall", url: null },
-          { type: "article", label: "Dovetail — synthesis guide", url: null },
-        ],
-      },
-      {
-        id: "rapid-validation",
-        name: "Rapid Validation",
-        theme: "design sprints and cheap tests before you build",
-        body: [
-          'Google Ventures\' Design Sprint compresses "should we even build this" into five days by forcing a testable prototype before a single line of production code gets written. The specific five-day format matters less than the discipline underneath it: identify the riskiest assumption first, and find the cheapest possible way to test it.',
-        ],
-        links: [
-          { type: "article", label: "GV Design Sprint — guide", url: null },
-          { type: "article", label: "Shape Up — appetite-based scoping", url: null },
-        ],
-      },
-    ],
-  },
+  DISCOVERY_RESEARCH,
   {
     id: "roadmapping-execution",
     label: "Roadmapping & Execution",
@@ -743,7 +633,15 @@ export interface TopicBlogPost {
 }
 
 export const RESOURCES_BLOG_MAP: Record<string, TopicBlogPost[]> = {
-  "strategy-discovery": [],
+  "discovery-research": [
+  {
+    "title": "Reframed: Product Discovery",
+    "description": "A PM-centered view of discovery across the product lifecycle: market understanding, problem discovery, solution discovery, usability testing, and market feedback. The activities overlap and inform one another. Continuous customer learning provides the foundation, with focused research filling the gaps and AI supporting preparation and synthesis.",
+    "url": "https://fromoutofthenoise.substack.com/p/reframed-product-discovery",
+    "filedUnder": "Discovery & Research",
+    "date": "Jul 30, 2026"
+  }
+],
   "ai-agentic-practice": [],
   "pm-foundations": [],
   "roadmapping-execution": [],

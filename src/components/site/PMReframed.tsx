@@ -3,8 +3,15 @@ import ReframedRail, { type ReframedTile } from "./ReframedRail";
 
 const SERIES_URL = "https://fromoutofthenoise.substack.com/p/pm-reframed";
 
-export default async function PMReframed() {
-  const posts = await fetchReframedPosts();
+export default async function PMReframed({
+  title = "Product Management Reframed",
+  postUrls,
+}: {
+  title?: string;
+  postUrls?: string[];
+} = {}) {
+  const allPosts = await fetchReframedPosts();
+  const posts = postUrls ? allPosts.filter((post) => postUrls.includes(post.link)) : allPosts;
   if (posts.length === 0) return null;
 
   const tiles: ReframedTile[] = posts.map((p) => ({
@@ -22,7 +29,7 @@ export default async function PMReframed() {
           Blog: From Out of the Noise
         </div>
         <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
-          Product Management Reframed
+          {title}
         </h2>
         <p className="mt-2 max-w-xl text-sm text-muted-foreground">
           Rethinking Product Frameworks in the Age of AI

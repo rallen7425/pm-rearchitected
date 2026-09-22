@@ -25,7 +25,7 @@ const PM_CARDS: ResourceTile[] = [
   {
     title: "Discovery & Research",
     description: "Understand customers, uncover real needs, and test ideas before committing to build.",
-    href: "/resources/strategy-discovery",
+    href: "/resources/discovery-research",
   },
   {
     title: "Design for PMs",

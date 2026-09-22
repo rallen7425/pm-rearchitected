@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowUpRight, BookOpen, ChevronRight, Play } from "lucide-react";
 import Header from "@/components/site/Header";
+import PMReframed from "@/components/site/PMReframed";
 import Footer from "@/components/site/Footer";
 import SupportingReadings from "@/components/site/SupportingReadings";
 import {
@@ -185,6 +186,11 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
           </div>
 
           {/* From the Blog */}
+          {topic === "discovery-research" ? (
+            <div className="mt-10">
+              <PMReframed title="From the Blog" postUrls={posts.map((post) => post.url)} />
+            </div>
+          ) : (
           <section className="mt-10">
             <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="text-xl font-semibold tracking-tight">From the Blog</h2>
@@ -218,6 +224,8 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
               </div>
             )}
           </section>
+
+          )}
 
           {/* Sub-topics */}
           <section className="mt-12">
