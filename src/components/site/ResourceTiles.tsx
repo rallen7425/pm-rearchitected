@@ -49,26 +49,29 @@ const PM_CARDS: ResourceTile[] = [
   },
 ];
 
+// Each card deep-links to its own sub-topic section on the shared ai-agentic-practice page
+// (see the `id={st.id}` anchor on each sub-topic in `[topic]/page.tsx`) rather than the bare
+// page URL, so the four tiles actually land somewhere different from one another.
 const AI_CARDS: ResourceTile[] = [
   {
     title: "Vibe Coding & Agentic Development",
     description: "Turn ideas into working prototypes with AI coding tools and agentic workflows.",
-    href: "/resources/ai-agentic-practice",
+    href: "/resources/ai-agentic-practice#vibe-coding-agentic-development",
   },
   {
     title: "Understanding AI",
     description: "Learn the fundamentals — how AI works, what it can do, and where it falls short.",
-    href: "/resources/ai-agentic-practice",
+    href: "/resources/ai-agentic-practice#ai-fundamentals",
   },
   {
     title: "AI Product Building Blocks",
     description: "Explore the technology behind AI products — LLMs, agents, RAG, and evals.",
-    href: "/resources/ai-agentic-practice",
+    href: "/resources/ai-agentic-practice#agents-rag-evals",
   },
   {
     title: "Product Management for AI-Empowered PMs",
     description: "Apply AI across product work, from research and strategy to decisions and delivery.",
-    href: "/resources/ai-agentic-practice",
+    href: "/resources/ai-agentic-practice#ai-empowered-pm-practice",
   },
 ];
 

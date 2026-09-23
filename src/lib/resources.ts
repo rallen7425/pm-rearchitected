@@ -529,6 +529,10 @@ export interface TopicBlogPost {
   date: string;
 }
 
+// Only relevant for topics WITHOUT `reframedPostUrls` set (pm-foundations, ai-agentic-practice,
+// product-vision-strategy, discovery-research) — a topic with `reframedPostUrls` pulls its
+// "From the Blog" rail live from the Substack Reframed archive instead and never reads this map.
+// See `[topic]/page.tsx`'s "From the Blog" branch.
 export const RESOURCES_BLOG_MAP: Record<string, TopicBlogPost[]> = {
   "discovery-research": [
   {
@@ -541,9 +545,7 @@ export const RESOURCES_BLOG_MAP: Record<string, TopicBlogPost[]> = {
 ],
   "ai-agentic-practice": [],
   "pm-foundations": [],
-  "roadmapping-execution": [],
-  "ux-design": [],
-  technology: [],
+  "product-vision-strategy": [],
 };
 
 // ---- Standalone /resources page sections ----
