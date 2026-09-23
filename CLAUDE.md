@@ -31,12 +31,11 @@ Raindrop collection: 70283481
 - `/resources` — Resource Library page: two-section tile grid (7 "Product Management" cards + 4 "AI for PMs" cards) + Terminology teaser + Top Voices + Templates + Books (redesigned 2026-09-09, tiles renamed/reordered 2026-09-13, sub-topics rebuilt as resource cards and fully re-architected into 11 topics 2026-09-19 through 2026-09-23, see "Resources" section below)
 - `/resources/[topic]` — Per-topic pages, 11 statically generated (`pm-foundations` "PM 101", `understanding-ai`, `ai-product-building-blocks`, `vibe-coding-agentic-development`, `ai-empowered-pm`, `product-vision-strategy`, `discovery-research`, `design-for-pms`, `agile-development-deployment`, `go-to-market-growth`, `technology-for-pms`). All 11 are fully written as resource-card lists — the old `strategy-discovery`/`roadmapping-execution`/`ux-design` placeholder topics (added 2026-09-09) and the single `ai-agentic-practice` topic (retired 2026-09-23) no longer exist; they were replaced, not filled in, and their old URLs 301-redirect via `next.config.ts` (see "Resources" section below)
 - `/terminology` — Combined hub showing top PM terms and top AI terms side by side (added 2026-08-21)
-- `/terms` — AI Terms top terms (priority 1–2, static) — renamed from `/glossary` 2026-07-23
-- `/terms/browse` — AI Terms browsed by category (all 177 terms)
+- `/terms` — AI Terms top terms (priority 1–2, static) — renamed from `/glossary` 2026-07-23. "Browse by Category" is an inline accordion here now (2026-09-23), not a separate page — see "AI Terms" section below.
 - `/terms/search` — AI Terms live full-text search (incl. aliases/abbreviations)
 - `/terms/flashcards` — AI Terms study page: Flash Card / Multiple Choice / Open-Ended
 - `/terms/[slug]` — AI Terms detail page (177 statically generated)
-- `/pm-terms`, `/pm-terms/browse`, `/pm-terms/search`, `/pm-terms/flashcards`, `/pm-terms/[slug]` — PM Terms domain, mirrors the `/terms` route tree exactly (added 2026-08-21, see "PM Terms" section below)
+- `/pm-terms`, `/pm-terms/search`, `/pm-terms/flashcards`, `/pm-terms/[slug]` — PM Terms domain, mirrors the `/terms` route tree exactly (added 2026-08-21, see "PM Terms" section below). ~~`/pm-terms/browse`~~ retired 2026-09-23, same as `/terms/browse`.
 - `/digital-twin` — AI chat answering visitor questions about Rick in his own voice (added 2026-08-21, see "Digital Twin" section below)
 
 ### Data sources
@@ -319,6 +318,58 @@ Raindrop collection: 70283481
   the 4 new topics into `RESOURCES_BLOG_MAP`. Verified via `npm run build` (11 topic pages prerender
   clean) and a live visual pass on all 4 new pages, the `/resources` hub, and the old-URL redirect.
   Pushed, deployed, and confirmed live (`curl` 200s on all 4 new routes, 308 on the old one).
+- **AI Terms hub renamed "AI Terminology"** (`d9d8d45`) — changed `GlossaryHeader`'s default `title`
+  prop, which all 4 `/terms` pages rely on (PM Terms pages pass their own explicit title, unaffected).
+- **Cross-linked the AI Terms and PM Terms hub pages** (`a713c98`, then relabeled `793df1b`) — `/terms`
+  now links to `/pm-terms` as "PM Terms" (placed left of "Test Yourself" in the header nav), and
+  `/pm-terms` links back as "AI Terms" in the same position. `/pm-terms`'s own header was also renamed
+  from generic "Terminology" to "Product Management Terminology" in the same pass.
+- **Replaced "Browse by Category" as a page link with an inline accordion** (`3a9ae26`, repositioned
+  `587b3b7`, fully completed `036511e`) — clicking "Browse by Category" used to navigate to
+  `/terms/browse` or `/pm-terms/browse`, a near-duplicate of the hub page (same Header/Hero, same nav)
+  with the category list added at the bottom. Rick flagged this twice: once for the general complaint,
+  once after the first fix accidentally made the toggle undiscoverable by placing it *after* a
+  50-100+ term "Top Terms" list, requiring a full scroll to find it (see "What happened" note below).
+  Final shape: a new `CategoryBrowse` client component (`src/components/glossary/CategoryBrowse.tsx`),
+  collapsed by default, sitting directly below `GlossaryHeader` — before "Top Terms," not after —
+  behind a bold "Browse by Category" line with a chevron that flips on click. Expanding shows the same
+  quick-jump nav and per-category term sections the standalone pages had.
+  - **The standalone `/terms/browse` and `/pm-terms/browse` pages are gone**, not just unlinked —
+    deleted outright, with `next.config.ts` 301-redirects to `/terms` and `/pm-terms` (matching the
+    existing pattern for retired Resources topics). Every remaining internal link that pointed at them
+    (`/terms/flashcards`, `/terms/search`, `/pm-terms/flashcards`, `/pm-terms/search`, and the term
+    detail pages' category badges) was updated to point at the hub page instead — `#category-list` for
+    the generic "browse" links, or a specific `#<category-id>` (e.g. `#ai-101`) for the detail pages'
+    category badges, which link straight at one category's section.
+  - **A genuine hydration-mismatch bug, not just a lint nitpick**: category-anchor deep links (e.g.
+    `/terms#ai-101` from a term detail page's badge) need the accordion open on load so there's
+    something to scroll to. First attempt used a `useState(() => window.location.hash ...)` lazy
+    initializer — simple, but it computes a different `open` value on the server (always `false`,
+    no `window`) than on the client (`true`, hash present), which is exactly the server/client branch
+    React's hydration-mismatch warning calls out by name. Confirmed via live testing (not just reading
+    the warning) that recovery left the DOM in a genuinely broken partial state: the category content
+    rendered expanded, but the toggle button's `aria-expanded` attribute stayed stuck on `"false"` —
+    not just a cosmetic mismatch, an actually inconsistent UI. Fixed with `useSyncExternalStore`
+    (`subscribeToHash`/`getHashSnapshot`/`getHashServerSnapshot` in `CategoryBrowse.tsx`) — React's
+    documented mechanism for reading browser-only state without a mismatch: renders the server
+    snapshot (`""`) during hydration, then syncs to the real hash immediately after, with no manual
+    `setState` inside a `useEffect` either (which the project's React Compiler-aware lint rule,
+    `react-hooks/set-state-in-effect`, flags as an error — see the Digital Twin section's "React
+    Compiler gotcha" for the same class of issue elsewhere in this codebase). Once the user manually
+    toggles the accordion, a separate `userOverride` state takes precedence over the hash so it can
+    still be collapsed/expanded normally afterward.
+  - Verified via `npm run build`, `eslint` clean, and a full round-trip live check: local dev *and*
+    production — cold navigation to `/terms#ai-101`, click-to-toggle both directions, the
+    `/terms/browse` → `/terms` redirect, and a term detail page's category badge — all confirmed
+    working with no console errors on the final version.
+- **Fixed the LinkedIn URL on `/about`** (`321fb45`) — was `linkedin.com/in/rickallen` (wrong handle,
+  missing `www`), live and wrong since the page was built. Now `linkedin.com/in/ricklallen`, per the
+  `_sources/` resumes/covers. This had been flagged in "What's Broken" since at least August.
+- **Excluded `handoff-for-claude-code/` from `tsconfig.json`** (`89646c1`) — stray `.ts` files dropped
+  there (raw Cowork handoff content, never meant to be compiled) broke local `npm run build`/`tsc
+  --noEmit` twice in this session alone, since nothing excluded the folder and their relative imports
+  don't resolve from that location. Verified both commands now succeed with the folder left in place —
+  no more need to move it aside first before a local build.
 
 ---
 
@@ -348,11 +399,13 @@ Responsible AI).
   toggle in `GlossaryHeader` next to the "AI Terms" heading (not a permanently visible box) — clicking
   it reveals `SearchBox` beneath the heading; `/terms/search` opens it by default.
 - **Header nav pattern**: `GlossaryHeader` takes a `links` array (not a single link) so each hub page
-  can show its own left-to-right set of links to the *other* two hub pages next to the search icon —
-  e.g. `/terms` shows Test Yourself → Browse by Category; `/terms/browse` shows Top Terms → Test
-  Yourself; `/terms/flashcards` shows Top Terms → Browse by Category. Exact order came from specific
-  per-page instructions, not a single global rule — check `GlossaryHeader.tsx` call sites before
-  assuming a pattern.
+  can show its own left-to-right set of links next to the search icon. As of 2026-09-23 (see
+  "Completed 2026-09-23"'s `CategoryBrowse` entry): `/terms` shows PM Terms → Test Yourself;
+  `/terms/flashcards` shows Top Terms → Browse by Category, where "Browse by Category" is now an
+  anchor link (`/terms#category-list`) into the inline accordion on the hub page, not a separate
+  page — the old standalone `/terms/browse` page is retired and 301-redirects to `/terms`. Exact
+  order came from specific per-page instructions, not a single global rule — check
+  `GlossaryHeader.tsx` call sites before assuming a pattern.
 - **Re-seeding**: `npm run seed:glossary` (`scripts/seed-glossary.ts`) clears and reloads all 5
   tables from the CSVs — safe to re-run after editing content. Maps `terms.csv`'s `category` column
   (a display name, e.g. "AI 101") to `categories.id_slug` — the CSV doesn't store the slug directly.
@@ -414,10 +467,10 @@ schema.
   everything. `terms` has no domain column of its own; domain is derived by joining through
   `category_id`, so any domain-scoped terms query goes through `categoryIdsForDomain()` in
   `src/lib/glossary.ts` first. 11 PM categories, 516 PM terms.
-- **Routes**: `/pm-terms`, `/pm-terms/browse`, `/pm-terms/search`, `/pm-terms/flashcards`,
-  `/pm-terms/[slug]` mirror the `/terms` tree exactly, sharing the same components
-  (`GlossaryHeader`, `SearchBox`, `TermList`, `FlashcardStudio`) via a `domain` prop rather than
-  forking them.
+- **Routes**: `/pm-terms`, `/pm-terms/search`, `/pm-terms/flashcards`, `/pm-terms/[slug]` mirror the
+  `/terms` tree exactly, sharing the same components (`GlossaryHeader`, `SearchBox`, `TermList`,
+  `FlashcardStudio`, and as of 2026-09-23 `CategoryBrowse`) via a `domain` prop rather than forking
+  them. `/pm-terms/browse` retired 2026-09-23, same as `/terms/browse` — see "AI Terms" section.
 - **Search**: `search_terms` Postgres function gained a `filter_domain` parameter; `GET
   /api/terms/search` accepts `?domain=ai|pm` (defaults to `ai` for backward compatibility with
   existing callers).
@@ -577,12 +630,13 @@ started.
 ## What's Broken / Known Issues
 
 - **Preview MCP tool** (`mcp__Claude_Preview__preview_*`) has been unreliable at starting the dev server (historically tripped on port 3000 being occupied). Workaround that works: run it manually, `npm run dev -- --port 3001`, and verify via curl or the browser tool. `.claude/launch.json` is set for port 3001.
-- **LinkedIn URL** on the About page (`/about`) uses a placeholder: `https://linkedin.com/in/rickallen`. Real URL is `https://www.linkedin.com/in/ricklallen` (per the `_sources/` resumes/covers) — not yet applied.
+- ~~LinkedIn URL on the About page uses a placeholder~~ — **fixed 2026-09-23**, now `https://www.linkedin.com/in/ricklallen`.
 - **Resources: all 11 topics are now fully written** — no more placeholder sub-topic content anywhere on `/resources`. The 4 sub-topics that were long deferred on the old single `ai-agentic-practice` page (Multimodal AI, Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy) don't carry over verbatim into the 4 new AI for PMs topics — that area got a full 20-sub-topic redesign in Cowork rather than a simple fill-in, so whether that old substance made it in under different names hasn't been specifically checked. Remaining gaps are all outside sub-topic content: Top Voices have no `url`s (non-clickable), Templates all say "coming soon". All filled in by editing `src/lib/resources.ts`.
 - ~~`ResourceTiles.tsx`'s `PM_CARDS`/`AI_CARDS` are hand-maintained, not derived from `RESOURCE_TOPICS`~~ — still true structurally (not auto-derived, still needs manual updates when topics change), but the concrete gaps this used to describe (`RESOURCES_BLOG_MAP` missing keys, `AI_CARDS` all pointing at one page) were **backfilled 2026-09-23**, see "Completed 2026-09-23". See "Resources" section above for the current state.
 - ~~Resource-card layout mobile-verification gap~~ — **mostly closed 2026-09-23**. Desktop: 2026-09-19 for `pm-foundations`, 2026-09-23 for the other 10. Mobile: 2026-09-23 for the `/resources` hub and the 8 topics that existed at the time (see "Completed 2026-09-23"), via the same-origin-iframe workaround after `resize_window` was confirmed broken in this environment — but that pass covered the old `ai-agentic-practice` page, since it happened before the AI-for-PMs split. The 4 topics that replaced it (`understanding-ai`, `ai-product-building-blocks`, `vibe-coding-agentic-development`, `ai-empowered-pm`) haven't had a mobile pass yet.
-- **Old Resources URLs**: `/resources/strategy-discovery`, `/resources/roadmapping-execution`, `/resources/ux-design`, and `/resources/technology` redirect (301) to their replacements via `next.config.ts`. `/resources/ai-agentic-practice` also redirects (301, added 2026-09-23) to `/resources/understanding-ai`.
-- **`handoff-for-claude-code/ai-for-pms/*.ts` break a local `npm run build`/`tsc --noEmit` if left in place** — these are Rick's raw Cowork-handoff files (untracked, not meant to be part of the app), but their `import type { ResourceTopic } from "./resources"` doesn't resolve from that folder, and the TypeScript compiler picks them up anyway since nothing excludes `handoff-for-claude-code/` from the project. Doesn't affect production (Vercel builds from git, and the folder is untracked), but a local verification build will fail with a confusing "Cannot find module './resources'" error unless the folder is temporarily moved aside first. Worth adding `handoff-for-claude-code/` to `tsconfig.json`'s `exclude` at some point so this stops being a trap.
+- **Old Resources and Terms URLs**: `/resources/strategy-discovery`, `/resources/roadmapping-execution`, `/resources/ux-design`, `/resources/technology`, and `/resources/ai-agentic-practice` redirect (301) to their replacements. `/terms/browse` and `/pm-terms/browse` also redirect (301, added 2026-09-23) to `/terms` and `/pm-terms` — see `next.config.ts`.
+- ~~"Browse by Category" navigated to a near-duplicate page~~ — **fixed 2026-09-23**, replaced with an inline accordion; the standalone pages are retired. See "Completed 2026-09-23" for the full story, including a real hydration-mismatch bug hit and fixed along the way (`useSyncExternalStore`, not a lazy `useState` initializer, for reading the URL hash on category-anchor deep links).
+- ~~Stray `.ts` files in `handoff-for-claude-code/` break a local `npm run build`/`tsc --noEmit`~~ — **fixed 2026-09-23**, `handoff-for-claude-code` added to `tsconfig.json`'s `exclude`. No longer necessary to move the folder aside before a local build.
 - **Digital Twin Case Studies sidebar is placeholder** — `CaseStudiesAside.tsx` has 3 example cards, awaiting Rick's real case studies.
 - ~~Digital Twin mobile layout unverified~~ — **verified 2026-09-23**, clean, see "Digital Twin" section's verification note above.
 - **`/pm-terms` and `/terminology` are build-verified only, not UX-verified** — nobody has clicked through the actual pages in a browser since they were built on 2026-08-09. Data and routes are confirmed working (build + direct DB query + a 200 smoke test in production), but the interactive experience (browse, search, flashcards for the PM domain) hasn't been exercised.
@@ -597,22 +651,20 @@ started.
    `ai-product-building-blocks`, `vibe-coding-agentic-development`, `ai-empowered-pm`) — the
    2026-09-23 mobile pass covered the old `ai-agentic-practice` page before it was split; these 4
    replacements haven't had their own pass yet. Reuse the same-origin-iframe technique from
-   "Completed 2026-09-23" rather than `resize_window`.
+   "Completed 2026-09-23" rather than `resize_window`. Also worth a mobile check of the new
+   `CategoryBrowse` accordion (`/terms`, `/pm-terms`) while at it — shipped 2026-09-23, desktop-only
+   so far.
 2. **Check whether the old `ai-agentic-practice` sub-topics' deferred content** (Multimodal AI,
    Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy) made it into the
    new 4-topic/20-sub-topic AI for PMs redesign under different names, or got dropped — see "What's
    Broken."
-3. **Exclude `handoff-for-claude-code/` from `tsconfig.json`** so stray `.ts` files dropped there
-   (like today's AI-for-PMs handoff) stop breaking local `npm run build`/`tsc --noEmit` — see "What's
-   Broken."
-4. Real `url`s for Top Voices/Templates, and consider pulling the flagged Launchnotes "40 PM Books"
+3. Real `url`s for Top Voices/Templates, and consider pulling the flagged Launchnotes "40 PM Books"
    list into the standalone `/resources` Books section.
-5. **Click through `/pm-terms` and `/terminology` interactively** — browse, search, and flashcards
+4. **Click through `/pm-terms` and `/terminology` interactively** — browse, search, and flashcards
    for the PM domain have never been exercised in a browser, only build-verified.
-6. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
+5. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
    placeholder cards).
-7. **Fix LinkedIn URL** in `src/app/about/page.tsx` → `https://www.linkedin.com/in/ricklallen`.
-8. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
+6. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
    it comes back (and where) or stays gone.
 9. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
 10. ~~Mobile nav~~ — **DONE 2026-07-24**, hamburger menu added to `Header.tsx`.
@@ -637,6 +689,11 @@ started.
     tile copy. See "Completed 2026-09-23".
 20. ~~Split AI for PMs into 4 separate resource pages~~ — **DONE 2026-09-23**, shipped, pushed, and
     deployed. See "Completed 2026-09-23".
+21. ~~Fix "Browse by Category" navigating to a near-duplicate page~~ — **DONE 2026-09-23**, inline
+    accordion, standalone pages retired and redirected, hydration-mismatch bug fixed along the way.
+    See "Completed 2026-09-23".
+22. ~~Fix LinkedIn URL~~ — **DONE 2026-09-23**, now `https://www.linkedin.com/in/ricklallen`.
+23. ~~Exclude `handoff-for-claude-code/` from `tsconfig.json`~~ — **DONE 2026-09-23**.
 
 ---
 
@@ -670,8 +727,7 @@ started.
 | `src/lib/substack.ts` | RSS fetch + parse |
 | `src/lib/raindrop-feed.ts` | Raindrop.io API fetch — `fetchReadingList(days = 7, limit = 10)`, slices after the day filter |
 | `src/app/globals.css` | Tailwind v4 design tokens (`@theme`), incl. `--color-success` (green, added 2026-07-23) |
-| `src/app/terms/page.tsx` | AI Terms top-terms page |
-| `src/app/terms/browse/page.tsx` | AI Terms browse-by-category page |
+| `src/app/terms/page.tsx` | AI Terms top-terms page, renders `CategoryBrowse` below the header (2026-09-23) |
 | `src/app/terms/search/page.tsx` | AI Terms search page (renders `SearchBox`, opened by default) |
 | `src/app/terms/flashcards/page.tsx` | AI Terms study page (renders `FlashcardStudio`) |
 | `src/app/terms/[slug]/page.tsx` | AI Terms term detail page |
@@ -681,13 +737,13 @@ started.
 | `src/lib/supabase.ts` | Supabase client, scoped to the `pm_rearchitected` schema |
 | `src/lib/anthropic.ts` | Anthropic client factory |
 | `src/lib/grading.ts` | Open-Ended answer grading prompt + call (server-only) |
-| `src/components/glossary/GlossaryHeader.tsx` | Shared "AI Terms" heading + search toggle + per-page nav links, used on all 4 hub pages |
-| `src/components/glossary/` | `TermList`, `SearchBox`, `GlossaryHeader`, `FlashcardStudio` — folder kept its original name |
+| `src/components/glossary/GlossaryHeader.tsx` | Shared "AI Terminology"/"Product Management Terminology" heading + search toggle + per-page nav links, used on the 3 remaining hub pages per domain (top terms, search, flashcards) |
+| `src/components/glossary/CategoryBrowse.tsx` | Inline "Browse by Category" accordion (added 2026-09-23), used on `/terms` and `/pm-terms`; reads the URL hash via `useSyncExternalStore` to auto-expand/scroll for category-anchor deep links without a hydration mismatch |
+| `src/components/glossary/` | `TermList`, `SearchBox`, `GlossaryHeader`, `FlashcardStudio`, `CategoryBrowse` — folder kept its original name |
 | `scripts/seed-glossary.ts` | AI Terms + PM Terms seed script (`npm run seed:glossary`) — kept its original name, now domain-aware |
 | `db/glossary/*.csv` | AI Terms + PM Terms source content (categories/terms/aliases/related_terms/sources) — folder kept its original name |
 | `src/app/terminology/page.tsx` | Combined PM+AI terms hub page |
-| `src/app/pm-terms/page.tsx` | PM Terms top-terms page |
-| `src/app/pm-terms/browse/page.tsx` | PM Terms browse-by-category page |
+| `src/app/pm-terms/page.tsx` | PM Terms top-terms page, renders `CategoryBrowse` below the header (2026-09-23) |
 | `src/app/pm-terms/search/page.tsx` | PM Terms search page |
 | `src/app/pm-terms/flashcards/page.tsx` | PM Terms study page |
 | `src/app/pm-terms/[slug]/page.tsx` | PM Terms detail page |
