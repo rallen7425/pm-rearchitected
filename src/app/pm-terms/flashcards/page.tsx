@@ -27,7 +27,7 @@ export default async function PmTermsFlashcardsPage() {
             domain="pm"
             links={[
               { href: "/pm-terms", label: "Top Terms" },
-              { href: "/pm-terms/browse", label: "Browse by Category" },
+              { href: "/pm-terms#category-list", label: "Browse by Category" },
             ]}
           />
           <h3 className="text-xl md:text-2xl font-semibold tracking-tight mb-8">Test Yourself</h3>

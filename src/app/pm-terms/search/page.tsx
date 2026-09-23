@@ -20,7 +20,7 @@ export default function PmTermsSearchPage() {
             title="Terminology"
             domain="pm"
             defaultSearchOpen
-            links={[{ href: "/pm-terms/browse", label: "Browse by Category" }]}
+            links={[{ href: "/pm-terms#category-list", label: "Browse by Category" }]}
           />
         </div>
       </main>

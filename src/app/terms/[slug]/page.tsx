@@ -45,7 +45,7 @@ export default async function TermPage({ params }: { params: Promise<{ slug: str
           <div className="mt-4 flex items-center gap-2 flex-wrap">
             {category && (
               <Link
-                href={`/terms/browse#${category.id_slug}`}
+                href={`/terms#${category.id_slug}`}
                 className="text-xs font-medium px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground hover:bg-accent transition-colors"
               >
                 {category.name}

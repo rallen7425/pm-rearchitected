@@ -8,7 +8,7 @@ import type { GlossaryDomain } from "@/lib/glossary";
 
 export function GlossaryHeader({
   title = "AI Terminology",
-  links = [{ href: "/terms/browse", label: "Browse by Category" }],
+  links = [{ href: "/terms#category-list", label: "Browse by Category" }],
   defaultSearchOpen = false,
   showSearch = true,
   domain = "ai",

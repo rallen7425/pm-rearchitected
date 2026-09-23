@@ -45,7 +45,7 @@ export default async function PmTermPage({ params }: { params: Promise<{ slug: s
           <div className="mt-4 flex items-center gap-2 flex-wrap">
             {category && (
               <Link
-                href={`/pm-terms/browse#${category.id_slug}`}
+                href={`/pm-terms#${category.id_slug}`}
                 className="text-xs font-medium px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground hover:bg-accent transition-colors"
               >
                 {category.name}

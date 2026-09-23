@@ -1,9 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { TermList } from "./TermList";
 import type { Category, TermSummary } from "@/lib/glossary";
+
+function subscribeToHash(callback: () => void) {
+  window.addEventListener("hashchange", callback);
+  return () => window.removeEventListener("hashchange", callback);
+}
+function getHashSnapshot() {
+  return window.location.hash.slice(1);
+}
+function getHashServerSnapshot() {
+  return "";
+}
 
 export function CategoryBrowse({
   categories,
@@ -14,13 +25,29 @@ export function CategoryBrowse({
   termsByCategory: TermSummary[][];
   basePath?: string;
 }) {
-  const [open, setOpen] = useState(false);
+  // Deep links (e.g. a term detail page's category badge, `#ai-101`) point at a category
+  // section that's only in the DOM once expanded. useSyncExternalStore (not a lazy useState
+  // initializer, and not setState-in-an-effect) reads the URL hash without a server/client
+  // mismatch: it renders the server snapshot ("") during hydration, then syncs to the real
+  // hash right after, which is the pattern React documents for reading browser-only state.
+  const hash = useSyncExternalStore(subscribeToHash, getHashSnapshot, getHashServerSnapshot);
+  const openViaHash = hash === "category-list" || categories.some((c) => c.id_slug === hash);
+
+  // Once the user has explicitly toggled it, their choice wins over the hash default.
+  const [userOverride, setUserOverride] = useState<boolean | null>(null);
+  const open = userOverride ?? openViaHash;
+
+  useEffect(() => {
+    if (openViaHash && hash && hash !== "category-list") {
+      document.getElementById(hash)?.scrollIntoView();
+    }
+  }, [openViaHash, hash]);
 
   return (
     <div id="category-list" className="mb-10 scroll-mt-24">
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => setUserOverride(!open)}
         aria-expanded={open}
         className="flex items-center gap-2 text-base font-semibold tracking-tight hover:text-primary transition-colors"
       >

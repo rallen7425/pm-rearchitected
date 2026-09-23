@@ -25,7 +25,7 @@ export default async function GlossaryFlashcardsPage() {
           <GlossaryHeader
             links={[
               { href: "/terms", label: "Top Terms" },
-              { href: "/terms/browse", label: "Browse by Category" },
+              { href: "/terms#category-list", label: "Browse by Category" },
             ]}
           />
           <h3 className="text-xl md:text-2xl font-semibold tracking-tight mb-8">Test Yourself</h3>
