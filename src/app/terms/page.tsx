@@ -25,6 +25,7 @@ export default async function GlossaryPage() {
         <div className="container pb-20">
           <GlossaryHeader
             links={[
+              { href: "/pm-terms", label: "PM Terminology" },
               { href: "/terms/flashcards", label: "Test Yourself" },
               { href: "/terms/browse", label: "Browse by Category" },
             ]}

@@ -27,6 +27,7 @@ export default async function PmTermsPage() {
             title="Terminology"
             domain="pm"
             links={[
+              { href: "/terms", label: "AI Terminology" },
               { href: "/pm-terms/flashcards", label: "Test Yourself" },
               { href: "/pm-terms/browse", label: "Browse by Category" },
             ]}
