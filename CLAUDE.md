@@ -23,13 +23,13 @@ Raindrop collection: 70283481
 
 ---
 
-## Current State (as of 2026-09-10)
+## Current State (as of 2026-09-23)
 
 ### Pages built
 - `/` — Home page (Hero, Recent Posts, Reading This Week, Resource Library, About section)
 - `/about` — Full standalone About page with bio content, plus a Digital Twin callout card (added 2026-08-21)
-- `/resources` — Resource Library page: 6-topic tile grid + Terminology teaser + Top Voices + Templates + Books (redesigned 2026-09-09, see "Resources" section below)
-- `/resources/[topic]` — Per-topic pages, 6 statically generated (`strategy-discovery`, `ai-agentic-practice`, `pm-foundations`, `roadmapping-execution`, `ux-design`, `technology`); only Strategy & Discovery has written content so far (added 2026-09-09)
+- `/resources` — Resource Library page: two-section tile grid (7 "Product Management" cards + 4 "AI for PMs" cards) + Terminology teaser + Top Voices + Templates + Books (redesigned 2026-09-09, tiles renamed/reordered 2026-09-13, sub-topics rebuilt as resource cards and fully re-architected into 8 topics 2026-09-19 through 2026-09-22, see "Resources" section below)
+- `/resources/[topic]` — Per-topic pages, 8 statically generated (`pm-foundations` "PM 101", `ai-agentic-practice` "AI for PMs", `product-vision-strategy`, `discovery-research`, `design-for-pms`, `agile-development-deployment`, `go-to-market-growth`, `technology-for-pms`). All 8 are now fully written as resource-card lists — the old `strategy-discovery`/`roadmapping-execution`/`ux-design` placeholder topics (added 2026-09-09) no longer exist; they were replaced, not filled in (see "Resources" section below for what changed and what old URLs now 404)
 - `/terminology` — Combined hub showing top PM terms and top AI terms side by side (added 2026-08-21)
 - `/terms` — AI Terms top terms (priority 1–2, static) — renamed from `/glossary` 2026-07-23
 - `/terms/browse` — AI Terms browsed by category (all 177 terms)
@@ -128,6 +128,144 @@ Raindrop collection: 70283481
   Issues, Next Session, and Key Files all refreshed for the above.
 - All work committed and pushed to `main`; each change auto-deployed to production and was
   smoke-checked live. Working tree clean at session end.
+
+---
+
+## Completed 2026-09-13
+
+- **Resource tile swap**: on both the home page and `/resources`, swapped Strategy & Discovery and
+  PM Foundations — PM Foundations is now the top-right wide tile, renamed **"PM 101"**; Strategy &
+  Discovery dropped to the standard-size row. AI & Agentic Practice renamed **"AI for PMs"** (stayed
+  top-left, wide, unmoved). Row 1 is now AI for PMs / PM 101 (both wide); row 2 is Strategy &
+  Discovery, Roadmapping & Execution, UX Design, Technology (all standard). Only `label`/`width`
+  changed in `RESOURCE_TOPICS` — `id`s (`ai-agentic-practice`, `pm-foundations`, `strategy-discovery`)
+  were left alone, so routes/URLs didn't change.
+- **First PM 101 sub-topic written**: "What is Product Management?" (Rick's copy, five sources —
+  Shreyas Doshi, Mind the Product/Eriksson, SVPG/Cagan, Product Board, Atlassian — each a body
+  paragraph + link pills built from his "Source:"/"Read More:" lines). Real URLs, no longer
+  placeholders. The other 4 PM 101 sub-topics (Roles & Responsibilities, Core Frameworks, Product
+  Sense, Stakeholder Communication) are still `body: null`.
+- **Process note**: first pass at this sub-topic paraphrased Rick's supplied copy into the site's
+  existing prose voice instead of using it verbatim — he'd already written finished copy, not notes
+  to adapt. Corrected to his exact wording (including two likely typos left as-is per his copy:
+  "makes then a bit more actionable" and "the PM's activities around Understanding what user need" —
+  flagged to him, not silently fixed). **Going forward: when Rick pastes copy that reads as finished
+  text, use it verbatim — only restructure into the page's data shape, never rewrite the sentences,
+  unless he explicitly asks for a rewrite.**
+
+---
+
+## Completed 2026-09-19
+
+- **Resources sub-topics redesigned as resource cards**, shipped (`996450d`), pushed, and deployed to
+  production — verified live via curl on `/resources`, `/resources/pm-foundations`, and
+  `/resources/ai-agentic-practice`. Replaces the old prose-paragraphs + link-pill-row sub-topic
+  format with a discrete card list (bold title, 1–2 sentence summary, one link per card), matching
+  `SubstackLatest.tsx`'s "Recent posts" visual language. Built from
+  `handoff-for-claude-code/claude-code-prompt-pm101-resource-cards.md` and
+  `claude-code-prompt-ai-for-pms-resource-cards.md` (kept untracked in this repo, same convention as
+  other handoff scratch material).
+  - New `Resource` type in `src/lib/resources.ts`: `"article" | "video" | "tool"`, with
+    `title`/`summary`/`url` or a multi-link `links[]` (mutually exclusive), plus an optional
+    `runtime` (video-grid only). `SubTopic.body`/`links` are now optional (legacy shape) and coexist
+    with a new optional `resources` field — both shapes render correctly depending on which a given
+    sub-topic sets.
+  - Added an optional `SubTopic.note` field (not specified in either handoff) to carry per-subtopic
+    scope/sequencing captions from the source JSON (e.g. PM 101's "surface-level, not a deep AI
+    dive" note) rather than silently drop them.
+  - **`pm-foundations`**: 5 placeholder sub-topics → 3 populated ones (What is Product Management?,
+    Dive Deeper, Product Management in 2026), superseding the 2026-09-13 verbatim-prose draft of
+    "What is Product Management?" (which never shipped) with the new card format.
+  - **`ai-agentic-practice`**: 8 empty scaffolded sub-topics → 4 populated ones (AI Fundamentals,
+    Agents/RAG & Evals, Vibe Coding & Agentic Development, Product Management for AI-Empowered PMs
+    & AI PMs).
+  - Also landed the never-committed 2026-09-13 tile reorder in the same commit (AI for PMs / PM 101
+    promoted to row 1 as the two wide tiles; Strategy & Discovery demoted to standard) since it
+    shared the same file and nothing superseded it in the interim.
+  - New render components in `src/app/resources/[topic]/page.tsx`: `ResourceCard` (the card-list
+    template), `VideoGrid` (4-across desktop / 2-across mobile square grid, partitions out
+    `type: "video"` resources from the card list), `ResourceSection` (picks the new vs. legacy
+    render path per sub-topic). `type: "tool"` gets a small "Tool" tag + "Visit site" instead of the
+    video icon + "Read the source".
+  - Two content calls made with Rick during this pass: swapped the paywalled HBR "Jobs to Be Done"
+    citation for the free Christensen Institute explainer (`christenseninstitute.org`, confirmed it
+    covers the same milkshake example); genericized the "Agents, RAG & Evals" RAG card so it no
+    longer names the UKG Financial Health Coach project.
+  - Video-grid placement is applied as one shared behavior across both migrated topics, including PM
+    101's single video (Lenny's Podcast) — a deliberate consistency call, confirmed with Rick, rather
+    than special-casing PM 101 to render its one video inline in the card list as that handoff's own
+    template literally showed.
+  - Verified: `tsc --noEmit` clean, `next build` prerenders all 6 topic pages, `eslint` shows no new
+    errors. Spot-checked both pages in-browser at desktop width. **Mobile width not verified** — see
+    "What's Broken / Known Issues."
+  - Deferred (per both handoffs' "Explicitly deferred" sections, not dropped): migrating the
+    remaining four topics to the `resources` shape; the four unwritten AI for PMs sub-topics
+    (Multimodal AI, Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy);
+    pulling a flagged Launchnotes "40 PM Books" list into the standalone `/resources` Books section.
+- **Digital Twin corpus refresh drafted** — a "September 2026 career refresh" reconciling
+  professional identity, UKG reporting scope, Nuance dates, commercial/P&L boundaries, acquisition
+  experience, launch-status distinctions, and response style, sourced from two new `_sources/` files
+  (`rick-allen-career-canonical-context.md`, `rick-allen-career-positioning-and-perspective.md`).
+  Touches all 5 corpus files, `Corpus-Ready/` masters (kept byte-identical), and
+  `src/lib/digital-twin.ts` (two new hard rules, a new VOICE paragraph). Sat reviewed-but-uncommitted
+  for several sessions while Resources work took priority — **landed 2026-09-23, see "Completed
+  2026-09-23" below.**
+
+---
+
+## Completed 2026-09-20
+
+- **PM 101 expanded**: added a "Frameworks" sub-topic to `pm-foundations` and expanded its existing
+  readings (`d53f306`).
+- **Intro copy updated** under the page header on both `pm-foundations` and `ai-agentic-practice`
+  (`836036a`, `8f3f18c`).
+- **Sub-topic pages decluttered**: dropped the "Sub-topics" h2 label and the per-item 01/04 counter
+  (no counterpart in Rick's Cowork mockups), promoted each sub-topic's own heading up a level to
+  match "From the Blog" and the mockups (`537d817`).
+- **Tile order flipped**: PM 101 now renders before AI for PMs on both the home page and `/resources`
+  (`09da894`) — supersedes the 2026-09-13 order.
+- **Product Vision & Strategy page added** (`ec590e5`) — first of four new topics built this week,
+  and the trigger for a larger architecture change: each new topic now gets its own
+  `src/lib/<topic-id>.ts` file (a single `export const TOPIC_NAME: ResourceTopic = {...}`) instead of
+  living inline in `RESOURCE_TOPICS` in `resources.ts`. Also reorganized `ResourceTiles.tsx` into two
+  hardcoded card lists (`PM_CARDS`, `AI_CARDS`) rather than mapping `RESOURCE_TOPICS` directly — see
+  "Resources" section below for what that means for the tile grid.
+
+---
+
+## Completed 2026-09-22
+
+- **Discovery & Research page added** (`a7986a3`, own file `src/lib/discovery-research.ts`).
+- **Design for PMs, Agile/Development/Deployment, Go-to-Market & Growth, and Technology for PMs
+  pages added** (`9dfdfcf`, one commit, four new files: `design-for-pms.ts`,
+  `agile-development-deployment.ts`, `go-to-market-growth.ts`, `technology-for-pms.ts`). This retires
+  the original `strategy-discovery`/`roadmapping-execution`/`ux-design` placeholder topics entirely —
+  they're removed from `RESOURCE_TOPICS`, not filled in, so their old URLs now 404 (`dynamicParams =
+  false`, unknown slug → not found).
+- **Net effect**: `/resources/[topic]` now statically generates 8 pages (up from 6), all fully
+  written as resource-card lists — every sub-topic across all 8 topics has populated `resources[]`,
+  no `body`/`links` legacy shape or placeholder sub-topics remain anywhere on the site. See
+  "Resources" section below for the full topic/file map.
+- **Not yet caught up in this doc when this work landed** — `CLAUDE.md` wasn't updated alongside
+  these commits; this pass (2026-09-23) is the catch-up.
+
+---
+
+## Completed 2026-09-23
+
+- **Landed the September 2026 Digital Twin career refresh** (`1c03e23`) that had been sitting
+  reviewed-but-uncommitted since before 2026-09-19 (see "Completed 2026-09-19" above). Reviewed the
+  full diff against all 5 corpus files and `src/lib/digital-twin.ts` for accuracy/tone before
+  committing — no changes needed, content was already careful about hedging claims (no formal P&L
+  ownership, direct-report vs. matrixed scope, acquisition integration vs. corporate-development
+  work, unconfirmed app-launch status). Pushed to `main`, auto-deployed to production, and verified
+  live: a streaming probe against `/api/digital-twin/chat` asking about team size and P&L ownership
+  returned the new reconciled framing correctly (direct reports at P97/UKG kept distinct from
+  matrixed/organizational scope at Nokia/UKG; explicit "no formal P&L ownership" with the commercial-
+  responsibility nuance), with zero em dashes as required.
+- Left `CLAUDE.md`'s own uncommitted doc updates and `handoff-for-claude-code/` out of that commit —
+  this session's CLAUDE.md pass (see 2026-09-20/09-22 sections above and "Resources" section
+  rewritten below) is a separate, subsequent commit.
 
 ---
 
@@ -240,30 +378,63 @@ schema.
 
 ---
 
-## Resources (redesigned 2026-09-09)
+## Resources (redesigned 2026-09-09; tiles renamed/reordered 2026-09-13; sub-topics redesigned as resource cards 2026-09-19; re-architected into 8 topics across per-topic files 2026-09-20 through 09-22)
 
 Replaced the original `/resources` (8 topic modules, two-column bullet lists with `href="#"` and
-literal "Item 1/2/3" placeholders) with a structured Resource Library.
+literal "Item 1/2/3" placeholders) with a structured Resource Library. Went through two further
+redesigns since: the 2026-09-19 move from prose+links to resource cards, and a 2026-09-20/09-22
+architecture change that replaced 3 of the original 6 topics with 6 newly-written ones (8 total) and
+split content out of the single `resources.ts` file.
 
-- **Content + types**: `src/lib/resources.ts` — `RESOURCE_TOPICS` (6 topics: Strategy & Discovery,
-  AI & Agentic Practice, PM Foundations, Roadmapping & Execution, UX Design, Technology; the first
-  two are `width: "wide"`), each with sub-topics; `RESOURCES_BLOG_MAP` (hand-maintained per-topic
-  Substack post list, ships empty); `RESOURCE_SECTIONS` (Terminology link cards, Top Voices,
-  Templates, Books). `url: null` renders as non-clickable, never a fabricated link. `body: null`
-  renders "Write-up coming soon." Only `strategy-discovery` is fully written.
-- **Routes**: `/resources/[topic]/page.tsx` — `generateStaticParams` over `TOPIC_IDS`,
-  `dynamicParams = false` (unknown slug → 404). Breadcrumb, "From the Blog" (empty state until
-  `RESOURCES_BLOG_MAP` gets entries), sub-topic write-ups + link pills.
-- **Components**: `src/components/site/ResourceTiles.tsx` — the 6-tile grid, shared by the home
-  page (`Resources.tsx`, which is now a thin wrapper) and `/resources`. `TerminologyTeaser.tsx` —
-  `"use client"` single-card glossary preview; the server builds a 40-term pool from
-  `listStudyTerms`/`listCategories` (both domains) at ISR time and passes it down; shuffle re-picks
-  in the click handler only, never during render.
+- **Content + types**: `src/lib/resources.ts` still defines the shared types (`ResourceTopic`,
+  `SubTopic`, `Resource`, `ResourceLink`) and `RESOURCE_TOPICS`, but as of 2026-09-20 each topic
+  added or rebuilt lives in its **own file**, imported into `RESOURCE_TOPICS`, rather than inline:
+  `product-vision-strategy.ts`, `discovery-research.ts`, `design-for-pms.ts`,
+  `agile-development-deployment.ts`, `go-to-market-growth.ts`, `technology-for-pms.ts`. Only
+  `pm-foundations` ("PM 101") and `ai-agentic-practice` ("AI for PMs") are still defined inline in
+  `resources.ts` (unchanged since 2026-09-19, aside from PM 101 gaining a "Frameworks" sub-topic
+  2026-09-20). `RESOURCE_TOPICS` order is now: `PRODUCT_VISION_STRATEGY`, `pm-foundations` (inline),
+  `ai-agentic-practice` (inline), `DISCOVERY_RESEARCH`, `DESIGN_FOR_PMS`,
+  `AGILE_DEVELOPMENT_DEPLOYMENT`, `GO_TO_MARKET_GROWTH`, `TECHNOLOGY_FOR_PMS` — 8 topics, each with
+  5 sub-topics, every sub-topic fully written with the `resources: Resource[]` card-list shape. The
+  legacy `body`/`links` prose shape (still typed on `SubTopic` for backward compatibility) has **no
+  remaining users** as of 2026-09-22 — the three topics that used it (`strategy-discovery`,
+  `roadmapping-execution`, `ux-design`) were removed outright, not migrated. Note: the comment block
+  at the top of `resources.ts` still describes the old body/links topics as "still used" — that's
+  now stale and should be corrected next time that file is touched.
+- **Routes**: `/resources/[topic]/page.tsx` — `generateStaticParams` over `TOPIC_IDS` (now 8 ids),
+  `dynamicParams = false` (unknown slug → 404). This means the old `/resources/strategy-discovery`,
+  `/resources/roadmapping-execution`, and `/resources/ux-design` URLs now 404 — nothing redirects
+  them. Breadcrumb, "From the Blog" (`RESOURCES_BLOG_MAP[topic.id] ?? []`, empty state when no
+  entry — the map still only has keys for the original 6 topic ids, so all 4 topics added
+  2026-09-20/09-22 render an empty "From the Blog" until that map is updated too), then sub-topics
+  via `ResourceSection`/`ResourceCard`/`VideoGrid` (card-list + video-grid + tool-badge rendering).
+- **Tile grid is no longer topic-driven**: `src/components/site/ResourceTiles.tsx` was rewritten
+  2026-09-20 from a map over `RESOURCE_TOPICS` into two **hardcoded** arrays — `PM_CARDS` (7 tiles:
+  PM 101 wide, then Product Vision & Strategy, Discovery & Research, Design for PMs, Agile/
+  Development/Deployment, Go-to-Market & Growth, Technology for PMs) and `AI_CARDS` (4 tiles: Vibe
+  Coding & Agentic Development, Understanding AI, AI Product Building Blocks, Product Management for
+  AI-Empowered PMs — all four currently point at the same `/resources/ai-agentic-practice` page,
+  since that topic hasn't been split into separate pages per sub-topic). Comment in the file:
+  "Existing topic pages remain the destinations until their content is reorganized" — i.e. this is
+  known to be a transitional state, not a bug. Adding a new topic now means updating `PM_CARDS`/
+  `AI_CARDS` by hand in addition to `RESOURCE_TOPICS` — they're no longer guaranteed to match.
+- **Other components**: `TerminologyTeaser.tsx` — `"use client"` single-card glossary preview; the
+  server builds a 40-term pool from `listStudyTerms`/`listCategories` (both domains) at ISR time and
+  passes it down; shuffle re-picks in the click handler only, never during render.
+  `ResourceCard`/`VideoGrid`/`ResourceSection` (in `[topic]/page.tsx` itself, not extracted to
+  `components/`) render the card-list shape.
 - **Known placeholder surface on production (by design)**: Top Voices have no `url`s yet, Templates
-  all say "coming soon", 5 of 6 topic pages have no written sub-topic bodies, every "From the Blog"
-  is an empty state. Fill in by editing `src/lib/resources.ts` (no code changes needed).
-- **Verified**: `npm run build` (all 6 topic pages prerender) + `eslint` clean; live smoke-checked
-  after deploy (`/resources` + all 6 topic routes 200, bad slug 404, teaser populated from Supabase).
+  all say "coming soon", "From the Blog" is empty for every topic except `discovery-research` (one
+  post). Fill in by editing `src/lib/resources.ts`'s `RESOURCE_SECTIONS`/`RESOURCES_BLOG_MAP` (no
+  code changes needed). The AI for PMs topic still has 4 sub-topics deferred entirely (Multimodal AI,
+  Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy — see "Completed
+  2026-09-19").
+- **Verified**: `npm run build` (all 8 topic pages prerender) + `tsc --noEmit` clean. Desktop-width
+  visual check done in-browser for the 2026-09-19 card layout; the 6 topics added 2026-09-20/09-22
+  and the current tile grid have **not** been visually spot-checked in a browser this pass — worth a
+  quick look before calling Resources fully done. Mobile width still not verified anywhere on
+  `/resources` (see "What's Broken").
 
 ---
 
@@ -337,33 +508,62 @@ started.
 
 - **Preview MCP tool** (`mcp__Claude_Preview__preview_*`) has been unreliable at starting the dev server (historically tripped on port 3000 being occupied). Workaround that works: run it manually, `npm run dev -- --port 3001`, and verify via curl or the browser tool. `.claude/launch.json` is set for port 3001.
 - **LinkedIn URL** on the About page (`/about`) uses a placeholder: `https://linkedin.com/in/rickallen`. Real URL is `https://www.linkedin.com/in/ricklallen` (per the `_sources/` resumes/covers) — not yet applied.
-- **Resources content is mostly placeholder** (2026-09-09 redesign, by design): Top Voices have no `url`s (non-clickable), Templates all say "coming soon", 5 of 6 `/resources/[topic]` pages have no written sub-topic bodies, every per-topic "From the Blog" is an empty state. All filled in by editing `src/lib/resources.ts`.
+- **Resources: all 8 topics are now fully written** — no more placeholder sub-topic content anywhere on `/resources`. Remaining gaps are all outside sub-topic content: Top Voices have no `url`s (non-clickable), Templates all say "coming soon", "From the Blog" is empty except `discovery-research`, and 4 AI for PMs sub-topics (Multimodal AI, Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy) were never added to `ai-agentic-practice` at all. All filled in by editing `src/lib/resources.ts`.
+- **`RESOURCES_BLOG_MAP` wasn't updated for the 4 topics added 2026-09-20/09-22** — `product-vision-strategy`, `design-for-pms`, `agile-development-deployment`, `go-to-market-growth`, and `technology-for-pms` have no key in the map, so "From the Blog" renders its empty state (safe fallback, not a crash — `RESOURCES_BLOG_MAP[topic] ?? []`). The map also still carries orphaned keys for the retired `roadmapping-execution`/`ux-design`/`technology` topic ids.
+- **`ResourceTiles.tsx`'s `PM_CARDS`/`AI_CARDS` are hand-maintained, not derived from `RESOURCE_TOPICS`** — adding, removing, or renaming a topic now requires updating both places by hand, and they're not guaranteed to stay in sync. See "Resources" section above.
+- **New resource-card layout is desktop-verified only, and only for the original 2 topics** — the card list, tool badges, and video grid on `/resources/pm-foundations` and `/resources/ai-agentic-practice` were visually confirmed at desktop width back on 2026-09-19. The 6 topics added since (2026-09-20/09-22) have only been build-verified (`next build` + `tsc --noEmit`), never visually spot-checked in a browser. No topic's mobile/narrow-viewport rendering has been verified — the browser tool's `resize_window` reported success without actually changing the rendered viewport in an earlier session (same class of gap noted below for Digital Twin).
+- **Old Resources URLs now 404**: `/resources/strategy-discovery`, `/resources/roadmapping-execution`, and `/resources/ux-design` were removed outright (not migrated) on 2026-09-22 in favor of newly-written replacement topics. Nothing redirects them — worth checking whether any external links (Substack posts, etc.) point at the old slugs.
 - **Digital Twin Case Studies sidebar is placeholder** — `CaseStudiesAside.tsx` has 3 example cards, awaiting Rick's real case studies.
 - **Digital Twin mobile layout unverified** — applies to both the original build and the 2026-09-10 reformat. Responsive via Tailwind `lg:` breakpoints but only desktop was visually checked; needs a real-phone pass.
 - **`/pm-terms` and `/terminology` are build-verified only, not UX-verified** — nobody has clicked through the actual pages in a browser since they were built on 2026-08-09. Data and routes are confirmed working (build + direct DB query + a 200 smoke test in production), but the interactive experience (browse, search, flashcards for the PM domain) hasn't been exercised.
 - **Digital Twin rate limiting is in-memory** — resets on every Vercel cold start, so it's not a durable defense against sustained abuse. Fine for current traffic; revisit with a Supabase-backed counter if abuse shows up.
+- **Aakash Gupta's AI PM transition guide** (linked from the AI for PMs "Product Management for AI-Empowered PMs & AI PMs" sub-topic) carries a "2025 Edition" tag on its own page as of this writing — worth checking whether a newer edition exists before it's linked in more places.
 
 ---
 
 ## Next Session Should Pick Up
 
-1. **Real-phone check of `/digital-twin`** — same gap that caught the 2026-07-24 header-nav bug;
-   automated tools couldn't verify the mobile layout this session.
-2. **Click through `/pm-terms` and `/terminology` interactively** — browse, search, and flashcards
+1. **Visually spot-check the 6 Resources topics added 2026-09-20/09-22** (`product-vision-strategy`,
+   `discovery-research`, `design-for-pms`, `agile-development-deployment`, `go-to-market-growth`,
+   `technology-for-pms`) in a browser at desktop width — only build-verified so far, never visually
+   confirmed like `pm-foundations`/`ai-agentic-practice` were on 2026-09-19.
+2. **Real narrow-viewport check of the Resources card layout, across all 8 topics** — the browser
+   tool couldn't actually verify mobile width in an earlier session (see "What's Broken"). Same gap
+   as the Digital Twin mobile check below.
+3. **Real-phone check of `/digital-twin`** — same gap that caught the 2026-07-24 header-nav bug;
+   automated tools couldn't verify the mobile layout in an earlier session either.
+4. **Decide on `RESOURCES_BLOG_MAP` and `ResourceTiles.tsx`'s `PM_CARDS`/`AI_CARDS`**: the blog map
+   is missing keys for 4 of the 6 newly-added topics (empty "From the Blog" state), and the tile
+   arrays are hand-maintained rather than derived from `RESOURCE_TOPICS` — decide whether to
+   backfill the map, keep the tiles hand-maintained going forward, or refactor the tiles to derive
+   from `RESOURCE_TOPICS` again now that all 8 topics are real. Also clean up the orphaned
+   `roadmapping-execution`/`ux-design`/`technology` keys left in the blog map.
+5. **Write the 4 deferred AI for PMs sub-topics** (Multimodal AI, Responsible AI & Governance,
+   AI-Native Operating Models, Portfolio AI Strategy). Also: real `url`s for Top Voices/Templates,
+   and consider pulling the flagged Launchnotes "40 PM Books" list into the standalone `/resources`
+   Books section.
+6. **Click through `/pm-terms` and `/terminology` interactively** — browse, search, and flashcards
    for the PM domain have never been exercised in a browser, only build-verified.
-3. **Fill in Resources content** in `src/lib/resources.ts` — sub-topic write-ups for the 5
-   unwritten topic pages, real `url`s for Top Voices and Templates, per-topic Substack posts in
-   `RESOURCES_BLOG_MAP`.
-4. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
+7. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
    placeholder cards).
-5. **Fix LinkedIn URL** in `src/app/about/page.tsx` → `https://www.linkedin.com/in/ricklallen`.
-6. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
+8. **Fix LinkedIn URL** in `src/app/about/page.tsx` → `https://www.linkedin.com/in/ricklallen`.
+9. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
    it comes back (and where) or stays gone.
-7. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
-8. ~~Mobile nav~~ — **DONE 2026-07-24**, hamburger menu added to `Header.tsx`.
-9. ~~PM Terms domain~~ — **DONE 2026-08-21** (built 2026-08-09, committed/shipped 2026-08-21).
-10. ~~Digital Twin chat~~ — **DONE 2026-08-21**, live at `/digital-twin`.
-11. ~~Resources redesign~~ — **DONE 2026-09-09**, shipped and live (content still being filled in).
+10. **Fix the stale comment block** at the top of `src/lib/resources.ts` — still describes the
+    retired body/links topics as "still used" (see "Resources" section above).
+11. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
+12. ~~Mobile nav~~ — **DONE 2026-07-24**, hamburger menu added to `Header.tsx`.
+13. ~~PM Terms domain~~ — **DONE 2026-08-21** (built 2026-08-09, committed/shipped 2026-08-21).
+14. ~~Digital Twin chat~~ — **DONE 2026-08-21**, live at `/digital-twin`.
+15. ~~Resources redesign (v1)~~ — **DONE 2026-09-09**, shipped and live; tiles renamed/reordered
+    2026-09-13.
+16. ~~Resources sub-topic content redesigned as resource cards (PM 101 + AI for PMs)~~ — **DONE
+    2026-09-19**, shipped, pushed, and deployed; see "Completed 2026-09-19" above.
+17. ~~Migrate/write remaining Resources topics~~ — **DONE 2026-09-20 through 09-22**, but as a
+    replace-not-migrate: `strategy-discovery`/`roadmapping-execution`/`ux-design` were retired and 6
+    newly-written topics took their place (8 total). See "Completed 2026-09-20"/"Completed
+    2026-09-22" above.
+18. ~~Land the Digital Twin corpus refresh~~ — **DONE 2026-09-23**, see "Completed 2026-09-23" above.
 
 ---
 
@@ -374,9 +574,15 @@ started.
 | `src/app/page.tsx` | Home page |
 | `src/app/about/page.tsx` | Standalone About page |
 | `src/app/resources/page.tsx` | Resource Library page (tile grid + Terminology teaser + Top Voices + Templates + Books), redesigned 2026-09-09 |
-| `src/app/resources/[topic]/page.tsx` | Per-topic Resources pages, 6 statically generated (`dynamicParams = false`) |
-| `src/lib/resources.ts` | Resources content + types (`RESOURCE_TOPICS`, `RESOURCES_BLOG_MAP`, `RESOURCE_SECTIONS`) — edit to fill in content, no code changes needed |
-| `src/components/site/ResourceTiles.tsx` | Shared 6-topic tile grid (home page + `/resources`) |
+| `src/app/resources/[topic]/page.tsx` | Per-topic Resources pages, 8 statically generated (`dynamicParams = false`) |
+| `src/lib/resources.ts` | Shared Resources types, `RESOURCE_TOPICS` (imports the 6 files below plus 2 inline topics), `RESOURCES_BLOG_MAP`, `RESOURCE_SECTIONS` — edit to fill in content, no code changes needed. Has a stale top-of-file comment as of 2026-09-22, see "Resources" section |
+| `src/lib/product-vision-strategy.ts` | Product Vision & Strategy topic content (added 2026-09-20) |
+| `src/lib/discovery-research.ts` | Discovery & Research topic content (added 2026-09-22) |
+| `src/lib/design-for-pms.ts` | Design for PMs topic content (added 2026-09-22) |
+| `src/lib/agile-development-deployment.ts` | Agile, Development & Deployment topic content (added 2026-09-22) |
+| `src/lib/go-to-market-growth.ts` | Go-to-Market & Growth topic content (added 2026-09-22) |
+| `src/lib/technology-for-pms.ts` | Technology for PMs topic content (added 2026-09-22) |
+| `src/components/site/ResourceTiles.tsx` | Home page + `/resources` tile grid — as of 2026-09-20, two hardcoded card lists (`PM_CARDS`, `AI_CARDS`), not derived from `RESOURCE_TOPICS`; see "Resources" section |
 | `src/components/site/TerminologyTeaser.tsx` | Client single-card glossary preview on `/resources`; server passes a term pool from Supabase |
 | `src/components/site/Header.tsx` | Nav — client component, uses `usePathname`; mobile hamburger dropdown added 2026-07-24, no Subscribe button in header as of same date |
 | `src/components/site/Hero.tsx` | Hero section (shared across pages) |
