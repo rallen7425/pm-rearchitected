@@ -24,10 +24,10 @@ export default async function PmTermsPage() {
         <Hero showDescription={false} />
         <div className="container pb-20">
           <GlossaryHeader
-            title="Terminology"
+            title="Product Management Terminology"
             domain="pm"
             links={[
-              { href: "/terms", label: "AI Terminology" },
+              { href: "/terms", label: "AI Terms" },
               { href: "/pm-terms/flashcards", label: "Test Yourself" },
               { href: "/pm-terms/browse", label: "Browse by Category" },
             ]}
