@@ -163,7 +163,7 @@ export default function AboutPage() {
                 Get the weekly note
               </a>
               <a
-                href="https://linkedin.com/in/rickallen"
+                href="https://www.linkedin.com/in/ricklallen"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-border bg-background text-foreground text-sm font-medium px-5 py-2.5 hover:bg-secondary transition-colors"
