@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
       { source: "/resources/ux-design", destination: "/resources/design-for-pms", permanent: true },
       { source: "/resources/roadmapping-execution", destination: "/resources/agile-development-deployment", permanent: true },
       { source: "/resources/technology", destination: "/resources/technology-for-pms", permanent: true },
+      { source: "/resources/ai-agentic-practice", destination: "/resources/understanding-ai", permanent: true },
     ];
   },
   images: {
