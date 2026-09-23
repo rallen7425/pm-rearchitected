@@ -633,13 +633,13 @@ started.
 - ~~LinkedIn URL on the About page uses a placeholder~~ — **fixed 2026-09-23**, now `https://www.linkedin.com/in/ricklallen`.
 - **Resources: all 11 topics are now fully written** — no more placeholder sub-topic content anywhere on `/resources`. The 4 sub-topics that were long deferred on the old single `ai-agentic-practice` page (Multimodal AI, Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy) don't carry over verbatim into the 4 new AI for PMs topics — that area got a full 20-sub-topic redesign in Cowork rather than a simple fill-in, so whether that old substance made it in under different names hasn't been specifically checked. Remaining gaps are all outside sub-topic content: Top Voices have no `url`s (non-clickable), Templates all say "coming soon". All filled in by editing `src/lib/resources.ts`.
 - ~~`ResourceTiles.tsx`'s `PM_CARDS`/`AI_CARDS` are hand-maintained, not derived from `RESOURCE_TOPICS`~~ — still true structurally (not auto-derived, still needs manual updates when topics change), but the concrete gaps this used to describe (`RESOURCES_BLOG_MAP` missing keys, `AI_CARDS` all pointing at one page) were **backfilled 2026-09-23**, see "Completed 2026-09-23". See "Resources" section above for the current state.
-- ~~Resource-card layout mobile-verification gap~~ — **mostly closed 2026-09-23**. Desktop: 2026-09-19 for `pm-foundations`, 2026-09-23 for the other 10. Mobile: 2026-09-23 for the `/resources` hub and the 8 topics that existed at the time (see "Completed 2026-09-23"), via the same-origin-iframe workaround after `resize_window` was confirmed broken in this environment — but that pass covered the old `ai-agentic-practice` page, since it happened before the AI-for-PMs split. The 4 topics that replaced it (`understanding-ai`, `ai-product-building-blocks`, `vibe-coding-agentic-development`, `ai-empowered-pm`) haven't had a mobile pass yet.
+- ~~Resource-card layout mobile-verification gap~~ — **fully closed 2026-09-23**. Desktop: 2026-09-19 for `pm-foundations`, 2026-09-23 for the other 10. Mobile: 2026-09-23 for the `/resources` hub and all 11 topics, including the 4 AI for PMs pages checked in a follow-up pass after the split (same same-origin-iframe technique, `resize_window` still confirmed broken in this environment). No bugs found anywhere.
 - **Old Resources and Terms URLs**: `/resources/strategy-discovery`, `/resources/roadmapping-execution`, `/resources/ux-design`, `/resources/technology`, and `/resources/ai-agentic-practice` redirect (301) to their replacements. `/terms/browse` and `/pm-terms/browse` also redirect (301, added 2026-09-23) to `/terms` and `/pm-terms` — see `next.config.ts`.
 - ~~"Browse by Category" navigated to a near-duplicate page~~ — **fixed 2026-09-23**, replaced with an inline accordion; the standalone pages are retired. See "Completed 2026-09-23" for the full story, including a real hydration-mismatch bug hit and fixed along the way (`useSyncExternalStore`, not a lazy `useState` initializer, for reading the URL hash on category-anchor deep links).
 - ~~Stray `.ts` files in `handoff-for-claude-code/` break a local `npm run build`/`tsc --noEmit`~~ — **fixed 2026-09-23**, `handoff-for-claude-code` added to `tsconfig.json`'s `exclude`. No longer necessary to move the folder aside before a local build.
 - **Digital Twin Case Studies sidebar is placeholder** — `CaseStudiesAside.tsx` has 3 example cards, awaiting Rick's real case studies.
 - ~~Digital Twin mobile layout unverified~~ — **verified 2026-09-23**, clean, see "Digital Twin" section's verification note above.
-- **`/pm-terms` and `/terminology` are build-verified only, not UX-verified** — nobody has clicked through the actual pages in a browser since they were built on 2026-08-09. Data and routes are confirmed working (build + direct DB query + a 200 smoke test in production), but the interactive experience (browse, search, flashcards for the PM domain) hasn't been exercised.
+- ~~`/pm-terms` and `/terminology` are build-verified only, not UX-verified~~ — **UX-verified 2026-09-23**: clicked through `/terminology`'s cross-links to `/pm-terms`, live search (typed "sprint", got ranked results, clicked through to a term detail page), the category-badge deep link into the accordion, and all 3 flashcards modes (Flash Card, Multiple Choice, Open-Ended — including a real `POST /api/terms/grade` call that correctly graded an imprecise answer "Partial"). Also spot-checked `/terms/flashcards` for parity. No bugs found; the Level dropdown itself is a plain native `<select>`, not independently verified but low-risk.
 - **Digital Twin rate limiting is in-memory** — resets on every Vercel cold start, so it's not a durable defense against sustained abuse. Fine for current traffic; revisit with a Supabase-backed counter if abuse shows up.
 - **Aakash Gupta's AI PM transition guide** (linked from the AI for PMs "Product Management for AI-Empowered PMs & AI PMs" sub-topic) carries a "2025 Edition" tag on its own page as of this writing — worth checking whether a newer edition exists before it's linked in more places.
 
@@ -647,24 +647,15 @@ started.
 
 ## Next Session Should Pick Up
 
-1. **Mobile-viewport check of the 4 new AI for PMs pages** (`understanding-ai`,
-   `ai-product-building-blocks`, `vibe-coding-agentic-development`, `ai-empowered-pm`) — the
-   2026-09-23 mobile pass covered the old `ai-agentic-practice` page before it was split; these 4
-   replacements haven't had their own pass yet. Reuse the same-origin-iframe technique from
-   "Completed 2026-09-23" rather than `resize_window`. Also worth a mobile check of the new
-   `CategoryBrowse` accordion (`/terms`, `/pm-terms`) while at it — shipped 2026-09-23, desktop-only
-   so far.
-2. **Check whether the old `ai-agentic-practice` sub-topics' deferred content** (Multimodal AI,
+1. **Check whether the old `ai-agentic-practice` sub-topics' deferred content** (Multimodal AI,
    Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy) made it into the
    new 4-topic/20-sub-topic AI for PMs redesign under different names, or got dropped — see "What's
    Broken."
-3. Real `url`s for Top Voices/Templates, and consider pulling the flagged Launchnotes "40 PM Books"
+2. Real `url`s for Top Voices/Templates, and consider pulling the flagged Launchnotes "40 PM Books"
    list into the standalone `/resources` Books section.
-4. **Click through `/pm-terms` and `/terminology` interactively** — browse, search, and flashcards
-   for the PM domain have never been exercised in a browser, only build-verified.
-5. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
+3. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
    placeholder cards).
-6. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
+4. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
    it comes back (and where) or stays gone.
 9. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
 10. ~~Mobile nav~~ — **DONE 2026-07-24**, hamburger menu added to `Header.tsx`.
@@ -694,6 +685,12 @@ started.
     See "Completed 2026-09-23".
 22. ~~Fix LinkedIn URL~~ — **DONE 2026-09-23**, now `https://www.linkedin.com/in/ricklallen`.
 23. ~~Exclude `handoff-for-claude-code/` from `tsconfig.json`~~ — **DONE 2026-09-23**.
+24. ~~Mobile-viewport check of the 4 new AI for PMs pages + `CategoryBrowse` accordion~~ — **DONE
+    2026-09-23**, same-origin-iframe technique, no bugs found on any of the 4 pages or the accordion
+    on `/terms`/`/pm-terms`. See "What's Broken."
+25. ~~Click through `/pm-terms` and `/terminology` interactively~~ — **DONE 2026-09-23**: cross-links,
+    live search, category-badge deep links, and all 3 flashcards modes (including a real Open-Ended
+    grading call) all verified working. See "What's Broken."
 
 ---
 
