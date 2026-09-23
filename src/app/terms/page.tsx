@@ -34,9 +34,9 @@ export default async function GlossaryPage() {
               { href: "/terms/flashcards", label: "Test Yourself" },
             ]}
           />
+          <CategoryBrowse categories={categories} termsByCategory={termsByCategory} basePath="/terms" />
           <h3 className="text-xl md:text-2xl font-semibold tracking-tight mb-8">Top Terms</h3>
           <TermList terms={terms} />
-          <CategoryBrowse categories={categories} termsByCategory={termsByCategory} basePath="/terms" />
         </div>
       </main>
       <Footer />

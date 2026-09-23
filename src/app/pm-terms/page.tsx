@@ -36,9 +36,9 @@ export default async function PmTermsPage() {
               { href: "/pm-terms/flashcards", label: "Test Yourself" },
             ]}
           />
+          <CategoryBrowse categories={categories} termsByCategory={termsByCategory} basePath="/pm-terms" />
           <h3 className="text-xl md:text-2xl font-semibold tracking-tight mb-8">Top Terms</h3>
           <TermList terms={terms} basePath="/pm-terms" />
-          <CategoryBrowse categories={categories} termsByCategory={termsByCategory} basePath="/pm-terms" />
         </div>
       </main>
       <Footer />

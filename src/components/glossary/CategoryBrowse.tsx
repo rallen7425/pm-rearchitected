@@ -17,7 +17,7 @@ export function CategoryBrowse({
   const [open, setOpen] = useState(false);
 
   return (
-    <div id="category-list" className="mt-12 border-t border-border pt-8 scroll-mt-24">
+    <div id="category-list" className="mb-10 scroll-mt-24">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -29,7 +29,7 @@ export function CategoryBrowse({
       </button>
 
       {open && (
-        <div className="mt-6">
+        <div className="mt-6 pb-8 border-b border-border">
           <nav className="flex flex-wrap gap-x-4 gap-y-2 mb-12">
             {categories.map((category) => (
               <a
