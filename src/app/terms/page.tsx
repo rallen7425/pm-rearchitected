@@ -4,7 +4,8 @@ import Hero from "@/components/site/Hero";
 import Footer from "@/components/site/Footer";
 import { TermList } from "@/components/glossary/TermList";
 import { GlossaryHeader } from "@/components/glossary/GlossaryHeader";
-import { listTopTerms } from "@/lib/glossary";
+import { CategoryBrowse } from "@/components/glossary/CategoryBrowse";
+import { listTopTerms, listCategories, listTermsByCategory } from "@/lib/glossary";
 
 export const revalidate = 3600;
 
@@ -16,6 +17,10 @@ export const metadata: Metadata = {
 
 export default async function GlossaryPage() {
   const terms = await listTopTerms(2);
+  const categories = await listCategories();
+  const termsByCategory = await Promise.all(
+    categories.map((category) => listTermsByCategory(category.id_slug))
+  );
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -27,11 +32,11 @@ export default async function GlossaryPage() {
             links={[
               { href: "/pm-terms", label: "PM Terms" },
               { href: "/terms/flashcards", label: "Test Yourself" },
-              { href: "/terms/browse", label: "Browse by Category" },
             ]}
           />
           <h3 className="text-xl md:text-2xl font-semibold tracking-tight mb-8">Top Terms</h3>
           <TermList terms={terms} />
+          <CategoryBrowse categories={categories} termsByCategory={termsByCategory} basePath="/terms" />
         </div>
       </main>
       <Footer />
