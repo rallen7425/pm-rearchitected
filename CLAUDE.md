@@ -499,10 +499,14 @@ started.
   framing, recruiter-name redirect, honest "I don't know" on an uncovered fact, general POV question
   for voice quality) were tested via live streaming curl calls against both local and production —
   all passed, including zero em dashes across every response despite the source corpus itself being
-  full of them. Browser streaming and desktop layout were visually confirmed. **Mobile viewport was
+  full of them. Browser streaming and desktop layout were visually confirmed. **Mobile viewport still
   not verified** — the browser tool's `resize_window` reported success but `window.innerWidth`
-  stayed at desktop width regardless (tried twice, including a fresh tab). Needs a real-phone check,
-  same class of gap that caught the 2026-07-24 header-nav mobile bug.
+  stayed at desktop width regardless (tried twice, including a fresh tab). Re-tested 2026-09-23 with
+  a cleaner repro: `resize_window` to 390×844, then 800×700 on a fresh tab both reported success but
+  `window.innerWidth`/`innerHeight` never moved off 1440×728 (the tool's actual default), ruling out
+  a minimum-window-size floor as the cause — this is a broken tool call, not a flaky one, and there's
+  no lower-level device-emulation tool available to fall back on in this environment. Needs a
+  real-phone check, same class of gap that caught the 2026-07-24 header-nav mobile bug.
 
 ---
 
@@ -513,7 +517,7 @@ started.
 - **Resources: all 8 topics are now fully written** — no more placeholder sub-topic content anywhere on `/resources`. Remaining gaps are all outside sub-topic content: Top Voices have no `url`s (non-clickable), Templates all say "coming soon", "From the Blog" is empty except `discovery-research`, and 4 AI for PMs sub-topics (Multimodal AI, Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy) were never added to `ai-agentic-practice` at all. All filled in by editing `src/lib/resources.ts`.
 - **`RESOURCES_BLOG_MAP` wasn't updated for the 4 topics added 2026-09-20/09-22** — `product-vision-strategy`, `design-for-pms`, `agile-development-deployment`, `go-to-market-growth`, and `technology-for-pms` have no key in the map, so "From the Blog" renders its empty state (safe fallback, not a crash — `RESOURCES_BLOG_MAP[topic] ?? []`). The map also still carries orphaned keys for the retired `roadmapping-execution`/`ux-design`/`technology` topic ids.
 - **`ResourceTiles.tsx`'s `PM_CARDS`/`AI_CARDS` are hand-maintained, not derived from `RESOURCE_TOPICS`** — adding, removing, or renaming a topic now requires updating both places by hand, and they're not guaranteed to stay in sync. See "Resources" section above.
-- **Resource-card layout is desktop-verified across all 8 topics** (2026-09-19 for `pm-foundations`/`ai-agentic-practice`, 2026-09-23 for the 6 added 2026-09-20/09-22) — cards, tool badges, video grid, and the tile grid all confirmed visually. **Still not verified at mobile/narrow-viewport width anywhere on `/resources`** — the browser tool's `resize_window` reported success without actually changing the rendered viewport in an earlier session (same class of gap noted below for Digital Twin); this needs a real-device or properly-verified-narrow pass, not just another `resize_window` attempt.
+- **Resource-card layout is desktop-verified across all 8 topics** (2026-09-19 for `pm-foundations`/`ai-agentic-practice`, 2026-09-23 for the 6 added 2026-09-20/09-22) — cards, tool badges, video grid, and the tile grid all confirmed visually. **Still not verified at mobile/narrow-viewport width anywhere on `/resources`** — `resize_window` is confirmed broken in this environment, not just flaky (see "Digital Twin" verification note below for the 2026-09-23 repro); needs a real device, not another automated attempt.
 - **Old Resources URLs now 404**: `/resources/strategy-discovery`, `/resources/roadmapping-execution`, and `/resources/ux-design` were removed outright (not migrated) on 2026-09-22 in favor of newly-written replacement topics. Nothing redirects them — worth checking whether any external links (Substack posts, etc.) point at the old slugs.
 - **Digital Twin Case Studies sidebar is placeholder** — `CaseStudiesAside.tsx` has 3 example cards, awaiting Rick's real case studies.
 - **Digital Twin mobile layout unverified** — applies to both the original build and the 2026-09-10 reformat. Responsive via Tailwind `lg:` breakpoints but only desktop was visually checked; needs a real-phone pass.
@@ -525,10 +529,11 @@ started.
 
 ## Next Session Should Pick Up
 
-1. **Real narrow-viewport check of the Resources card layout, across all 8 topics** — the browser
-   tool couldn't actually verify mobile width in an earlier session, and `resize_window` isn't
-   trustworthy for this (see "What's Broken") — needs a real device or a verified-narrow method, not
-   another `resize_window` attempt. Same gap as the Digital Twin mobile check below.
+1. **Real narrow-viewport check of the Resources card layout, across all 8 topics** — `resize_window`
+   is confirmed broken in this environment as of 2026-09-23 (not just flaky; see "What's Broken"),
+   and there's no device-emulation fallback available. Don't burn another session re-attempting it
+   with the same tool — needs an actual phone/tablet, or the tool getting fixed. Same gap as the
+   Digital Twin mobile check below.
 2. **Real-phone check of `/digital-twin`** — same gap that caught the 2026-07-24 header-nav bug;
    automated tools couldn't verify the mobile layout in an earlier session either.
 3. **Decide on `RESOURCES_BLOG_MAP` and `ResourceTiles.tsx`'s `PM_CARDS`/`AI_CARDS`**: the blog map
