@@ -1,5 +1,8 @@
 # Rick Allen — Career Timeline
 
+## Independent Product Builder | 2026–Present
+Building PM-ReArchitected and its Digital Twin, publishing From Out of the Noise, researching AI-native product development, and designing consumer mobile app concepts with AI-enabled workflows. Exploring agentic and multi-agent products hands-on. Public launches of these experimental apps have not been confirmed.
+
 ## UKG — Senior Director, Product Management, Payments & FinTech
 **Jun 2024 – May 2026 · Lowell, MA (Hybrid)**
 
@@ -10,7 +13,7 @@ Led a team of product managers building next-generation pay and financial wellne
 - Led a competitive multi-vendor RFP process to select a strategic fintech partner, and developed a significant new distribution partnership (with Chime) to expand financial wellness reach.
 - Spearheaded replatforming and modernization of the employee pay experience: redesigned web and mobile journeys on a new design system, launched a text-and-voice AI Pay Assistant, and unified the pay distribution platform across all user touchpoints with instant bank account verification (via an open-banking integration) to reduce payment errors and unlock fintech distribution partnerships.
 - Drove adoption of an agentic AI-powered product discovery workflow across product and design (Claude Code, Replit), compressing research/prototyping/user-testing cycles from months to days — a process change he led for PMs and designers specifically (not the parallel, separately-driven engineering adoption of AI coding tools).
-- Built and scaled the product organization from the ground up — recruiting and developing PMs, designers, and engineers into a team recognized for delivering outsized impact relative to its size. Operated as a hands-on player-coach: driving the most complex platform/partnership work directly while mentoring PMs across the broader org.
+- Built and led the product organization, directly leading product managers and partnering with Design and Engineering in a broader matrixed organization. Do not imply that the broader engineering/design organization consisted of his direct reports. Operated as a hands-on player-coach: driving the most complex platform/partnership work directly while mentoring PMs across the broader org.
 - Served as the lead product stakeholder for UKG Labs, partnering with more than a dozen early-stage financial-wellness companies to evaluate partnerships and inform the portfolio strategy.
 - Departed UKG in May 2026 (large-scale reduction/layoff).
 
@@ -23,6 +26,10 @@ Led a four-person Guest Experience mobile app and platform product team; defined
 - Introduced a SaaS mobile developer platform (SDK and APIs) letting tier-1 customers and partners integrate accesso features within their own apps, expanding accesso's sales footprint.
 - Managed the design system and its rollout across accesso's customers.
 
+- Managed an AI-driven engagement platform using in-park behavior and traffic patterns for recommendations.
+- Drove mobile food-and-beverage ordering and payments redesign through discovery, design, development, and POS integration.
+- Recruited to stabilize and lead the product team. Following an acquisition, corporate strategy shifted toward custom development/professional services and the role/team was eliminated before the broader product vision was fully realized. Do not claim he completed a transformation away from professional services.
+
 ## P97 Networks — Head of Mobile Product Management & Design
 **Oct 2021 – Mar 2023 · Houston, TX (Remote)**
 
@@ -30,6 +37,10 @@ Owned product strategy, roadmap, and implementation for P97's Mobility and Conne
 
 - Implemented 25+ apps on the P97 platform for major fuel and convenience retail brands, including ExxonMobil, Shell, Phillips 66, and Citgo, growing transaction revenue and recurring service fees.
 - Led design and development of the ExxonMobil app (US and Canada) — 4.8-star rating, most-downloaded app in its category.
+
+- Built Mobile Product Management and led Design, helping move from customer-specific mobile development toward a scalable product model.
+- Managed the B2B Customer Portal for location onboarding, loyalty/marketing configuration, and program analytics.
+- Expanded the portfolio with in-app EV charging payments. The brands served represented roughly half of U.S. retail fuel locations; this describes brand footprint, not app adoption at every location.
 
 ## Amazon — Principal Product Manager, Dash Cart
 **Apr 2021 – Oct 2021 · Hudson, MA (Hybrid)**
@@ -49,6 +60,11 @@ Part of the In-Store and Consumer Financial Services product teams, focused on e
 - Expanded Cardless Cash Access to 40 banks, enabling withdrawals at over 25,000 ATMs via mobile banking apps and the PayPal consumer app.
 - Led design/development of cloud-based data infrastructure and internal/customer-facing dashboards, driving the team toward more data-centric decision-making.
 
+- Joined Paydiant shortly before its acquisition by PayPal; helped evolve the startup product organization within the enterprise.
+- Responsibilities included product managers, data analysts, and technical writers; substantial customer/prospect engagement, positioning, demos, sales support, and commercialization.
+- Worked on transaction/behavior-based fraud detection and ML/risk-scoring capabilities with Risk, Compliance, Legal, InfoSec, and providers.
+- Supported growth through personalized offers, loyalty rewards, and new-user promotions. Commercial influence did not constitute formal P&L ownership.
+
 ## Nokia / Microsoft — Senior Product Owner, Mobile Payments & Developer Experience
 **Jan 2010 – Feb 2015 · Burlington, MA (On-site)**
 
@@ -59,13 +75,20 @@ Managed Nokia's mobile payment platform and global portfolio of payment services
 - Managed Nokia's subscription payment platform, including launching Nokia Music operator-billing subscriptions across North America, Europe, and Asia.
 - Reduced time-to-market for new platform features by 4+ months via a cloud-based architecture strategy.
 
+- Helped move a 24-person Product and Engineering organization toward Agile and cloud architecture; that scope is not a direct-report count.
+- Worked through Nokia Devices' acquisition by Microsoft and integration of payment services/infrastructure, coordinating vendors, integrators, payment providers, and distributed engineering resources.
+
 ## Earlier career
 
-**Nuance Communications — Senior Product Manager, Mobile Applications (2007-2009/2010, Burlington, MA)**
+**Nuance Communications — Senior Product Manager, Mobile Applications (2007-2010, Burlington, MA)**
 Owned full product lifecycle for mobile speech applications — business strategy, product definition, market launch, and roadmap — leading a cross-functional team spanning engineering, speech science, UX, marketing, and operations. Managed design, development, and deployment of the Dragon Dictation and Dragon Search apps for iPhone (an overall top-10 App Store rank) and created Nuance Voice Control for BlackBerry, Android, Windows Mobile, and Symbian. Led mobile usability testing programs to research how consumers actually used mobile speech applications, resulting in what he's described as the first mobile unconstrained speech UI — predating Siri and Alexa. Introduced Agile development process to accelerate time to market.
 
-**m-Qube, Inc. — Senior Product Manager (2006-2007, Watertown, MA)**
+At Nuance, also owned mobile speech platform/SDK capabilities and helped integrate people, resources, technology, and products from acquisitions including Mobile Voice Control and VoiceSignal. This was product integration, not corporate-development or financial deal execution.
+
+**VeriSign / m-Qube, Inc. — Senior Product Manager (2006-2007, Watertown, MA)**
 Managed the product roadmap for premium messaging, content delivery, and payment services at one of the largest mobile aggregators in North America. Led integration of Premium SMS/MMS distribution platforms with wireless carriers, enabling content providers to charge for mobile apps and subscriptions, and worked with one of the largest North American carriers to define a new subscription-payments platform.
+
+m-Qube was acquired by VeriSign while Rick was part of the company.
 
 **Boston Communications Group (BCGI) — Senior Product Manager, Payment Services (2003-2006, Bedford, MA)**
 Managed the Payment Manager wireless payment platform end-to-end — opportunity identification, positioning, requirements, and roadmap — including leading deployment for a leading tier-one wireless carrier from requirements through implementation. Owned the payment gateway roadmap covering ecommerce transaction processing (credit, debit, checks) across online and mobile interfaces, and supported domestic and international sales with presentations, demos, and RFP responses.

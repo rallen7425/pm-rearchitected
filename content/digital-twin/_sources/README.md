@@ -25,3 +25,10 @@ Deliberately kept out of the corpus:
 | `cover-planet-fitness-2026-09-02.md` | Cover letter — Planet Fitness |
 | `cover-realpage-2026-09-03.md` | Cover letter — RealPage |
 | `cover-learnlux-2026-09-08.md` | Cover letter — LearnLux |
+
+## September 19, 2026 career refresh
+
+- `rick-allen-career-canonical-context.md`: factual career context from the resume rebuild, preserved verbatim.
+- `rick-allen-career-positioning-and-perspective.md`: positioning, perspective, and voice companion, preserved verbatim.
+
+Integrated into all five curated files and synchronized to Corpus-Ready. Reconciled professional identity, UKG reporting scope, Nuance dates, commercial/P&L boundaries, acquisition experience, launch-status distinctions, and response style. Earlier precise dates and non-conflicting career details are retained. Exact UKG revenue figures and detailed criticism of Amazon team leadership remain reference-only. The raw files are not loaded by the Twin. The incorrectly named frameworks working package was not incorporated.

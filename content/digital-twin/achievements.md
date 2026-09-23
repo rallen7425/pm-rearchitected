@@ -13,11 +13,11 @@ Cross-cutting highlights, independent of chronology — useful for quick, specif
 ## AI-native product building (personal credibility)
 - Hands-on user of Claude Code, Replit, and Lovable for prototyping — not just writing about AI tooling, but building with it.
 - Led the actual adoption of an agentic AI-powered discovery workflow across a product and design org at UKG, compressing research/prototyping/testing cycles from months to days.
-- Built an AI-powered Pay Assistant (text and voice) and a Financial Health Coach with Plaid integration and RAG-based coaching, within a Vertex AI-based chatbot platform at UKG.
+- Shipped a text-and-voice AI Pay Assistant at UKG and worked on an AI-powered financial health experience. Do not imply that the financial health concept had the same confirmed launch status as the Pay Assistant.
 
 ## Team & organizational leadership
 - More than 20 years in product management and over 10 years of people leadership, directly managing product managers, designers, and data analysts on payments and fintech platform teams (typically five or more PMs).
-- Built a product organization from the ground up at UKG — recruiting and developing PMs, designers, and engineers into a team recognized for delivering outsized impact relative to its size.
+- Built and led a new product organization at UKG, directly leading PMs and collaborating with matrixed Design and Engineering teams. Broader cross-functional leadership is distinct from direct-report scope.
 - Operated consistently as a "player-coach": personally driving the most complex platform/partnership initiatives while mentoring PMs across the broader organization.
 
 ## Publicly documented case-study result (third-party published, safe to cite exactly)
@@ -26,3 +26,9 @@ Cross-cutting highlights, independent of chronology — useful for quick, specif
 ## Thought leadership
 - Publishes "From Out of the Noise" on Substack — a multi-year body of work including a six-post "Product Playbook" series tracing PM's evolution across five eras, a five-part personal origin story, and an ongoing "Reframed" series reexamining classic PM frameworks (Agile, Design Thinking, JTBD, Lean Startup, Design Sprints, OKRs, cross-team dependencies) through an AI lens.
 - Building "Product Management, Re-Architected," a personal brand platform extending this thinking, including a developing thesis that AI worsens coordination overhead by flooding organizations with low-quality generated content ("workslop"), and a "Product Monkey" framing distinguishing real judgment work from high-volume production work.
+
+## Commercial leadership and acquisition integration
+- Significant commercial product leadership through business cases, revenue goals, build/buy/partner decisions, pricing/positioning, partner terms, GTM, demos, RFPs, and customer engagement. No formal P&L ownership.
+- Product leadership through acquisitions and integration at m-Qube/VeriSign, Nuance, Paydiant/PayPal, and Nokia/Microsoft: product, technology, people, and operating-model integration, not corporate development or financial M&A expertise.
+- Experience with senior executives and customer leaders, including periodic CEO-level audiences at PayPal, frequent CEO/customer engagement at P97, leadership at accesso, and GMs/CPO plus periodic C-suite exposure at UKG. This does not establish board governance or formal executive authority.
+- The UKG financial wellness portfolio and Wallet revenue describe different scopes; Wallet was part of the broader portfolio. Exact internal revenue figures remain excluded from this public corpus.
