@@ -284,10 +284,20 @@ Raindrop collection: 70283481
     clicking it opens the mobile dropdown (Home/Blog/Resources/Terminology/Digital Twin highlighted
     as active/About) and toggles to an X. Hero, the "What would you like to know?" ask box, and
     `CaseStudiesAside` all stack to a single column below `lg` as designed. Footer stacks/centers.
-  - **`/resources` at 390px: clean, no bugs.** The `PM_CARDS`/`AI_CARDS` tile grid, the Terminology
-    teaser (live Supabase term + the 4 link cards), Top Voices, Templates, and Books all collapse to
-    a single column and read correctly — including the Books section's colored cover-block cards.
-  - Closes out both outstanding mobile-verification items from "Next Session Should Pick Up."
+  - **`/resources` hub at 390px: clean, no bugs.** The `PM_CARDS`/`AI_CARDS` tile grid, the
+    Terminology teaser (live Supabase term + the 4 link cards), Top Voices, Templates, and Books all
+    collapse to a single column and read correctly — including the Books section's colored
+    cover-block cards.
+  - **All 8 individual `/resources/[topic]` pages at 390px: clean, no bugs**
+    (`pm-foundations`, `ai-agentic-practice`, `product-vision-strategy`, `discovery-research`,
+    `design-for-pms`, `agile-development-deployment`, `go-to-market-growth`,
+    `technology-for-pms`) — swept each one top-to-bottom by reassigning the harness iframe's `src`.
+    Resource cards, "Also from X:" bulleted link lists, tool badges, and the "From the Blog" Reframed
+    rail all render correctly at mobile width. Specifically confirmed the video grid's
+    `grid-cols-2 sm:grid-cols-4` breakpoint actually renders 2-across on `pm-foundations` (Lenny's
+    Podcast / Christian Idiodi cards) — this had been an open question since 2026-09-19 since nobody
+    could previously get a real narrow viewport to check it against.
+  - Closes out every mobile-verification item that had been open on this project since July.
 
 ---
 
@@ -457,13 +467,12 @@ split content out of the single `resources.ts` file.
   `pm-foundations`/`ai-agentic-practice`; 2026-09-23 for the 6 topics added 2026-09-20/09-22 and the
   current `PM_CARDS`/`AI_CARDS` tile grid) — cards, tool badges, video grid, the "From the Blog"
   Reframed rail (populated on `discovery-research`, empty state elsewhere), and the live Terminology
-  teaser all render correctly, no visual bugs found. **390px mobile width verified 2026-09-23** on
-  the `/resources` hub itself (tile grid, Terminology teaser, Top Voices, Templates, Books all stack
-  to a single column cleanly) via a same-origin-iframe workaround (see "Completed 2026-09-23") after
-  `resize_window` was confirmed broken in this environment. The 8 individual topic pages weren't
-  each re-checked at mobile width this pass — only the hub — but they share the same `ResourceCard`/
-  `VideoGrid` rendering path already used at desktop width, so a per-topic mobile check is lower
-  priority than it was.
+  teaser all render correctly, no visual bugs found. **390px mobile width verified 2026-09-23 across
+  the `/resources` hub and all 8 individual topic pages** (tile grid, Terminology teaser, Top Voices,
+  Templates, Books, resource cards, tool badges, the video grid at its 2-across mobile breakpoint,
+  and the Reframed rail all stack/render cleanly, no bugs found anywhere) via a same-origin-iframe
+  workaround (see "Completed 2026-09-23") after `resize_window` was confirmed broken in this
+  environment.
 
 ---
 
@@ -544,7 +553,7 @@ started.
 - **Resources: all 8 topics are now fully written** — no more placeholder sub-topic content anywhere on `/resources`. Remaining gaps are all outside sub-topic content: Top Voices have no `url`s (non-clickable), Templates all say "coming soon", "From the Blog" is empty except `discovery-research`, and 4 AI for PMs sub-topics (Multimodal AI, Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy) were never added to `ai-agentic-practice` at all. All filled in by editing `src/lib/resources.ts`.
 - **`RESOURCES_BLOG_MAP` wasn't updated for the 4 topics added 2026-09-20/09-22** — `product-vision-strategy`, `design-for-pms`, `agile-development-deployment`, `go-to-market-growth`, and `technology-for-pms` have no key in the map, so "From the Blog" renders its empty state (safe fallback, not a crash — `RESOURCES_BLOG_MAP[topic] ?? []`). The map also still carries orphaned keys for the retired `roadmapping-execution`/`ux-design`/`technology` topic ids.
 - **`ResourceTiles.tsx`'s `PM_CARDS`/`AI_CARDS` are hand-maintained, not derived from `RESOURCE_TOPICS`** — adding, removing, or renaming a topic now requires updating both places by hand, and they're not guaranteed to stay in sync. See "Resources" section above.
-- **Resource-card layout is desktop- and mobile-verified across all 8 topics/the hub** (desktop: 2026-09-19 for `pm-foundations`/`ai-agentic-practice`, 2026-09-23 for the rest; mobile: 2026-09-23, the `/resources` hub only, via the iframe workaround — see "Completed 2026-09-23"). `resize_window` itself is confirmed broken in this environment (see "Digital Twin" verification note), but a same-origin-iframe harness worked around it, so this is no longer a blocked item — just something the 8 individual topic pages haven't each had a turn under it yet.
+- ~~Resource-card layout mobile-verification gap~~ — **closed 2026-09-23**. Desktop: 2026-09-19 for `pm-foundations`/`ai-agentic-practice`, 2026-09-23 for the rest. Mobile: 2026-09-23, the `/resources` hub and all 8 topic pages, via the same-origin-iframe workaround (see "Completed 2026-09-23") after `resize_window` was confirmed broken in this environment. No bugs found at either width.
 - **Old Resources URLs now 404**: `/resources/strategy-discovery`, `/resources/roadmapping-execution`, and `/resources/ux-design` were removed outright (not migrated) on 2026-09-22 in favor of newly-written replacement topics. Nothing redirects them — worth checking whether any external links (Substack posts, etc.) point at the old slugs.
 - **Digital Twin Case Studies sidebar is placeholder** — `CaseStudiesAside.tsx` has 3 example cards, awaiting Rick's real case studies.
 - ~~Digital Twin mobile layout unverified~~ — **verified 2026-09-23**, clean, see "Digital Twin" section's verification note above.
@@ -556,47 +565,43 @@ started.
 
 ## Next Session Should Pick Up
 
-1. **Real narrow-viewport check of the 8 individual Resources topic pages** — the `/resources` hub
-   itself is mobile-verified (see "Completed 2026-09-23"), but the 8 topic pages weren't each
-   re-checked at mobile width this pass, only at desktop. Reuse the same-origin-iframe technique
-   documented in "Completed 2026-09-23" rather than `resize_window`, which is confirmed broken in
-   this environment.
-2. **Decide on `RESOURCES_BLOG_MAP` and `ResourceTiles.tsx`'s `PM_CARDS`/`AI_CARDS`**: the blog map
+1. **Decide on `RESOURCES_BLOG_MAP` and `ResourceTiles.tsx`'s `PM_CARDS`/`AI_CARDS`**: the blog map
    is missing keys for 4 of the 6 newly-added topics (empty "From the Blog" state), and the tile
    arrays are hand-maintained rather than derived from `RESOURCE_TOPICS` — decide whether to
    backfill the map, keep the tiles hand-maintained going forward, or refactor the tiles to derive
    from `RESOURCE_TOPICS` again now that all 8 topics are real. Also clean up the orphaned
    `roadmapping-execution`/`ux-design`/`technology` keys left in the blog map.
-3. **Write the 4 deferred AI for PMs sub-topics** (Multimodal AI, Responsible AI & Governance,
+2. **Write the 4 deferred AI for PMs sub-topics** (Multimodal AI, Responsible AI & Governance,
    AI-Native Operating Models, Portfolio AI Strategy). Also: real `url`s for Top Voices/Templates,
    and consider pulling the flagged Launchnotes "40 PM Books" list into the standalone `/resources`
    Books section.
-4. **Click through `/pm-terms` and `/terminology` interactively** — browse, search, and flashcards
+3. **Click through `/pm-terms` and `/terminology` interactively** — browse, search, and flashcards
    for the PM domain have never been exercised in a browser, only build-verified.
-5. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
+4. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
    placeholder cards).
-6. **Fix LinkedIn URL** in `src/app/about/page.tsx` → `https://www.linkedin.com/in/ricklallen`.
-7. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
+5. **Fix LinkedIn URL** in `src/app/about/page.tsx` → `https://www.linkedin.com/in/ricklallen`.
+6. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
    it comes back (and where) or stays gone.
-8. **Fix the stale comment block** at the top of `src/lib/resources.ts` — still describes the
+7. **Fix the stale comment block** at the top of `src/lib/resources.ts` — still describes the
    retired body/links topics as "still used" (see "Resources" section above).
-9. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
-10. ~~Mobile nav~~ — **DONE 2026-07-24**, hamburger menu added to `Header.tsx`.
-11. ~~PM Terms domain~~ — **DONE 2026-08-21** (built 2026-08-09, committed/shipped 2026-08-21).
-12. ~~Digital Twin chat~~ — **DONE 2026-08-21**, live at `/digital-twin`.
-13. ~~Resources redesign (v1)~~ — **DONE 2026-09-09**, shipped and live; tiles renamed/reordered
+8. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
+9. ~~Mobile nav~~ — **DONE 2026-07-24**, hamburger menu added to `Header.tsx`.
+10. ~~PM Terms domain~~ — **DONE 2026-08-21** (built 2026-08-09, committed/shipped 2026-08-21).
+11. ~~Digital Twin chat~~ — **DONE 2026-08-21**, live at `/digital-twin`.
+12. ~~Resources redesign (v1)~~ — **DONE 2026-09-09**, shipped and live; tiles renamed/reordered
     2026-09-13.
-14. ~~Resources sub-topic content redesigned as resource cards (PM 101 + AI for PMs)~~ — **DONE
+13. ~~Resources sub-topic content redesigned as resource cards (PM 101 + AI for PMs)~~ — **DONE
     2026-09-19**, shipped, pushed, and deployed; see "Completed 2026-09-19" above.
-15. ~~Migrate/write remaining Resources topics~~ — **DONE 2026-09-20 through 09-22**, but as a
+14. ~~Migrate/write remaining Resources topics~~ — **DONE 2026-09-20 through 09-22**, but as a
     replace-not-migrate: `strategy-discovery`/`roadmapping-execution`/`ux-design` were retired and 6
     newly-written topics took their place (8 total). See "Completed 2026-09-20"/"Completed
     2026-09-22" above.
-16. ~~Land the Digital Twin corpus refresh~~ — **DONE 2026-09-23**, see "Completed 2026-09-23" above.
-17. ~~Visually spot-check the 6 new Resources topics + tile grid at desktop width~~ — **DONE
+15. ~~Land the Digital Twin corpus refresh~~ — **DONE 2026-09-23**, see "Completed 2026-09-23" above.
+16. ~~Visually spot-check the 6 new Resources topics + tile grid at desktop width~~ — **DONE
     2026-09-23**, no bugs found; see "Resources" section above.
-18. ~~Real-phone/mobile-viewport check of `/digital-twin` and the `/resources` hub~~ — **DONE
-    2026-09-23** via the same-origin-iframe workaround; no bugs found. See "Completed 2026-09-23".
+17. ~~Real-phone/mobile-viewport check of `/digital-twin`, the `/resources` hub, and all 8 topic
+    pages~~ — **DONE 2026-09-23** via the same-origin-iframe workaround; no bugs found anywhere. See
+    "Completed 2026-09-23".
 
 ---
 
