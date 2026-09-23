@@ -7,7 +7,7 @@ import { SearchBox } from "./SearchBox";
 import type { GlossaryDomain } from "@/lib/glossary";
 
 export function GlossaryHeader({
-  title = "Terminology",
+  title = "AI Terminology",
   links = [{ href: "/terms/browse", label: "Browse by Category" }],
   defaultSearchOpen = false,
   showSearch = true,
