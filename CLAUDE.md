@@ -23,7 +23,7 @@ Raindrop collection: 70283481
 
 ---
 
-## Current State (as of 2026-09-23)
+## Current State (as of 2026-09-24)
 
 ### Pages built
 - `/` — Home page (Hero, Recent Posts, Reading This Week, PM Reframed rail, Top Voices, Resource Library, About section). Top Voices added 2026-09-24, see "Resources" section below.
@@ -373,7 +373,7 @@ Raindrop collection: 70283481
 
 ---
 
-## Completed 2026-09-24 (branch `top-voices-row`, not yet merged to `main`)
+## Completed 2026-09-24
 
 - **Replaced the old "Top Voices to Follow" section with a single shared full-width row**, rendered
   on both `/` (directly above `Resources`) and `/resources` (directly above "Curated & opinionated").
@@ -414,7 +414,51 @@ Raindrop collection: 70283481
     exactly at each breakpoint, no text overflow. Click-tested Ed Donner's "Videos" link (→ YouTube)
     and UX Collective (→ uxdesign.cc) for real, both correct. Confirmed the old Top Voices grid is
     gone from `/resources` and nothing else on either page shifted position.
-  - **Not yet on `main`** — committed on a new branch (`top-voices-row`), not pushed, not deployed.
+  - **Merged, pushed, deployed** — `top-voices-row` merged into `main` (fast-forward), pushed, Vercel
+    production build succeeded, confirmed live.
+- **Follow-up fix: shared heading now actually spans its two columns** (`83f3575`) — Rick reported
+  the "Product Management, Growth & Leadership" heading was wrapping inside column 1 (too narrow)
+  and the vertical divider between columns 1 and 2 ran all the way through the header instead of
+  starting at the first bullet. Root cause: the initial build kept one `VoiceColumn` heading per
+  data column, with column 2's heading present-but-invisible for alignment rather than actually
+  merged. Restructured `TopVoices.tsx` to fold `continuesPrevious` columns into their predecessor's
+  *group* (a `GROUPS` array built by `reduce`-ing over `TOP_VOICES`), so each group renders **one**
+  heading that spans `sm:col-span-2` (covers both tracks at `sm:` and `lg:`), with the divider
+  (`border-l`) applied only to the inner sub-grid's second column — i.e. starting exactly at the top
+  of the first bullet, never through the heading row. No changes to `top-voices.ts`'s data shape or
+  the mobile (single-column, no divider) behavior. Verified live at 1200px, 900px, and 400px via the
+  same-origin-iframe technique. Pushed and deployed same session.
+- **End-to-end site review**, Rick's explicit ask before ending the session — walked every major
+  surface live (Home, `/resources`, `/terms`, `/pm-terms`, `/terminology`, flashcards/quiz in all 3
+  modes including a real Open-Ended AI-grading call, `/digital-twin` chat, `/about`, a `/resources`
+  topic page, footer/cross-links, external link targets, mobile viewport, console + network on every
+  page) and found two real bugs, both fixed, committed together (`da86cd2`), pushed, deployed, and
+  re-verified live:
+  - **Glossary content bug**: the PM Terms "4D Spotify Framework" definition was genuinely truncated
+    mid-sentence in the source data — *"...built around four phases: Discover, Define, Design, and...
+    typically paired with..."*, missing "Deliver" as the fourth phase. Confirmed in `db/glossary/
+    terms.csv` itself (not a display/CSS truncation), so a content bug, not a code bug. Grepped the
+    rest of the 693-row file for the same pattern — this was the only broken entry. Fixed the CSV and
+    re-seeded the live Supabase glossary tables via `npm run seed:glossary` (safe to re-run; wipes
+    and reinserts all 5 tables from the CSVs, only this one row's content actually changed).
+  - **Digital Twin truncation bug**: `MAX_TOKENS` was 600 (see "Digital Twin" section below) — too
+    low for some longer answers. Reproduced once in ~4 tries: the "Tell me about your career" answer
+    cut off mid-sentence ("...building mobile app concepts from a person") with no error shown to the
+    visitor and no retry. Root-caused to hitting the token cap (Anthropic just stops generating, no
+    exception, so the route's existing `catch` block never fires and never appends its
+    "[Something went wrong...]" fallback text). Raised `MAX_TOKENS` to 1200. Re-tested the exact same
+    question live post-deploy — response now completes cleanly with a full closing sentence.
+  - **False positives ruled out, not fixed** (worth knowing for next time, not a to-do): a network
+    tool artifact reported `503` on every `/api/digital-twin/chat` call regardless of whether the
+    response actually completed or truncated — not a reliable signal for this streaming endpoint, don't
+    chase it again without independent evidence (e.g. actually-broken output, like the truncation bug
+    above); two `docs.claude.com` links "failed to fetch" under a same-origin-fetch probe script but
+    work fine on direct navigation (the domain redirects to `platform.claude.com`, which the no-cors
+    HEAD-request probe doesn't handle) — not broken links.
+  - Everything else came back clean: search (both domains), the `CategoryBrowse` accordion and its
+    hash-deep-link behavior, all 3 flashcard/quiz modes, the `/terms`⇄`/pm-terms` cross-links, the
+    `/terminology` hub's links to both domains, the LinkedIn link, mobile layout on `/pm-terms`, and
+    every external link target sampled.
 
 ---
 
@@ -628,7 +672,9 @@ started.
   ever), and a closing voice instruction from `bio.md`'s "Personality / voice notes" section.
 - **API**: `POST /api/digital-twin/chat`, streaming Route Handler, `claude-sonnet-5` (not Haiku —
   voice quality matters more here than for the cheap Haiku-based AI Terms quiz grading). `max_tokens:
-  600`. Rejects message arrays over 20 turns or 2000 chars/message. No conversation history persisted
+  1200` (raised from 600 on 2026-09-24 — the lower cap could cut a longer answer, e.g. the full
+  career-history response, off mid-sentence with no error shown to the visitor; see "Completed
+  2026-09-24"). Rejects message arrays over 20 turns or 2000 chars/message. No conversation history persisted
   server-side — the client holds the running array and resends it each request. No logging of
   message content, only error objects on failure.
 - **Rate limiting**: `src/lib/rate-limit.ts`, in-memory sliding window per IP (`x-forwarded-for`),
@@ -670,6 +716,9 @@ started.
   true 390px viewport, and the page renders clean: header collapses to the hamburger, the dropdown
   opens/closes and highlights the active page, hero/ask-box/`CaseStudiesAside` all stack to a single
   column, footer stacks. No mobile bugs found.
+- **Mid-sentence truncation bug found and fixed 2026-09-24** — see "Completed 2026-09-24." `MAX_TOKENS`
+  raised 600 → 1200; re-verified live post-deploy with the same career question that had previously
+  cut off, response now completes cleanly.
 
 ---
 
@@ -684,6 +733,8 @@ started.
 - ~~"Browse by Category" navigated to a near-duplicate page~~ — **fixed 2026-09-23**, replaced with an inline accordion; the standalone pages are retired. See "Completed 2026-09-23" for the full story, including a real hydration-mismatch bug hit and fixed along the way (`useSyncExternalStore`, not a lazy `useState` initializer, for reading the URL hash on category-anchor deep links).
 - ~~Stray `.ts` files in `handoff-for-claude-code/` break a local `npm run build`/`tsc --noEmit`~~ — **fixed 2026-09-23**, `handoff-for-claude-code` added to `tsconfig.json`'s `exclude`. No longer necessary to move the folder aside before a local build.
 - **Digital Twin Case Studies sidebar is placeholder** — `CaseStudiesAside.tsx` has 3 example cards, awaiting Rick's real case studies.
+- ~~Digital Twin chat could truncate a longer answer mid-sentence~~ — **fixed 2026-09-24**, `MAX_TOKENS` 600 → 1200. Found during the end-to-end review; see "Completed 2026-09-24" and "Digital Twin" sections.
+- ~~"4D Spotify Framework" PM term definition truncated mid-sentence~~ — **fixed 2026-09-24** in `db/glossary/terms.csv`, re-seeded live. Found during the end-to-end review; see "Completed 2026-09-24."
 - ~~Digital Twin mobile layout unverified~~ — **verified 2026-09-23**, clean, see "Digital Twin" section's verification note above.
 - ~~`/pm-terms` and `/terminology` are build-verified only, not UX-verified~~ — **UX-verified 2026-09-23**: clicked through `/terminology`'s cross-links to `/pm-terms`, live search (typed "sprint", got ranked results, clicked through to a term detail page), the category-badge deep link into the accordion, and all 3 flashcards modes (Flash Card, Multiple Choice, Open-Ended — including a real `POST /api/terms/grade` call that correctly graded an imprecise answer "Partial"). Also spot-checked `/terms/flashcards` for parity. No bugs found; the Level dropdown itself is a plain native `<select>`, not independently verified but low-risk.
 - **Digital Twin rate limiting is in-memory** — resets on every Vercel cold start, so it's not a durable defense against sustained abuse. Fine for current traffic; revisit with a Supabase-backed counter if abuse shows up.
@@ -693,19 +744,19 @@ started.
 
 ## Next Session Should Pick Up
 
-1. **Merge (or otherwise land) the `top-voices-row` branch** — built, verified, and committed
-   2026-09-24 but deliberately left unpushed/undeployed per that session's instructions. See
-   "Completed 2026-09-24."
-2. **Check whether the old `ai-agentic-practice` sub-topics' deferred content** (Multimodal AI,
+1. **Check whether the old `ai-agentic-practice` sub-topics' deferred content** (Multimodal AI,
    Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy) made it into the
    new 4-topic/20-sub-topic AI for PMs redesign under different names, or got dropped — see "What's
    Broken."
-3. Real `url`s for Templates, and consider pulling the flagged Launchnotes "40 PM Books" list into
+2. Real `url`s for Templates, and consider pulling the flagged Launchnotes "40 PM Books" list into
    the standalone `/resources` Books section.
-4. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
+3. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
    placeholder cards).
-5. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
+4. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
    it comes back (and where) or stays gone.
+5. Nothing currently broken as of 2026-09-24's end-to-end review — the two bugs it found (glossary
+   truncation, Digital Twin token cap) are both fixed and verified live. This list is otherwise just
+   the long-standing backlog items above.
 9. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
 10. ~~Mobile nav~~ — **DONE 2026-07-24**, hamburger menu added to `Header.tsx`.
 11. ~~PM Terms domain~~ — **DONE 2026-08-21** (built 2026-08-09, committed/shipped 2026-08-21).
@@ -740,8 +791,13 @@ started.
 25. ~~Click through `/pm-terms` and `/terminology` interactively~~ — **DONE 2026-09-23**: cross-links,
     live search, category-badge deep links, and all 3 flashcards modes (including a real Open-Ended
     grading call) all verified working. See "What's Broken."
-26. ~~Replace Top Voices with a shared full-width row on Home and `/resources`~~ — **DONE 2026-09-24**
-    on branch `top-voices-row`, not yet merged/pushed/deployed. See "Completed 2026-09-24."
+26. ~~Replace Top Voices with a shared full-width row on Home and `/resources`~~ — **DONE 2026-09-24**,
+    merged, pushed, and deployed. See "Completed 2026-09-24."
+27. ~~Fix the Top Voices shared heading wrapping instead of spanning its two columns~~ — **DONE
+    2026-09-24**. See "Completed 2026-09-24."
+28. ~~End-to-end site review before ending the session~~ — **DONE 2026-09-24**, found and fixed two
+    real bugs (glossary truncation, Digital Twin token cap), both verified live; everything else
+    checked out clean. See "Completed 2026-09-24" and "What's Broken."
 
 ---
 
