@@ -26,9 +26,9 @@ Raindrop collection: 70283481
 ## Current State (as of 2026-09-23)
 
 ### Pages built
-- `/` — Home page (Hero, Recent Posts, Reading This Week, Resource Library, About section)
+- `/` — Home page (Hero, Recent Posts, Reading This Week, PM Reframed rail, Top Voices, Resource Library, About section). Top Voices added 2026-09-24, see "Resources" section below.
 - `/about` — Full standalone About page with bio content, plus a Digital Twin callout card (added 2026-08-21)
-- `/resources` — Resource Library page: two-section tile grid (7 "Product Management" cards + 4 "AI for PMs" cards) + Terminology teaser + Top Voices + Templates + Books (redesigned 2026-09-09, tiles renamed/reordered 2026-09-13, sub-topics rebuilt as resource cards and fully re-architected into 11 topics 2026-09-19 through 2026-09-23, see "Resources" section below)
+- `/resources` — Resource Library page: Top Voices row + two-section tile grid (7 "Product Management" cards + 4 "AI for PMs" cards) + Terminology teaser + Templates + Books (redesigned 2026-09-09, tiles renamed/reordered 2026-09-13, sub-topics rebuilt as resource cards and fully re-architected into 11 topics 2026-09-19 through 2026-09-23, Top Voices rebuilt as a shared full-width row 2026-09-24, see "Resources" section below)
 - `/resources/[topic]` — Per-topic pages, 11 statically generated (`pm-foundations` "PM 101", `understanding-ai`, `ai-product-building-blocks`, `vibe-coding-agentic-development`, `ai-empowered-pm`, `product-vision-strategy`, `discovery-research`, `design-for-pms`, `agile-development-deployment`, `go-to-market-growth`, `technology-for-pms`). All 11 are fully written as resource-card lists — the old `strategy-discovery`/`roadmapping-execution`/`ux-design` placeholder topics (added 2026-09-09) and the single `ai-agentic-practice` topic (retired 2026-09-23) no longer exist; they were replaced, not filled in, and their old URLs 301-redirect via `next.config.ts` (see "Resources" section below)
 - `/terminology` — Combined hub showing top PM terms and top AI terms side by side (added 2026-08-21)
 - `/terms` — AI Terms top terms (priority 1–2, static) — renamed from `/glossary` 2026-07-23. "Browse by Category" is an inline accordion here now (2026-09-23), not a separate page — see "AI Terms" section below.
@@ -373,6 +373,51 @@ Raindrop collection: 70283481
 
 ---
 
+## Completed 2026-09-24 (branch `top-voices-row`, not yet merged to `main`)
+
+- **Replaced the old "Top Voices to Follow" section with a single shared full-width row**, rendered
+  on both `/` (directly above `Resources`) and `/resources` (directly above "Curated & opinionated").
+  Content finalized in Cowork, handed off via `handoff-for-claude-code/top-voices/` (mockup HTML +
+  final `TOP_VOICES` data) and built to match, not copied from its raw CSS.
+  - **Data**: `src/lib/top-voices.ts` — copied verbatim from the handoff file (names/labels/URLs
+    unchanged). Shape is `TOP_VOICES: VoiceColumn[]`, always 4 columns: "Product Management, Growth &
+    Leadership" (split across columns 1 and 2, 5 voices each, column 2 has `continuesPrevious: true`),
+    "Design & User Experience" (4 voices), "Applied AI for Product Builders" (5 voices) — 19 voices,
+    27 links total.
+  - **Component**: `src/components/site/TopVoices.tsx` — a server component (no `"use client"`,
+    nothing interactive) that renders the `rounded-2xl border border-border bg-card shadow-card` card
+    and takes an optional `header` prop, so each page supplies its own header markup (Home reuses
+    `Resources.tsx`'s exact header block; `/resources` uses that page's own `SectionHead`) while
+    sharing one card implementation. `TopVoices` itself owns the `<section id="top-voices"
+    className="scroll-mt-24">` wrapper, mirroring how `Resources.tsx` wraps itself rather than being
+    wrapped by the page.
+  - **Responsive borders, the fiddly part**: 4 columns at `lg:` and up, 2 columns between `sm:` and
+    `lg:`, 1 column below `sm:`. Column 2's group heading is invisible-but-space-reserving
+    (`invisible`, keeps its `min-h-[30px]` slot so both lists start on the same line) at `sm:` and up,
+    and fully `hidden` below `sm:` (space collapses, its list continues directly under column 1's,
+    matching the mockup's `.colhead.cont{display:none}` + `.col.cont-col{padding-top:0}`). Each of the
+    4 columns has its own hand-written border classes (not a blanket `divide-x`) since which edge gets
+    a divider vs. a top border changes per column depending on which breakpoint's row it's in — see
+    the `COLUMN_CLASSES` array in `TopVoices.tsx` for the exact per-column, per-breakpoint logic
+    (verified by hand against the mockup's cascading `max-width` media queries before writing the
+    Tailwind).
+  - **Removed**: the old `RESOURCE_SECTIONS.topVoices` array plus the `TopVoice`/`VoiceMedium` types
+    in `src/lib/resources.ts`, and the old 4-card grid section (mapped `RESOURCE_SECTIONS.topVoices`,
+    showed initials/medium badges/one-line descriptions, no real URLs) plus its now-unused `initials()`
+    helper in `src/app/resources/page.tsx`. Confirmed via repo-wide grep that nothing else referenced
+    any of these before removing them.
+  - **Verified**: `npm run lint` and `npm run build` both clean (pre-existing unrelated lint errors in
+    `about/page.tsx`/`About.tsx`/`Header.tsx` untouched). Checked `/` and `/resources` side-by-side
+    against the mockup at desktop (1200px), tablet (900px), and mobile (400px) via the same-origin-
+    iframe technique (`resize_window` still confirmed broken in this environment) — all 19 voices/27
+    links render, column 2 aligns with column 1 at every width, dividers/top-borders match the mockup
+    exactly at each breakpoint, no text overflow. Click-tested Ed Donner's "Videos" link (→ YouTube)
+    and UX Collective (→ uxdesign.cc) for real, both correct. Confirmed the old Top Voices grid is
+    gone from `/resources` and nothing else on either page shifted position.
+  - **Not yet on `main`** — committed on a new branch (`top-voices-row`), not pushed, not deployed.
+
+---
+
 ## AI Terms (added 2026-07-23, renamed from "AI Glossary" same day)
 
 Content (177 terms, editorially researched/deduped/written elsewhere) came in as 5 CSVs, originally
@@ -538,10 +583,11 @@ of 10 newly-written topics (11 total) and split content out of the single `resou
   passes it down; shuffle re-picks in the click handler only, never during render.
   `ResourceCard`/`VideoGrid`/`ResourceSection` (in `[topic]/page.tsx` itself, not extracted to
   `components/`) render the card-list shape.
-- **Known placeholder surface on production (by design)**: Top Voices have no `url`s yet, Templates
-  all say "coming soon", "From the Blog" is empty everywhere except `discovery-research` (one post)
-  and the 4 topics with `reframedPostUrls` (which pull live from Substack). Fill in by editing
-  `src/lib/resources.ts`'s `RESOURCE_SECTIONS`/`RESOURCES_BLOG_MAP` (no code changes needed).
+- **Known placeholder surface on production (by design)**: Templates all say "coming soon", "From the
+  Blog" is empty everywhere except `discovery-research` (one post) and the 4 topics with
+  `reframedPostUrls` (which pull live from Substack). Fill in by editing `src/lib/resources.ts`'s
+  `RESOURCE_SECTIONS`/`RESOURCES_BLOG_MAP` (no code changes needed). Top Voices is no longer part of
+  `RESOURCE_SECTIONS` — see "Completed 2026-09-24" (branch `top-voices-row`) for its replacement.
 - **Verified**: `npm run build` (all 11 topic pages prerender) + `tsc --noEmit` + `eslint` clean
   (checked with `handoff-for-claude-code/` set aside, since its stray `.ts` files aren't meant to be
   part of the app build — see "What's Broken"). Desktop-width visual check done in-browser for all
@@ -631,7 +677,7 @@ started.
 
 - **Preview MCP tool** (`mcp__Claude_Preview__preview_*`) has been unreliable at starting the dev server (historically tripped on port 3000 being occupied). Workaround that works: run it manually, `npm run dev -- --port 3001`, and verify via curl or the browser tool. `.claude/launch.json` is set for port 3001.
 - ~~LinkedIn URL on the About page uses a placeholder~~ — **fixed 2026-09-23**, now `https://www.linkedin.com/in/ricklallen`.
-- **Resources: all 11 topics are now fully written** — no more placeholder sub-topic content anywhere on `/resources`. The 4 sub-topics that were long deferred on the old single `ai-agentic-practice` page (Multimodal AI, Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy) don't carry over verbatim into the 4 new AI for PMs topics — that area got a full 20-sub-topic redesign in Cowork rather than a simple fill-in, so whether that old substance made it in under different names hasn't been specifically checked. Remaining gaps are all outside sub-topic content: Top Voices have no `url`s (non-clickable), Templates all say "coming soon". All filled in by editing `src/lib/resources.ts`.
+- **Resources: all 11 topics are now fully written** — no more placeholder sub-topic content anywhere on `/resources`. The 4 sub-topics that were long deferred on the old single `ai-agentic-practice` page (Multimodal AI, Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy) don't carry over verbatim into the 4 new AI for PMs topics — that area got a full 20-sub-topic redesign in Cowork rather than a simple fill-in, so whether that old substance made it in under different names hasn't been specifically checked. Remaining gaps are all outside sub-topic content: Templates all say "coming soon" (Top Voices resolved 2026-09-24, see below). All filled in by editing `src/lib/resources.ts`.
 - ~~`ResourceTiles.tsx`'s `PM_CARDS`/`AI_CARDS` are hand-maintained, not derived from `RESOURCE_TOPICS`~~ — still true structurally (not auto-derived, still needs manual updates when topics change), but the concrete gaps this used to describe (`RESOURCES_BLOG_MAP` missing keys, `AI_CARDS` all pointing at one page) were **backfilled 2026-09-23**, see "Completed 2026-09-23". See "Resources" section above for the current state.
 - ~~Resource-card layout mobile-verification gap~~ — **fully closed 2026-09-23**. Desktop: 2026-09-19 for `pm-foundations`, 2026-09-23 for the other 10. Mobile: 2026-09-23 for the `/resources` hub and all 11 topics, including the 4 AI for PMs pages checked in a follow-up pass after the split (same same-origin-iframe technique, `resize_window` still confirmed broken in this environment). No bugs found anywhere.
 - **Old Resources and Terms URLs**: `/resources/strategy-discovery`, `/resources/roadmapping-execution`, `/resources/ux-design`, `/resources/technology`, and `/resources/ai-agentic-practice` redirect (301) to their replacements. `/terms/browse` and `/pm-terms/browse` also redirect (301, added 2026-09-23) to `/terms` and `/pm-terms` — see `next.config.ts`.
@@ -647,15 +693,18 @@ started.
 
 ## Next Session Should Pick Up
 
-1. **Check whether the old `ai-agentic-practice` sub-topics' deferred content** (Multimodal AI,
+1. **Merge (or otherwise land) the `top-voices-row` branch** — built, verified, and committed
+   2026-09-24 but deliberately left unpushed/undeployed per that session's instructions. See
+   "Completed 2026-09-24."
+2. **Check whether the old `ai-agentic-practice` sub-topics' deferred content** (Multimodal AI,
    Responsible AI & Governance, AI-Native Operating Models, Portfolio AI Strategy) made it into the
    new 4-topic/20-sub-topic AI for PMs redesign under different names, or got dropped — see "What's
    Broken."
-2. Real `url`s for Top Voices/Templates, and consider pulling the flagged Launchnotes "40 PM Books"
-   list into the standalone `/resources` Books section.
-3. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
+3. Real `url`s for Templates, and consider pulling the flagged Launchnotes "40 PM Books" list into
+   the standalone `/resources` Books section.
+4. **Add real case studies** to `src/components/digital-twin/CaseStudiesAside.tsx` (currently 3
    placeholder cards).
-4. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
+5. **Decide on the Subscribe button** — removed from the header 2026-07-24 "for now"; revisit whether
    it comes back (and where) or stays gone.
 9. ~~Deploy~~ — **DONE 2026-07-10**, live at https://pm-rearchitected.vercel.app.
 10. ~~Mobile nav~~ — **DONE 2026-07-24**, hamburger menu added to `Header.tsx`.
@@ -691,6 +740,8 @@ started.
 25. ~~Click through `/pm-terms` and `/terminology` interactively~~ — **DONE 2026-09-23**: cross-links,
     live search, category-badge deep links, and all 3 flashcards modes (including a real Open-Ended
     grading call) all verified working. See "What's Broken."
+26. ~~Replace Top Voices with a shared full-width row on Home and `/resources`~~ — **DONE 2026-09-24**
+    on branch `top-voices-row`, not yet merged/pushed/deployed. See "Completed 2026-09-24."
 
 ---
 
@@ -698,11 +749,13 @@ started.
 
 | File | Purpose |
 |------|---------|
-| `src/app/page.tsx` | Home page |
+| `src/app/page.tsx` | Home page — renders `<TopVoices>` (with its own header) directly above `<Resources />` as of 2026-09-24 |
 | `src/app/about/page.tsx` | Standalone About page |
-| `src/app/resources/page.tsx` | Resource Library page (tile grid + Terminology teaser + Top Voices + Templates + Books), redesigned 2026-09-09 |
+| `src/app/resources/page.tsx` | Resource Library page (Top Voices + tile grid + Terminology teaser + Templates + Books), redesigned 2026-09-09; Top Voices rebuilt as a shared component 2026-09-24 |
 | `src/app/resources/[topic]/page.tsx` | Per-topic Resources pages, 11 statically generated (`dynamicParams = false`) |
-| `src/lib/resources.ts` | Shared Resources types, `RESOURCE_TOPICS` (imports the 6 files below plus 2 inline topics), `RESOURCES_BLOG_MAP`, `RESOURCE_SECTIONS` — edit to fill in content, no code changes needed. Has a stale top-of-file comment as of 2026-09-22, see "Resources" section |
+| `src/lib/resources.ts` | Shared Resources types, `RESOURCE_TOPICS` (imports the 6 files below plus 2 inline topics), `RESOURCES_BLOG_MAP`, `RESOURCE_SECTIONS` — edit to fill in content, no code changes needed. `topVoices`/`TopVoice`/`VoiceMedium` removed 2026-09-24 (see `top-voices.ts` below). Has a stale top-of-file comment as of 2026-09-22, see "Resources" section |
+| `src/lib/top-voices.ts` | Top Voices data (`TOP_VOICES`, 4 columns, 19 voices, 27 links) — added 2026-09-24, copied verbatim from Cowork handoff |
+| `src/components/site/TopVoices.tsx` | Shared Top Voices row — added 2026-09-24, used on both `/` and `/resources` via an optional `header` prop |
 | `src/lib/product-vision-strategy.ts` | Product Vision & Strategy topic content (added 2026-09-20) |
 | `src/lib/discovery-research.ts` | Discovery & Research topic content (added 2026-09-22) |
 | `src/lib/design-for-pms.ts` | Design for PMs topic content (added 2026-09-22) |

@@ -4,6 +4,7 @@ import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
 import ResourceTiles from "@/components/site/ResourceTiles";
 import TerminologyTeaser, { type TeaserTerm } from "@/components/site/TerminologyTeaser";
+import TopVoices from "@/components/site/TopVoices";
 import { RESOURCE_SECTIONS } from "@/lib/resources";
 import { listCategories, listStudyTerms, type GlossaryDomain } from "@/lib/glossary";
 
@@ -25,14 +26,6 @@ const SPINES: [string, string][] = [
   ["hsl(200 60% 46%)", "hsl(200 60% 26%)"],
   ["hsl(340 55% 50%)", "hsl(340 55% 30%)"],
 ];
-
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase() ?? "")
-    .join("");
-}
 
 function fyShuffle<T>(items: T[]): T[] {
   const copy = [...items];
@@ -108,7 +101,18 @@ export default async function ResourcesPage() {
           </header>
 
           <div className="space-y-16">
-            {/* 1. Resource Library grid (condensed) */}
+            {/* 1. Top Voices */}
+            <TopVoices
+              header={
+                <SectionHead
+                  eyebrow="Who I actually follow"
+                  title="Top Voices to Follow"
+                  intro="Newsletters, podcasts, and people worth a follow across product, design, and applied AI."
+                />
+              }
+            />
+
+            {/* 2. Resource Library grid (condensed) */}
             <section>
               <SectionHead
                 eyebrow="Resource library"
@@ -118,7 +122,7 @@ export default async function ResourcesPage() {
               <ResourceTiles />
             </section>
 
-            {/* 2. Terminology teaser */}
+            {/* 3. Terminology teaser */}
             <section>
               <SectionHead
                 eyebrow="Look something up"
@@ -126,53 +130,6 @@ export default async function ResourcesPage() {
                 intro="177+ PM and AI terms live in the full Terminology hub — definitions, flashcards, and quizzes. This is a preview, not a copy of it."
               />
               <TerminologyTeaser pool={pool} links={RESOURCE_SECTIONS.terminologyLinks} />
-            </section>
-
-            {/* 3. Top Voices */}
-            <section>
-              <SectionHead
-                eyebrow="Who I actually follow"
-                title="Top Voices to Follow"
-                intro="Newsletters, podcasts, and people worth a follow — mixed traditional PM and AI-native, on purpose."
-              />
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {RESOURCE_SECTIONS.topVoices.map((voice) => {
-                  const card = (
-                    <>
-                      <div className="mb-3 flex items-center justify-between">
-                        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-soft text-[11px] font-bold text-accent-foreground">
-                          {initials(voice.name)}
-                        </span>
-                        <span className="rounded-full bg-primary-soft px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-primary">
-                          {voice.medium}
-                        </span>
-                      </div>
-                      <div className="text-sm font-semibold">{voice.name}</div>
-                      <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                        {voice.desc}
-                      </p>
-                    </>
-                  );
-                  return voice.url ? (
-                    <a
-                      key={voice.name}
-                      href={voice.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-2xl border border-border bg-card p-4 shadow-card transition-all hover:border-primary/40 hover:shadow-card-hover"
-                    >
-                      {card}
-                    </a>
-                  ) : (
-                    <div
-                      key={voice.name}
-                      className="rounded-2xl border border-border bg-card p-4 shadow-card"
-                    >
-                      {card}
-                    </div>
-                  );
-                })}
-              </div>
             </section>
 
             {/* 4. Templates & Examples */}

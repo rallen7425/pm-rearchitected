@@ -4,6 +4,7 @@ import Hero from "@/components/site/Hero";
 import SubstackLatest from "@/components/site/SubstackLatest";
 import Newsfeed from "@/components/site/Newsfeed";
 import PMReframed from "@/components/site/PMReframed";
+import TopVoices from "@/components/site/TopVoices";
 import Resources from "@/components/site/Resources";
 import About from "@/components/site/About";
 import Footer from "@/components/site/Footer";
@@ -59,6 +60,22 @@ export default function Home() {
           <Suspense fallback={<div className="h-72 bg-muted/30 rounded-2xl animate-pulse" />}>
             <PMReframed />
           </Suspense>
+          <TopVoices
+            header={
+              <div className="mb-8">
+                <div className="text-xs font-medium uppercase tracking-widest text-primary">
+                  Who I actually follow
+                </div>
+                <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
+                  Top Voices to Follow
+                </h2>
+                <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+                  Newsletters, podcasts, and people worth a follow across product, design, and
+                  applied AI.
+                </p>
+              </div>
+            }
+          />
           <Suspense fallback={<div className="h-64 bg-muted/30 rounded-2xl animate-pulse" />}>
             <Resources />
           </Suspense>

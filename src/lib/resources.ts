@@ -348,15 +348,6 @@ export interface TermLinkCard {
   href: string;
 }
 
-export type VoiceMedium = "Newsletter" | "Social" | "Blog" | "Podcast";
-
-export interface TopVoice {
-  name: string;
-  medium: VoiceMedium;
-  desc: string;
-  url: string | null;
-}
-
 export interface TemplateItem {
   name: string;
   desc: string;
@@ -371,7 +362,6 @@ export interface BookItem {
 
 export const RESOURCE_SECTIONS: {
   terminologyLinks: TermLinkCard[];
-  topVoices: TopVoice[];
   templates: TemplateItem[];
   books: BookItem[];
 } = {
@@ -391,56 +381,6 @@ export const RESOURCE_SECTIONS: {
       label: "Test Yourself",
       desc: "Flash cards, multiple choice, and open-ended grading",
       href: "/terms/flashcards",
-    },
-  ],
-  topVoices: [
-    {
-      name: "Lenny Rachitsky",
-      medium: "Newsletter",
-      desc: "Lenny's Newsletter & Podcast — the widest-read practitioner interview series in product.",
-      url: null,
-    },
-    {
-      name: "Shreyas Doshi",
-      medium: "Social",
-      desc: "Sharp, quotable frameworks on prioritization, influence, and product judgment.",
-      url: null,
-    },
-    {
-      name: "Aakash Gupta",
-      medium: "Newsletter",
-      desc: "Product Growth — one of the more prolific trackers of the AI PM skill shift specifically.",
-      url: null,
-    },
-    {
-      name: "Ethan Mollick",
-      medium: "Blog",
-      desc: "One Useful Thing — research-grounded, refreshingly free of AI hype.",
-      url: null,
-    },
-    {
-      name: "Marty Cagan",
-      medium: "Blog",
-      desc: "Silicon Valley Product Group — still the clearest voice on empowered product teams.",
-      url: null,
-    },
-    {
-      name: "Teresa Torres",
-      medium: "Blog",
-      desc: "Product Talk — continuous discovery, taught with real product examples.",
-      url: null,
-    },
-    {
-      name: "Simon Willison",
-      medium: "Blog",
-      desc: "Independent, hands-on AI engineering writing — the best signal-to-noise on new model releases.",
-      url: null,
-    },
-    {
-      name: "Latent Space",
-      medium: "Podcast",
-      desc: "The AI engineer podcast — deep technical conversations without the hype cycle.",
-      url: null,
     },
   ],
   templates: [
