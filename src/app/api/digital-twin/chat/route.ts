@@ -3,7 +3,7 @@ import { getAnthropicClient } from "@/lib/anthropic";
 import { buildDigitalTwinSystemPrompt } from "@/lib/digital-twin";
 import { checkRateLimit } from "@/lib/rate-limit";
 
-const MAX_TOKENS = 600;
+const MAX_TOKENS = 1200;
 const MAX_MESSAGES = 20;
 const MAX_MESSAGE_LENGTH = 2000;
 
